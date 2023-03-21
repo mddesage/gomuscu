@@ -18,6 +18,7 @@ const WARNING_2_ROLE_ID = '987820202177749085';
 const WARNING_3_ROLE_ID = '987820202177749084';
 const MUTE_ROLE_ID = '991408401538105445';
 const LOG_CHANNEL_ID = '989208521625174137';
+const ADMIN_COMMAND = 'code';
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -290,6 +291,31 @@ client.on('messageCreate', async message => {
           .setTimestamp();
   
         logChannel.send({ embeds: [logEmbed] });
+      }
+    }
+  });
+
+  //CODE
+  client.on('message', async message => {
+    if (message.author.bot) return;
+    if (!message.content.startsWith(prefix)) return;
+  
+    const args = message.content.trim().split(/ +/g);
+    const cmd = args.shift().slice(prefix.length).toLowerCase();
+  
+    if (cmd === ADMIN_COMMAND) {
+      if (!message.member.permissions.has('ADMINISTRATOR')) {
+        return message.reply("Vous n'avez pas la permission de me demander cette information.");
+      }
+  
+      const url = 'https://github.com/mddesage/gomuscu';
+  
+      try {
+        await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
+        await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
+      } catch (error) {
+        console.error(error);
+        message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
       }
     }
   });
