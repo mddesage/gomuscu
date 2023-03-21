@@ -14,12 +14,7 @@ client.login(process.env.TOKEN);
 
 const prefix = (process.env.PREFIX);
 
-const WARNING_1_ROLE_ID = '987820202177749086';
-const WARNING_2_ROLE_ID = '987820202177749085';
-const WARNING_3_ROLE_ID = '987820202177749084';
-const MUTE_ROLE_ID = '991408401538105445';
-const LOG_CHANNEL_ID = '989208521625174137';
-const BOT_ID = '994859660727291985';
+const ADMIN_COMMAND = 'code';
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -246,3 +241,29 @@ client.on("interactionCreate", async interaction => {
 
 
 //AVERTISSEMENT
+
+//CODE
+client.on('message', async message => {
+    if (message.author.bot) return;
+    if (!message.content.startsWith(PREFIX)) return;
+  
+    const args = message.content.trim().split(/ +/g);
+    const cmd = args.shift().slice(PREFIX.length).toLowerCase();
+  
+    if (cmd === ADMIN_COMMAND) {
+      if (!message.member.permissions.has('ADMINISTRATOR')) {
+        return message.reply("Vous n'avez pas la permission de me demander cette information.");
+      }
+  
+      const url = 'https://github.com/mddesage/gomuscu';
+  
+      try {
+        await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
+        await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
+      } catch (error) {
+        console.error(error);
+        message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
+      }
+    }
+  });
+  
