@@ -192,7 +192,7 @@ client.on("messageCreate", async message => {
             .addComponents(menu);
 
         await message.channel.send({
-            content: 'Sélectionnez votre département **du 01 au 25** :',
+            content: '**Sélectionnez votre département** :',
             components: [row],
         });
     }
@@ -249,7 +249,7 @@ client.on("messageCreate", async message => {
             .addComponents(menu2);
 
         await message.channel.send({
-            content: 'Sélectionnez votre département **du 26 au 50**:',
+            content: '',
             components: [row2],
         });
     }
@@ -306,7 +306,7 @@ client.on("messageCreate", async message => {
             .addComponents(menu);
 
         await message.channel.send({
-            content: 'Sélectionnez votre département **du 51 au 75** :',
+            content: '',
             components: [row],
         });
     }
@@ -367,7 +367,7 @@ client.on("messageCreate", async message => {
             .addComponents(menu);
 
         await message.channel.send({
-            content: 'Sélectionnez votre département **du 76 au 95 (971, 972, 973, 974, 976)** :',
+            content: '',
             components: [row],
         });
     }
