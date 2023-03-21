@@ -249,7 +249,7 @@ client.on('message', async message => {
     const args = message.content.trim().split(/ +/g);
     const cmd = args.shift().slice(prefix.length).toLowerCase();
   
-    if (cmd === prefix + "code") {
+    if (cmd === "code") {
       if (!message.member.permissions.has('ADMINISTRATOR')) {
         return message.reply("Vous n'avez pas la permission de me demander cette information.");
       }
