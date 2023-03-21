@@ -258,7 +258,7 @@ client.on('message', async message => {
 });
   
 //REPETE
-client.on('message', async (message) => {
+client.on('messageCreate', async (message) => {
     // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
     if (message.author.bot || !message.content.startsWith(prefix)) return;
   
