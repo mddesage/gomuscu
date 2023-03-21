@@ -239,19 +239,23 @@ client.on("interactionCreate", async interaction => {
 
 //AVERTISSEMENT
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-    const mutedRole = newMember.guild.roles.cache.find(role => role.id === '991408401538105445');
-    const warn1Role = newMember.guild.roles.cache.find(role => role.id === '987820202177749086');
-    const warn2Role = newMember.guild.roles.cache.find(role => role.id === '987820202177749085');
-    const warn3Role = newMember.guild.roles.cache.find(role => role.id === '987820202177749084');
-    const logChannel = newMember.guild.channels.cache.find(channel => channel.id === '989208521625174137');
+    const channelId = '989208521625174137';
+    const role1Id = '987820202177749086'; // Premier avertissement
+    const role2Id = '987820202177749085'; // Deuxième avertissement
+    const role3Id = '987820202177749084'; // Troisième avertissement
+    const muteRoleId = '991408401538105445';
   
-    if (newMember.roles.cache.has(mutedRole.id)) {
-        message.channel.send(`⚠️ Attention ${newMember.user} vous venez d'être rendu 🔇muet ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
-    } else if (newMember.roles.cache.has(warn3Role.id)) {
-        message.channel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre troisième avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
-    } else if (newMember.roles.cache.has(warn2Role.id)) {
-        message.channel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre deuxième avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
-    } else if (newMember.roles.cache.has(warn1Role.id)) {
-        message.channel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre premier avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
+    const channel = newMember.guild.channels.cache.get(channelId);
+    if (!channel) return console.error(`Channel ${channelId} not found`);
+  
+    if (!oldMember.roles.cache.has(role1Id) && newMember.roles.cache.has(role1Id)) {
+      channel.send(`⚠️ Attention ${newMember} vous venez de recevoir votre premier avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
+    } else if (!oldMember.roles.cache.has(role2Id) && newMember.roles.cache.has(role2Id)) {
+      channel.send(`⚠️ Attention ${newMember} vous venez de recevoir votre deuxième avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
+    } else if (!oldMember.roles.cache.has(role3Id) && newMember.roles.cache.has(role3Id)) {
+      channel.send(`⚠️ Attention ${newMember} vous venez de recevoir votre troisième avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
+    } else if (!oldMember.roles.cache.has(muteRoleId) && newMember.roles.cache.has(muteRoleId)) {
+      channel.send(`⚠️ Attention ${newMember} vous venez d'être rendu 🔇muet ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
     }
   });
+  
