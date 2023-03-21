@@ -249,8 +249,7 @@ client.on("messageCreate", async message => {
             .addComponents(menu2);
 
         await message.channel.send({
-            content: '',
-            components: [row2],
+            components: [row2]
         });
     }
     // ...
@@ -306,8 +305,7 @@ client.on("messageCreate", async message => {
             .addComponents(menu);
 
         await message.channel.send({
-            content: '',
-            components: [row],
+            components: [row]
         });
     }
     // ...
@@ -367,8 +365,7 @@ client.on("messageCreate", async message => {
             .addComponents(menu);
 
         await message.channel.send({
-            content: '',
-            components: [row],
+            components: [row]
         });
     }
     // ...
