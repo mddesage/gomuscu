@@ -307,7 +307,7 @@ client.on('messageCreate', async (message) => {
   
       // Vérifier si un message a été fourni
       if (!messageToRepeat) {
-        return message.reply('Veuillez fournir un message à répéter.');
+        return message.reply('Veuillez fournir un message à répéterex : (ex : **<@994859660727291985> repete&suppr [le message à répeter]**).');
       }
   
       // Répéter le message
