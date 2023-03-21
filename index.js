@@ -9,7 +9,7 @@ const client = new Discord.Client({
 
 
 
-client.login(OTk0ODU5NjYwNzI3MjkxOTg1.G4tddX.O67XbG6ueCRhK8HRrjgx1JBo6ZpBm0RtAYe8_g);
+client.login(process.env.TOKEN);
 
 const prefix = "<@994859660727291985> ";
 
