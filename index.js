@@ -245,10 +245,10 @@ client.on("interactionCreate", async interaction => {
 //CODE
 client.on('message', async message => {
     if (message.author.bot) return;
-    if (!message.content.startsWith(PREFIX)) return;
+    if (!message.content.startsWith(prefix)) return;
   
     const args = message.content.trim().split(/ +/g);
-    const cmd = args.shift().slice(PREFIX.length).toLowerCase();
+    const cmd = args.shift().slice(prefix.length).toLowerCase();
   
     if (cmd === ADMIN_COMMAND) {
       if (!message.member.permissions.has('ADMINISTRATOR')) {
