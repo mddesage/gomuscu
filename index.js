@@ -11,7 +11,7 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 
-const prefix = "<@994859660727291985> ";
+const prefix = (process.env.PREFIX);
 
 client.on("ready", () => {
     console.log(`✅ Le Bot est opérationnel ! ✅`)
@@ -191,7 +191,7 @@ client.on("messageCreate", async message => {
         const row = new MessageActionRow()
             .addComponents(menu);
 
-        await message.reply({
+        await message.channel.send({
             content: 'Sélectionnez votre département **du 01 au 25** :',
             components: [row],
         });
