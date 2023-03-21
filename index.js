@@ -9,9 +9,9 @@ const client = new Discord.Client({
 
 
 
-client.login(process.env.TOKEN);
+client.login("OTk0ODU5NjYwNzI3MjkxOTg1.G2Tr7h.Ysy940EkjOjb_wpgoNPqaAS3FhtvCpr55kbJJA");
 
-const prefix = (process.env.PREFIX);
+const prefix = "<@994859660727291985>";
 
 client.on("ready", () => {
     console.log(`✅ Le Bot est opérationnel ! ✅`)
