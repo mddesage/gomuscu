@@ -9,10 +9,9 @@ const client = new Discord.Client({
 
 
 
-const { token } = require('./config/config.json');
-client.login(token);
+client.login(OTk0ODU5NjYwNzI3MjkxOTg1.G4tddX.O67XbG6ueCRhK8HRrjgx1JBo6ZpBm0RtAYe8_g);
 
-const prefix = "<@994859660727291985>";
+const prefix = "<@994859660727291985> ";
 
 client.on("ready", () => {
     console.log(`✅ Le Bot est opérationnel ! ✅`)
@@ -47,11 +46,6 @@ client.on("messageCreate", async message => {
         switch (command) {
             case '':
                 message.reply("Oui ?");
-                break;
-            case 'discord':
-                message.reply("https://discord.gg/T9fUEbsJrt");
-                break;
-            case 'salut':
             case 'hey':
             case 'yo':
                 message.reply("Salut à toi !");
