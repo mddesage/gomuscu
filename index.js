@@ -14,7 +14,6 @@ client.login(process.env.TOKEN);
 
 const prefix = (process.env.PREFIX);
 
-const ADMIN_COMMAND = 'code';
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -250,7 +249,7 @@ client.on('message', async message => {
     const args = message.content.trim().split(/ +/g);
     const cmd = args.shift().slice(prefix.length).toLowerCase();
   
-    if (cmd === ADMIN_COMMAND) {
+    if (cmd === prefix + "code") {
       if (!message.member.permissions.has('ADMINISTRATOR')) {
         return message.reply("Vous n'avez pas la permission de me demander cette information.");
       }
