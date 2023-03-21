@@ -9,9 +9,9 @@ const client = new Discord.Client({
 
 
 
-client.login("OTk0ODU5NjYwNzI3MjkxOTg1.G2Tr7h.Ysy940EkjOjb_wpgoNPqaAS3FhtvCpr55kbJJA");
+client.login(process.env.TOKEN);
 
-const prefix = "<@994859660727291985>";
+const prefix = (process.env.PREFIX);
 
 client.on("ready", () => {
     console.log(`✅ Le Bot est opérationnel ! ✅`)
@@ -246,12 +246,12 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
     const logChannel = newMember.guild.channels.cache.find(channel => channel.id === '989208521625174137');
   
     if (newMember.roles.cache.has(mutedRole.id)) {
-      logChannel.send(`⚠️ Attention ${newMember.user} vous venez d'être rendu 🔇muet ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
+      message.channel.send(`⚠️ Attention ${newMember.user} vous venez d'être rendu 🔇muet ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
     } else if (newMember.roles.cache.has(warn3Role.id)) {
-      logChannel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre troisième avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
+      message.channel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre troisième avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
     } else if (newMember.roles.cache.has(warn2Role.id)) {
-      logChannel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre deuxième avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
+        message.channel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre deuxième avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
     } else if (newMember.roles.cache.has(warn1Role.id)) {
-      logChannel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre premier avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
+        message.channel.send(`⚠️ Attention ${newMember.user} vous venez de recevoir votre premier avertissement ! Contactez un <@&987820202198712449> pour plus d'information ou en cas d'erreur.`);
     }
   });
