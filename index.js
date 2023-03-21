@@ -285,3 +285,37 @@ client.on('messageCreate', async (message) => {
       message.channel.send(messageToRepeat);
     }
   });
+
+  //REPETE&SUPPR
+  client.on('messageCreate', async (message) => {
+    // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
+    if (message.author.bot || !message.content.startsWith(prefix)) return;
+  
+    // Récupération de la commande et des arguments
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+  
+    // Gestion de la commande "repete"
+    if (command === 'repete' || command === 'repete&suppr') {
+      // Vérifier si l'utilisateur a la permission d'administrateur
+      if (!message.member.permissions.has('ADMINISTRATOR')) {
+        return message.reply("Vous n'avez pas la permission nécessaire pour effectuer cette action.");
+      }
+  
+      // Obtenir le message à répéter
+      const messageToRepeat = args.join(' ');
+  
+      // Vérifier si un message a été fourni
+      if (!messageToRepeat) {
+        return message.reply('Veuillez fournir un message à répéter.');
+      }
+  
+      // Répéter le message
+      message.channel.send(messageToRepeat);
+  
+      // Supprimer le message initial si la commande est 'repete&suppr'
+      if (command === 'repete&suppr') {
+        message.delete();
+      }
+    }
+  });
