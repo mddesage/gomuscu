@@ -269,7 +269,7 @@ client.on('messageCreate', async (message) => {
     // Gestion de la commande "repete"
     if (command === 'repete') {
       // Vérifier si l'utilisateur a la permission d'administrateur
-      if (!message.member.hasPermission('ADMINISTRATOR')) {
+      if (!message.member.permissions.has('ADMINISTRATOR')) {
         return message.reply("Vous n'avez pas la permission nécessaire pour effectuer cette action.");
       }
   
