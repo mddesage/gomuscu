@@ -238,7 +238,7 @@ client.on("interactionCreate", async interaction => {
 
 
 //AVERTISSEMENT
-client.on('guildMemberUpdate', (oldMember, newMember) => {
+client.on("guildMemberUpdate", (oldMember, newMember) => {
     const channelId = '<#989208521625174137>';
     const role1Id = '<@&987820202177749086>'; // Premier avertissement
     const role2Id = '<@&987820202177749085>'; // Deuxième avertissement
