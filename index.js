@@ -49,22 +49,6 @@ client.on("messageCreate", async message => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
-  
-    if (cmd === ADMIN_COMMAND) {
-      if (!message.member.permissions.has('ADMINISTRATOR')) {
-        return message.reply("Vous n'avez pas la permission de me demander cette information.");
-      }
-  
-      const url = 'https://github.com/mddesage/gomuscu';
-  
-      try {
-        await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
-        await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
-      } catch (error) {
-        console.error(error);
-        message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
-      }
-    }
 
     if (message.content.startsWith(prefix)) {
         switch (command) {
@@ -178,7 +162,6 @@ switch (command) {
         break;
     // ...
 }
-
 });
 
 
@@ -263,58 +246,3 @@ client.on("interactionCreate", async interaction => {
 
 
 //AVERTISSEMENT
-client.on('messageCreate', async message => {
-    if (message.author.bot) return;
-  
-    const botMention = `<@!${BOT_ID}>`;
-    if (!message.content.startsWith(botMention)) return;
-  
-    const args = message.content.slice(botMention.length).trim().split(/ +/);
-    const command = args.shift().toLowerCase();
-  
-    if (command === 'avertissement') {
-      if (!message.member.hasPermission('MANAGE_ROLES')) {
-        return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
-      }
-  
-      const targetUser = message.mentions.members.first();
-      if (!targetUser) {
-        return message.reply("Veuillez mentionner un utilisateur à avertir.");
-      }
-  
-      let reason = args.slice(1).join(' ') || 'Aucune raison spécifiée';
-  
-      if (targetUser.roles.cache.has(WARNING_3_ROLE_ID)) {
-        await targetUser.roles.remove(WARNING_3_ROLE_ID);
-        await targetUser.roles.add(MUTE_ROLE_ID);
-        message.channel.send(`${targetUser} a maintenant 3 avertissements et a été rendu muet.`);
-      } else if (targetUser.roles.cache.has(WARNING_2_ROLE_ID)) {
-        await targetUser.roles.remove(WARNING_2_ROLE_ID);
-        await targetUser.roles.add(WARNING_3_ROLE_ID);
-        message.channel.send(`${targetUser} a maintenant 3 avertissements.`);
-      } else if (targetUser.roles.cache.has(WARNING_1_ROLE_ID)) {
-        await targetUser.roles.remove(WARNING_1_ROLE_ID);
-        await targetUser.roles.add(WARNING_2_ROLE_ID);
-        message.channel.send(`${targetUser} a maintenant 2 avertissements.`);
-      } else {
-        await targetUser.roles.add(WARNING_1_ROLE_ID);
-        message.channel.send(`${targetUser} a maintenant 1 avertissement.`);
-      }
-  
-      const logChannel = message.guild.channels.cache.get(LOG_CHANNEL_ID);
-      if (logChannel) {
-        const logEmbed = new Discord.MessageEmbed()
-          .setColor('#ff0000')
-          .setTitle('Avertissement')
-          .addField('Utilisateur averti', targetUser, true)
-          .addField('Modérateur', message.author, true)
-          .addField('Raison', reason)
-          .setTimestamp();
-  
-        logChannel.send(logEmbed);
-      }
-    }
-  });
-
-
-  //prefix + code
