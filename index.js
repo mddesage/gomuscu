@@ -237,25 +237,25 @@ client.on("interactionCreate", async interaction => {
     handleInteraction(interaction, 'departement_menu');
 });
   //CODE
-  client.on('message', async message => {
-    if (message.author.bot) return;
-  
-    if (message.content === prefix + `code`) {
-      if (!message.member.permissions.has('ADMINISTRATOR')) {
-        return message.reply("Vous n'avez pas la permission de me demander cette information.");
-      }
-  
-      const url = 'https://github.com/mddesage/gomuscu';
-  
-      try {
-        await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
-        await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
-      } catch (error) {
-        console.error(error);
-        message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
-      }
+client.on('message', async message => {
+  if (message.author.bot) return;
+
+  if (message.content === prefix + 'code') {
+    if (!message.member.permissions.has('ADMINISTRATOR')) {
+      return message.reply("Vous n'avez pas la permission de me demander cette information.");
     }
-  });
+
+    const url = 'https://github.com/mddesage/gomuscu';
+
+    try {
+      await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
+      await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
+    } catch (error) {
+      console.error(error);
+      message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
+    }
+  }
+});
   
 //REPETE
 client.on('message', async (message) => {
@@ -285,4 +285,3 @@ client.on('message', async (message) => {
       message.channel.send(messageToRepeat);
     }
   });
-  
