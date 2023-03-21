@@ -13,7 +13,6 @@ const client = new Discord.Client({
 client.login(process.env.TOKEN);
 
 const prefix = (process.env.PREFIX);
-const ADMIN_COMMAND = 'code';
 const BOT_MENTION = '<@994859660727291985>';
 
 client.on("ready", () => {
@@ -241,7 +240,7 @@ client.on("interactionCreate", async interaction => {
   client.on('message', async message => {
     if (message.author.bot) return;
   
-    if (message.content === prefix + `${ADMIN_COMMAND}`) {
+    if (message.content === prefix + `code`) {
       if (!message.member.permissions.has('ADMINISTRATOR')) {
         return message.reply("Vous n'avez pas la permission de me demander cette information.");
       }
