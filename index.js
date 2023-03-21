@@ -257,9 +257,8 @@ client.on("interactionCreate", async interaction => {
     }
   });
   
-
-  //avertissement
-  client.on('message', async (message) => {
+//REPETE
+client.on('message', async (message) => {
     // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
     if (message.author.bot || !message.content.startsWith(prefix)) return;
   
@@ -267,33 +266,22 @@ client.on("interactionCreate", async interaction => {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
   
-    // Gestion des commandes d'avertissement
-    if (command === 'warn') {
-      if (!message.member.hasPermission('MANAGE_ROLES')) {
-        return message.reply("Vous n'avez pas la permission de gérer les rôles.");
+    // Gestion de la commande "repete"
+    if (command === 'repete') {
+      // Vérifier si l'utilisateur a la permission d'administrateur
+      if (!message.member.hasPermission('ADMINISTRATOR')) {
+        return message.reply("Vous n'avez pas la permission nécessaire pour effectuer cette action.");
       }
   
-      const userToWarn = message.mentions.members.first();
-      if (!userToWarn) {
-        return message.reply("Veuillez mentionner un utilisateur à avertir.");
+      // Obtenir le message à répéter
+      const messageToRepeat = args.join(' ');
+  
+      // Vérifier si un message a été fourni
+      if (!messageToRepeat) {
+        return message.reply('Veuillez fournir un message à répéter.');
       }
   
-      const warningChannel = message.guild.channels.cache.get('989208521625174137');
-  
-      if (userToWarn.roles.cache.has('987820202177749086')) {
-        await userToWarn.roles.add('987820202177749085');
-        await userToWarn.roles.remove('987820202177749086');
-        warningChannel.send(`${userToWarn} a reçu un deuxième avertissement.`);
-      } else if (userToWarn.roles.cache.has('987820202177749085')) {
-        await userToWarn.roles.add('987820202177749084');
-        await userToWarn.roles.remove('987820202177749085');
-        warningChannel.send(`${userToWarn} a reçu un troisième avertissement.`);
-      } else if (userToWarn.roles.cache.has('987820202177749084')) {
-        await userToWarn.roles.add('991408401538105445');
-        warningChannel.send(`${userToWarn} a été rendu muet après trois avertissements.`);
-      } else {
-        await userToWarn.roles.add('987820202177749086');
-        warningChannel.send(`${userToWarn} a reçu un premier avertissement.`);
-      }
+      // Répéter le message
+      message.channel.send(messageToRepeat);
     }
   });
