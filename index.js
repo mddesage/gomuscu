@@ -169,230 +169,68 @@ switch (command) {
 
 
 
-// MENU1
+// MENU
 const { MessageActionRow, MessageSelectMenu } = Discord;
 
-client.on("messageCreate", async message => {
-    // ...
-    if (message.content === "yhuywghyy") {
-        const menu = new MessageSelectMenu()
-            .setCustomId('departement_menu')
-            .setPlaceholder('Choisissez votre département du 01 au 25')
-            .addOptions(
-                Array.from({ length: 25 }, (_, i) => {
-                    const num = (i + 1).toString().padStart(2, '0');
-                    return {
-                        label: `Département ${num}`,
-                        value: `departement_${num}`,
-                    };
-                })
-            );
+const createMenu = (customId, start, end, extraOptions = []) => {
+    const menu = new MessageSelectMenu()
+        .setCustomId(customId)
+        .setPlaceholder(`Choisissez votre département du ${start} au ${end}`)
+        .addOptions(
+            Array.from({ length: end - start + 1 }, (_, i) => {
+                const num = (i + start).toString().padStart(2, '0');
+                return {
+                    label: `Département ${num}`,
+                    value: `departement_${num}`,
+                };
+            }).concat(extraOptions)
+        );
 
-        const row = new MessageActionRow()
-            .addComponents(menu);
+    const row = new MessageActionRow()
+        .addComponents(menu);
+
+    return row;
+};
+
+const handleInteraction = async (interaction, customIdPrefix) => {
+    if (!interaction.isSelectMenu() || !interaction.customId.startsWith(customIdPrefix)) return;
+
+    const choice = interaction.values[0];
+    const departementNumber = choice.split('_')[1];
+    const roleName = `🧭┃Département ${departementNumber}`;
+    const role = interaction.guild.roles.cache.find(r => r.name === roleName);
+
+    if (!role) {
+        await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
+        return;
+    }
+
+    try {
+        await interaction.member.roles.add(role);
+        await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+    } catch (error) {
+        console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
+        await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
+    }
+};
+
+client.on("messageCreate", async message => {
+    if (message.content === "yhuywghyy") {
+        const menu1 = createMenu('departement_menu1', 1, 25);
+        const menu2 = createMenu('departement_menu2', 26, 50);
+        const menu3 = createMenu('departement_menu3', 51, 75);
+        const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
+            label: `Département ${num}`,
+            value: `departement_${num}`,
+        })));
 
         await message.channel.send({
             content: '**Sélectionnez votre département** :',
-            components: [row],
+            components: [menu1, menu2, menu3, menu4],
         });
     }
-    // ...
 });
 
 client.on("interactionCreate", async interaction => {
-    if (!interaction.isSelectMenu()) return;
-
-    if (interaction.customId === 'departement_menu') {
-        const choice = interaction.values[0];
-        const departementNumber = choice.split('_')[1];
-        const roleName = `🧭┃Département ${departementNumber}`;
-        const role = interaction.guild.roles.cache.find(r => r.name === roleName);
-
-        if (!role) {
-            await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
-            return;
-        }
-
-        try {
-            await interaction.member.roles.add(role);
-            await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
-        } catch (error) {
-            console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
-            await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
-        }
-    }
+    handleInteraction(interaction, 'departement_menu');
 });
-// ...
-
-
-
-
-
-//MENU2
-client.on("messageCreate", async message => {
-    // ...
-    if (message.content === 'yhuywghyy') {
-        const menu2 = new MessageSelectMenu()
-            .setCustomId('departement_menu2')
-            .setPlaceholder('Choisissez votre département du 26 au 50')
-            .addOptions(
-                Array.from({ length: 25 }, (_, i) => {
-                    const num = (i + 26).toString().padStart(2, '0');
-                    return {
-                        label: `Département ${num}`,
-                        value: `departement_${num}`,
-                    };
-                })
-            );
-
-        const row2 = new MessageActionRow()
-            .addComponents(menu2);
-
-        await message.channel.send({
-            components: [row2]
-        });
-    }
-    // ...
-});
-
-client.on("interactionCreate", async interaction => {
-    if (!interaction.isSelectMenu()) return;
-
-    if (interaction.customId === 'departement_menu2') {
-        const choice = interaction.values[0];
-        const departementNumber = choice.split('_')[1];
-        const roleName = `Département ${departementNumber}`;
-        const role = interaction.guild.roles.cache.find(r => r.name === roleName);
-
-        if (!role) {
-            await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
-            return;
-        }
-
-        try {
-            await interaction.member.roles.add(role);
-            await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
-        } catch (error) {
-            console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
-            await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
-        }
-    }
-});
-// ...
-
-
-
-
-
-//MENU3
-client.on("messageCreate", async message => {
-    // ...
-    if (message.content === 'yhuywghyy') {
-        const menu = new MessageSelectMenu()
-            .setCustomId('departement_menu3')
-            .setPlaceholder('Choisissez votre département du 51 au 75')
-            .addOptions(
-                Array.from({ length: 25 }, (_, i) => {
-                    const num = (i + 51).toString().padStart(2, '0');
-                    return {
-                        label: `Département ${num}`,
-                        value: `departement_${num}`,
-                    };
-                })
-            );
-
-        const row = new MessageActionRow()
-            .addComponents(menu);
-
-        await message.channel.send({
-            components: [row]
-        });
-    }
-    // ...
-});
-
-client.on("interactionCreate", async interaction => {
-    if (!interaction.isSelectMenu()) return;
-
-    if (interaction.customId === 'departement_menu3') {
-        const choice = interaction.values[0];
-        const departementNumber = choice.split('_')[1];
-        const roleName = `Département ${departementNumber}`;
-        const role = interaction.guild.roles.cache.find(r => r.name === roleName);
-
-        if (!role) {
-            await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
-            return;
-        }
-
-        try {
-            await interaction.member.roles.add(role);
-            await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
-        } catch (error) {
-            console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
-            await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
-        }
-    }
-});
-// ...
-
-
-
-//MENU4
-
-client.on("messageCreate", async message => {
-    // ...
-    if (message.content === 'yhuywghyy') {
-        const menu = new MessageSelectMenu()
-            .setCustomId('departement_menu4')
-            .setPlaceholder('Choisissez votre département du 76 au 95 (971, 972, 973, 974, 976)')
-            .addOptions(
-                Array.from({ length: 20 }, (_, i) => {
-                    const num = (i + 76).toString().padStart(2, '0');
-                    return {
-                        label: `Département ${num}`,
-                        value: `departement_${num}`,
-                    };
-                }).concat(
-                    [971, 972, 973, 974, 976].map(num => ({
-                        label: `Département ${num}`,
-                        value: `departement_${num}`,
-                    }))
-                )
-            );
-
-        const row = new MessageActionRow()
-            .addComponents(menu);
-
-        await message.channel.send({
-            components: [row]
-        });
-    }
-    // ...
-});
-
-client.on("interactionCreate", async interaction => {
-    if (!interaction.isSelectMenu()) return;
-
-    if (interaction.customId === 'departement_menu4') {
-        const choice = interaction.values[0];
-        const departementNumber = choice.split('_')[1];
-        const roleName = `Département ${departementNumber}`;
-        const role = interaction.guild.roles.cache.find(r => r.name === roleName);
-
-        if (!role) {
-            await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
-            return;
-        }
-
-        try {
-            await interaction.member.roles.add(role);
-            await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
-        } catch (error) {
-            console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
-            await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
-        }
-    }
-});
-// ...
-
