@@ -4,6 +4,7 @@ const client = new Discord.Client({
         Discord.Intents.FLAGS.GUILDS,
         Discord.Intents.FLAGS.GUILD_MESSAGES,
         Discord.Intents.FLAGS.DIRECT_MESSAGES,
+        Discord.Intents.FLAGS.MESSAGE_CONTENT,
     ]
 });
 
