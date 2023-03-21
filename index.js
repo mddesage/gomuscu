@@ -14,7 +14,7 @@ client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
 
 client.on("ready", () => {
-    console.log(`✅ Le Bot est opérationnel ! ✅`)
+    console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 });
 
 client.on("interactionCreate", interaction => {
