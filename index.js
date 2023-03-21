@@ -257,3 +257,43 @@ client.on("interactionCreate", async interaction => {
     }
   });
   
+
+  //avertissement
+  client.on('message', async (message) => {
+    // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
+    if (message.author.bot || !message.content.startsWith(prefix)) return;
+  
+    // Récupération de la commande et des arguments
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const command = args.shift().toLowerCase();
+  
+    // Gestion des commandes d'avertissement
+    if (command === 'warn') {
+      if (!message.member.hasPermission('MANAGE_ROLES')) {
+        return message.reply("Vous n'avez pas la permission de gérer les rôles.");
+      }
+  
+      const userToWarn = message.mentions.members.first();
+      if (!userToWarn) {
+        return message.reply("Veuillez mentionner un utilisateur à avertir.");
+      }
+  
+      const warningChannel = message.guild.channels.cache.get('989208521625174137');
+  
+      if (userToWarn.roles.cache.has('987820202177749086')) {
+        await userToWarn.roles.add('987820202177749085');
+        await userToWarn.roles.remove('987820202177749086');
+        warningChannel.send(`${userToWarn} a reçu un deuxième avertissement.`);
+      } else if (userToWarn.roles.cache.has('987820202177749085')) {
+        await userToWarn.roles.add('987820202177749084');
+        await userToWarn.roles.remove('987820202177749085');
+        warningChannel.send(`${userToWarn} a reçu un troisième avertissement.`);
+      } else if (userToWarn.roles.cache.has('987820202177749084')) {
+        await userToWarn.roles.add('991408401538105445');
+        warningChannel.send(`${userToWarn} a été rendu muet après trois avertissements.`);
+      } else {
+        await userToWarn.roles.add('987820202177749086');
+        warningChannel.send(`${userToWarn} a reçu un premier avertissement.`);
+      }
+    }
+  });
