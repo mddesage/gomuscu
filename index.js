@@ -244,7 +244,7 @@ client.on("interactionCreate", async interaction => {
 
 
 //AVERTISSEMENT
-client.on('message', async message => {
+client.on('messageCreate', async message => {
     if (message.author.bot || !message.content.startsWith(prefix)) return;
   
     const args = message.content.slice(prefix.length).trim().split(/ +/);
