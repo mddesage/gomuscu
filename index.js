@@ -285,3 +285,4 @@ client.on('message', async (message) => {
       message.channel.send(messageToRepeat);
     }
   });
+  
