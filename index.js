@@ -19,6 +19,7 @@ const WARNING_2_ROLE_ID = '987820202177749085';
 const WARNING_3_ROLE_ID = '987820202177749084';
 const MUTE_ROLE_ID = '991408401538105445';
 const LOG_CHANNEL_ID = '989208521625174137';
+const BOT_ID = '994859660727291985';
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -245,14 +246,17 @@ client.on("interactionCreate", async interaction => {
 
 
 //AVERTISSEMENT
-client.on('messageCreate', async message => {
-    if (message.author.bot || !message.content.startsWith(prefix)) return;
+client.on('message', async message => {
+    if (message.author.bot) return;
   
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
+    const botMention = `<@!${BOT_ID}>`;
+    if (!message.content.startsWith(botMention)) return;
+  
+    const args = message.content.slice(botMention.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
   
     if (command === 'avertissement') {
-      if (!message.member.permissions.has('MANAGE_ROLES')) {
+      if (!message.member.hasPermission('MANAGE_ROLES')) {
         return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
       }
   
@@ -282,7 +286,7 @@ client.on('messageCreate', async message => {
   
       const logChannel = message.guild.channels.cache.get(LOG_CHANNEL_ID);
       if (logChannel) {
-        const logEmbed = new MessageEmbed()
+        const logEmbed = new Discord.MessageEmbed()
           .setColor('#ff0000')
           .setTitle('Avertissement')
           .addField('Utilisateur averti', targetUser, true)
@@ -290,7 +294,7 @@ client.on('messageCreate', async message => {
           .addField('Raison', reason)
           .setTimestamp();
   
-        logChannel.send({ embeds: [logEmbed] });
+        logChannel.send(logEmbed);
       }
     }
   });
