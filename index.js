@@ -215,7 +215,7 @@ const handleInteraction = async (interaction, customIdPrefix) => {
 };
 
 client.on("messageCreate", async message => {
-    if (message.content === "yhuywghyy") {
+    if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
         const menu1 = createMenu('departement_menu1', 1, 25);
         const menu2 = createMenu('departement_menu2', 26, 50);
         const menu3 = createMenu('departement_menu3', 51, 75);
