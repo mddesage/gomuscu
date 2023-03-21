@@ -2,5 +2,8 @@
   "dependencies": {
     "discord-buttons": "^4.0.0-deprecated",
     "discord.js": "^13.14.0"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
