@@ -248,7 +248,7 @@ client.on("messageCreate", async message => {
         const row2 = new MessageActionRow()
             .addComponents(menu2);
 
-        await message.reply({
+        await message.channel.send({
             content: 'Sélectionnez votre département **du 26 au 50**:',
             components: [row2],
         });
@@ -305,7 +305,7 @@ client.on("messageCreate", async message => {
         const row = new MessageActionRow()
             .addComponents(menu);
 
-        await message.reply({
+        await message.channel.send({
             content: 'Sélectionnez votre département **du 51 au 75** :',
             components: [row],
         });
@@ -366,7 +366,7 @@ client.on("messageCreate", async message => {
         const row = new MessageActionRow()
             .addComponents(menu);
 
-        await message.reply({
+        await message.channel.send({
             content: 'Sélectionnez votre département **du 76 au 95 (971, 972, 973, 974, 976)** :',
             components: [row],
         });
