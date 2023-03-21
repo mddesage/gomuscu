@@ -239,11 +239,11 @@ client.on("interactionCreate", async interaction => {
 
 //AVERTISSEMENT
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-    const channelId = '989208521625174137';
-    const role1Id = '987820202177749086'; // Premier avertissement
-    const role2Id = '987820202177749085'; // Deuxième avertissement
-    const role3Id = '987820202177749084'; // Troisième avertissement
-    const muteRoleId = '991408401538105445';
+    const channelId = '<#989208521625174137>';
+    const role1Id = '<@&987820202177749086>'; // Premier avertissement
+    const role2Id = '<@&987820202177749085>'; // Deuxième avertissement
+    const role3Id = '<@&987820202177749084>'; // Troisième avertissement
+    const muteRoleId = '<@&991408401538105445>';
   
     const channel = newMember.guild.channels.cache.get(channelId);
     if (!channel) return console.error(`Channel ${channelId} not found`);
