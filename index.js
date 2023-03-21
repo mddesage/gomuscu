@@ -49,6 +49,22 @@ client.on("messageCreate", async message => {
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
+  
+    if (cmd === ADMIN_COMMAND) {
+      if (!message.member.permissions.has('ADMINISTRATOR')) {
+        return message.reply("Vous n'avez pas la permission de me demander cette information.");
+      }
+  
+      const url = 'https://github.com/mddesage/gomuscu';
+  
+      try {
+        await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
+        await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
+      } catch (error) {
+        console.error(error);
+        message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
+      }
+    }
 
     if (message.content.startsWith(prefix)) {
         switch (command) {
@@ -162,6 +178,7 @@ switch (command) {
         break;
     // ...
 }
+
 });
 
 
@@ -301,26 +318,3 @@ client.on('messageCreate', async message => {
 
 
   //prefix + code
-  client.on('messageCreate', async message => {
-    if (message.author.bot) return;
-    if (!message.content.startsWith(prefix)) return;
-  
-    const args = message.content.trim().split(/ +/g);
-    const cmd = args.shift().slice(prefix.length).toLowerCase();
-  
-    if (cmd === ADMIN_COMMAND) {
-      if (!message.member.permissions.has('ADMINISTRATOR')) {
-        return message.reply("Vous n'avez pas la permission de me demander cette information.");
-      }
-  
-      const url = 'https://github.com/mddesage/gomuscu';
-  
-      try {
-        await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
-        await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
-      } catch (error) {
-        console.error(error);
-        message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
-      }
-    }
-  });
