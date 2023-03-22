@@ -133,7 +133,7 @@ client.on("messageCreate", async message => {
             case 'help':
                     const embed = new Discord.MessageEmbed()
                         .setColor("BLUE")
-                        .setFooter("*Au nom de l'équipe** 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
+                        .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **discord** \n<@994859660727291985> **roles**\n<@994859660727291985> **departements**\n<@994859660727291985> **discussion**\n<@994859660727291985> **performances**\n<@994859660727291985> **evolutions**\n<@994859660727291985> **programmes**\n<@994859660727291985> **playlist**\n<@994859660727291985> **reseauxsociaux**\n<@994859660727291985> **gymbro**")
@@ -145,7 +145,7 @@ client.on("messageCreate", async message => {
                 if (message.member.permissions.has("ADMINISTRATOR")) {
                     const embed = new Discord.MessageEmbed()
                         .setColor("RED")
-                        .setFooter("*Au nom de l'équipe*  𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
+                        .setFooter("Au nom de l'équipe  𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **suppr**\n<@994859660727291985> **code**\n<@994859660727291985> **repete**\n<@994859660727291985> **repete&suppr**")
