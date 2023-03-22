@@ -33,15 +33,10 @@ client.on("interactionCreate", interaction => {
 });
 
 client.on('message', message => {
-    // Vérifie que le message n'a pas été envoyé par le bot lui-même
     if (message.author.bot) return;
-    
-    // Liste de mots à détecter
     const greetings = ['salut', 'slt', 'bonjour', 'bjr', 'bonsoir', 'bsr', 'wesh', 'hey'];
   
-    // Vérifie si le message contient l'un des mots de la liste
     if (greetings.some(word => message.content.toLowerCase().includes(word))) {
-      // Réagit avec "👋"
       message.react('👋');
     }
   });
@@ -341,5 +336,18 @@ client.on('messageCreate', async (message) => {
       if (command === 'repete&suppr') {
         message.delete();
       }
+    }
+  });
+
+//react message
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (user.bot) return; 
+  
+    try {
+      if (!reaction.message.guild) return; 
+  
+      await reaction.message.react(reaction.emoji);
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout de la réaction:', error);
     }
   });
