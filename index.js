@@ -17,7 +17,7 @@ client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
     client.user.setPresence({
-        status: 'online', // Vous pouvez choisir parmi 'online', 'idle', 'dnd' ou 'invisible'
+        status: 'dnd', // Vous pouvez choisir parmi 'online', 'idle', 'dnd' ou 'invisible'
         activities: [
           {
             name: '𝐺𝑂𝑀𝑈𝑆𝐶𝑈', // Le texte à afficher
