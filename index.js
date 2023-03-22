@@ -12,32 +12,21 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
-const RPC = require('discord-rpc');
-const rpc = new RPC.Client({ transport: 'ipc' });
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
-    rpc.login({ clientId: '994859660727291985' }).catch(console.error);
-
-    rpc.on('ready', () => {
-      console.log('RPC connected!');
-  
-      rpc.setActivity({
-        details: 'Rejoins nous !',
-        state: 'On attend plus que toi 😉',
-        startTimestamp: new Date(),
-        largeImageKey: 'logo',
-        largeImageText: 'GO MUSCU',
-        smallImageKey: 'logo',
-        smallImageText: 'Petite',
-        instance: false,
-        buttons: [
-            { label: 'REJOINDRE', url: 'https://discord.gg/T9fUEbsJrt' },
-        ]
+    client.user.setPresence({
+        status: 'online', // Vous pouvez choisir parmi 'online', 'idle', 'dnd' ou 'invisible'
+        activities: [
+          {
+            name: 'Personnaliser le Rich Presence', // Le texte à afficher
+            type: 'PLAYING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
+            url: 'https://www.example.com', // URL facultative pour le type 'STREAMING'
+          },
+        ],
       });
     });
-  });
 
 client.on("interactionCreate", interaction => {
     // Gérer les interactions ici
