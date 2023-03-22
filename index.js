@@ -57,6 +57,12 @@ client.on("messageCreate", async message => {
         switch (command) {
             case '':
                 message.reply("Oui ?");
+            case 'discord':
+            case 'Discord':
+            case 'invit':
+            case 'invite':
+            case 'invitation':
+                message.reply("https://discord.gg/T9fUEbsJrt");
             case 'hey':
             case 'yo':
                 message.reply("Salut à toi !");
