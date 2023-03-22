@@ -21,7 +21,7 @@ client.on("ready", () => {
         activities: [
           {
             name: '𝐺𝑂𝑀𝑈𝑆𝐶𝑈', // Le texte à afficher
-            type: 'STREAMING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
+            type: 'COMPETING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
             url: 'https://discord.gg/T9fUEbsJrt', // URL facultative pour le type 'STREAMING'
           },
         ],
