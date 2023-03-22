@@ -13,7 +13,6 @@ const client = new Discord.Client({
 client.login(process.env.TOKEN);
 
 const prefix = (process.env.PREFIX);
-const BOT_MENTION = '<@994859660727291985>';
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -319,3 +318,27 @@ client.on('messageCreate', async (message) => {
       }
     }
   });
+
+  //gpt
+const GPTKEY = (process.env.GPT_KEY);
+const { Client, Intents } = require('discord.js');
+const openai = require('openai');
+openai.apiKey = 'votre_clé_api_openai';
+
+async function chatGPT(msg) {
+  const res = await openai.Completion.create({ engine: 'text-davinci-002', prompt: `Répondre à ce message : "${msg}"`, max_tokens: 150, n: 1, stop: null, temperature: 0.7 });
+  return res.choices[0].text.trim();
+}
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot || !message.content.startsWith('/chatgpt')) return;
+  const userInput = message.content.slice('/chatgpt'.length).trim();
+  if (!userInput) return message.reply("Veuillez fournir un message après la commande '/chatgpt'.");
+  try {
+    const gptResponse = await chatGPT(userInput);
+    message.reply(gptResponse);
+  } catch (error) {
+    console.error('Erreur lors de la génération de la réponse ChatGPT:', error);
+    message.reply("Désolé, une erreur s'est produite. Veuillez réessayer plus tard.");
+  }
+});
