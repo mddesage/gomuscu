@@ -162,12 +162,13 @@ client.on("messageCreate", async message => {
 
             
         }
-    // ...
+
+//SUPPR
 switch (command) {
-    // ...
+
     case 'suppr':
         if (!message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
-            return message.reply("Vous n'avez pas la permission de supprimer des messages.");
+            return message.reply("Désolé, cette commande est réservée aux employés.");
         }
 
         const deleteCount = parseInt(args[0], 10);
