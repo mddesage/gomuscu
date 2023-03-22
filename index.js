@@ -13,6 +13,8 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
+const RPC = require('discord-rpc');
+const rpc = new RPC.Client({ transport: 'ipc' });
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
