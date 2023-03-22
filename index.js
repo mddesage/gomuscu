@@ -149,7 +149,7 @@ client.on("messageCreate", async message => {
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription("Le prefix de <@994859660727291985> est sa mention.\n\n<@994859660727291985> suppr \n<@994859660727291985> code\n<@994859660727291985> repete\n<@994859660727291985> repete&suppr")
-                        .setTitle("Liste des commandes");
+                        .setTitle("Liste des commandes EMPLOYÉS");
                     message.channel.send({ embeds: [embed] });
                     } else {
                     message.reply("Désolé, cette commande est réservée aux employés.");
@@ -262,7 +262,7 @@ client.on('message', async message => {
 
   if (message.content === prefix + 'code') {
     if (!message.member.permissions.has('ADMINISTRATOR')) {
-      return message.reply("Vous n'avez pas la permission de me demander cette information.");
+      return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
     const url = 'https://github.com/mddesage/gomuscu';
@@ -290,7 +290,7 @@ client.on('messageCreate', async (message) => {
     if (command === 'repete') {
       // Vérifier si l'utilisateur a la permission d'administrateur
       if (!message.member.permissions.has('ADMINISTRATOR')) {
-        return message.reply("Vous n'avez pas la permission nécessaire pour effectuer cette action.");
+        return message.reply("Désolé, cette commande est réservée aux employés.");
       }
   
       // Obtenir le message à répéter
@@ -319,7 +319,7 @@ client.on('messageCreate', async (message) => {
     if (command === 'repete' || command === 'repete&suppr') {
       // Vérifier si l'utilisateur a la permission d'administrateur
       if (!message.member.permissions.has('ADMINISTRATOR')) {
-        return message.reply("Vous n'avez pas la permission nécessaire pour effectuer cette action.");
+        return message.reply("Désolé, cette commande est réservée aux employés.");
       }
   
       // Obtenir le message à répéter
