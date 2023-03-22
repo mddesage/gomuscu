@@ -21,8 +21,20 @@ client.on("ready", () => {
         activities: [
           {
             name: 'Personnaliser le Rich Presence', // Le texte à afficher
-            type: 'PLAYING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
-            url: 'https://www.example.com', // URL facultative pour le type 'STREAMING'
+        type: 'PLAYING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
+        url: 'https://discord.gg/T9fUEbsJrt', // URL facultative pour le type 'STREAMING'
+        details: 'Rejoins nous !',
+        state: 'On attend plus que toi 😉',
+        assets: {
+          large_image: 'grid_1',
+          large_text: 'GO MUSCU',
+          small_image: 'logo',
+          small_text: 'Petite',
+        },
+        buttons: [
+          { label: 'REJOINDRE', url: 'https://discord.gg/T9fUEbsJrt' },
+          // { label: '2B', url: 'https://peopleofhell.fr/tuto/rich' }, // Décommentez cette ligne pour ajouter un deuxième bouton
+        ],
           },
         ],
       });
