@@ -339,4 +339,17 @@ client.on('messageCreate', async (message) => {
   });
 
 
-//rich presence
+//!invite
+client.on('messageCreate', async (message) => {
+    if (message.content === '!invite') {
+      const row = new MessageActionRow()
+        .addComponents(
+          new MessageButton()
+            .setLabel('REJOINDRE')
+            .setStyle('LINK')
+            .setURL('https://discord.gg/T9fUEbsJrt')
+        );
+  
+      await message.reply({ content: 'Cliquez sur le bouton pour rejoindre le serveur:', components: [row] });
+    }
+  });
