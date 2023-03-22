@@ -130,7 +130,7 @@ client.on("messageCreate", async message => {
                 message.reply("Voici le salon des <#987842500997820477>");
                 break;
             case 'aide':
-                case 'help':
+            case 'help':
                     const embed = new Discord.MessageEmbed()
                         .setColor("BLUE")
                         .setFooter("Au nom de l'équipe de GOMUSCU")
@@ -138,10 +138,24 @@ client.on("messageCreate", async message => {
                         .setThumbnail("https://images-ext-2.discordapp.net/external/npfN0HwsFYgFsIAxK2tygqq29ykQmDTlvAqUjksas8E/https/media3.giphy.com/media/LnKEhZb9MAjPZnq3AC/giphy.gif")
                         .setDescription("Le prefix de <@994859660727291985> est sa mention\n\n<@994859660727291985> discord \n<@994859660727291985> roles\n<@994859660727291985> departements\n<@994859660727291985> discussion\n<@994859660727291985> performances\n<@994859660727291985> evolutions\n<@994859660727291985> programmes\n<@994859660727291985> playlist\n<@994859660727291985> reseauxsociaux\n<@994859660727291985> gymbro")
                         .setTitle("Liste des commandes");
-    
                     message.channel.send({ embeds: [embed] });
-                   
-            }
+                    break;
+
+            case 'aide+':
+            case 'help+':
+                    if (message.member.permissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+                        const embed = new Discord.MessageEmbed()
+                            .setColor("BLUE")
+                            .setFooter("Au nom de l'équipe de GOMUSCU")
+                            .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+                            .setThumbnail("https://images-ext-2.discordapp.net/external/npfN0HwsFYgFsIAxK2tygqq29ykQmDTlvAqUjksas8E/https/media3.giphy.com/media/LnKEhZb9MAjPZnq3AC/giphy.gif")
+                            .setDescription("Le prefix de <@994859660727291985> est sa mention\n\n<@994859660727291985> discord \n<@994859660727291985> roles\n<@994859660727291985> departements\n<@994859660727291985> discussion\n<@994859660727291985> performances\n<@994859660727291985> evolutions\n<@994859660727291985> programmes\n<@994859660727291985> playlist\n<@994859660727291985> reseauxsociaux\n<@994859660727291985> gymbro")
+                            .setTitle("Liste des commandes");}
+                message.channel.send({ embeds: [embed] });
+                    break;
+                };
+                
+              
 
 
             
@@ -174,20 +188,7 @@ switch (command) {
 }
 });
 
-
-
-
-
-
-
-// les menus : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT
-
-
-
-
-
-
-// MENU
+// MENU : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT
 const { MessageActionRow, MessageSelectMenu } = Discord;
 
 const createMenu = (customId, start, end, extraOptions = []) => {
@@ -252,6 +253,7 @@ client.on("messageCreate", async message => {
 client.on("interactionCreate", async interaction => {
     handleInteraction(interaction, 'departement_menu');
 });
+
   //CODE
 client.on('message', async message => {
   if (message.author.bot) return;
@@ -335,6 +337,3 @@ client.on('messageCreate', async (message) => {
       }
     }
   });
-
-
-//rich presence
