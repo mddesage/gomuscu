@@ -321,9 +321,8 @@ client.on('messageCreate', async (message) => {
 
   //gpt
 const GPTKEY = (process.env.GPT_KEY);
-const { Client, Intents } = require('discord.js');
 const openai = require('openai');
-openai.apiKey = 'votre_clé_api_openai';
+openai.apiKey = (GPT_KEY);
 
 async function chatGPT(msg) {
   const res = await openai.Completion.create({ engine: 'text-davinci-002', prompt: `Répondre à ce message : "${msg}"`, max_tokens: 150, n: 1, stop: null, temperature: 0.7 });
