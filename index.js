@@ -17,7 +17,7 @@ const prefix = (process.env.PREFIX);
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
-    rpc.login({ clientId: '994716668087513178' }).catch(console.error);
+    rpc.login({ clientId: '994859660727291985' }).catch(console.error);
 
     rpc.on('ready', () => {
       console.log('RPC connected!');
