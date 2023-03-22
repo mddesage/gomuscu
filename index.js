@@ -16,28 +16,25 @@ const prefix = (process.env.PREFIX);
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
-    client.user.setPresence({
-        status: 'online', // Vous pouvez choisir parmi 'online', 'idle', 'dnd' ou 'invisible'
-        activities: [
-          {
-         name: '𝐺𝑂𝑀𝑈𝑆𝐶𝑈', // Le texte à afficher
-        type: 'PLAYING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
-        url: 'https://discord.gg/T9fUEbsJrt', // URL facultative pour le type 'STREAMING'
-        details: 'Rejoins nous !',
-        state: 'On attend plus que toi 😉',
-        assets: {
-          large_image: 'grid_1',
-          large_text: 'GO MUSCU',
-          small_image: 'logo',
-          small_text: 'Petite',
+    const activities = [
+        {
+          text: "Rejoins nous !",
+          type: "PLAYING"
         },
-        buttons: [
-          { label: 'REJOINDRE', url: 'https://discord.gg/T9fUEbsJrt' },
-          // { label: '2B', url: 'https://peopleofhell.fr/tuto/rich' }, // Décommentez cette ligne pour ajouter un deuxième bouton
-        ],
-          },
-        ],
-      });
+        {
+          text: "On attend plus que toi 😉",
+          type: "PLAYING"
+        }
+      ];
+    
+      let activityIndex = 0;
+    
+      setInterval(() => {
+        const activity = activities[activityIndex];
+        client.user.setActivity(activity.text, { type: activity.type });
+    
+        activityIndex = (activityIndex + 1) % activities.length;
+      }, 10000); // Change the bot's status every 10 seconds
     });
 
 client.on("interactionCreate", interaction => {
