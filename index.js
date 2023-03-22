@@ -321,7 +321,7 @@ client.on('messageCreate', async (message) => {
   });
 
   //gpt
-  openai.apiKey = (process.env.GPT_KEY);
+  openai.apiKey = ("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");
 
   async function chatGPT(msg) {
     const res = await openai.Completion.create({
