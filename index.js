@@ -320,24 +320,24 @@ client.on('messageCreate', async (message) => {
   });
 
   //gpt
-const GPTKEY = (process.env.GPT_KEY);
-const openai = require('openai');
-openai.apiKey = (GPTKEY);
-
-async function chatGPT(msg) {
-  const res = await openai.Completion.create({ engine: 'text-davinci-002', prompt: `Répondre à ce message : "${msg}"`, max_tokens: 150, n: 1, stop: null, temperature: 0.7 });
-  return res.choices[0].text.trim();
-}
-
-client.on('messageCreate', async (message) => {
-  if (message.author.bot || !message.content.startsWith('/chatgpt')) return;
-  const userInput = message.content.slice('/chatgpt'.length).trim();
-  if (!userInput) return message.reply("Veuillez fournir un message après la commande '/chatgpt'.");
-  try {
-    const gptResponse = await chatGPT(userInput);
-    message.reply(gptResponse);
-  } catch (error) {
-    console.error('Erreur lors de la génération de la réponse ChatGPT:', error);
-    message.reply("Désolé, une erreur s'est produite. Veuillez réessayer plus tard.");
+  const openai = require('openai');
+  openai.apiKey = (process.env.GPT_KEY);
+  
+  async function chatGPT(msg) {
+    const res = await openai.Completion.create({ engine: 'text-davinci-002', prompt: `Répondre à ce message : "${msg}"`, max_tokens: 150, n: 1, stop: null, temperature: 0.7 });
+    return res.choices[0].text.trim();
   }
-});
+  
+  client.on('messageCreate', async (message) => {
+    if (message.author.bot || !message.content.startsWith(prefix + 'chatgpt')) return;
+    const userInput = message.content.slice((prefix + 'chatgpt').length).trim();
+    if (!userInput) return message.reply("Veuillez fournir un message après la commande '" + prefix + "chatgpt'.");
+    try {
+      const gptResponse = await chatGPT(userInput);
+      message.reply(gptResponse);
+    } catch (error) {
+      console.error('Erreur lors de la génération de la réponse ChatGPT:', error);
+      message.reply("Désolé, une erreur s'est produite. Veuillez réessayer plus tard.");
+    }
+  });
+  
