@@ -12,6 +12,7 @@ const client = new Discord.Client({
 
 
 client.login(process.env.TOKEN);
+dotenv.config();
 const prefix = (process.env.PREFIX);
 
 client.on("ready", () => {
