@@ -12,7 +12,6 @@ const client = new Discord.Client({
 
 
 client.login(process.env.TOKEN);
-dotenv.config();
 const prefix = (process.env.PREFIX);
 
 client.on("ready", () => {
@@ -320,14 +319,21 @@ client.on('messageCreate', async (message) => {
     }
   });
 
-  client.on('messageReactionAdd', async (reaction, user) => {
-    // Vérifiez si la réaction a été ajoutée par un bot, auquel cas ne faites rien
-    if (user.bot) return;
 
-    // Ajouter la même réaction que celle ajoutée par l'utilisateur
-    try {
-        await reaction.message.react(reaction.emoji);
-    } catch (error) {
-        console.error('Erreur lors de l\'ajout de la réaction:', error);
-    }
-});
+  const dotenv = require('dotenv');
+
+  // Charger les variables d'environnement
+  dotenv.config();
+  
+    client.on('messageReactionAdd', async (reaction, user) => {
+      // Vérifiez si la réaction a été ajoutée par un bot, auquel cas ne faites rien
+      if (user.bot) return;
+  
+      // Ajouter la même réaction que celle ajoutée par l'utilisateur
+      try {
+          await reaction.message.react(reaction.emoji);
+      } catch (error) {
+          console.error('Erreur lors de l\'ajout de la réaction:', error);
+      }
+  });
+  
