@@ -13,27 +13,30 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
-const RPC = require('discord-rpc');
-const rpc = new RPC.Client({ transport: 'ipc' });
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
+
+    rpc.login({ clientId: '994716668087513178' }).catch(console.error);
+
     rpc.on('ready', () => {
-        console.log('RPC connected!');
-    
-        rpc.setActivity({
-          details: 'Titre de votre Rich Presence',
-          state: 'Description de votre Rich Presence',
-          startTimestamp: new Date(),
-          largeImageKey: 'nom_de_votre_image_large',
-          largeImageText: 'Texte pour l\'image large',
-          smallImageKey: 'nom_de_votre_image_petite',
-          smallImageText: 'Texte pour l\'image petite',
-          instance: false,
-        });
+      console.log('RPC connected!');
+  
+      rpc.setActivity({
+        details: 'Rejoins nous !',
+        state: 'On attend plus que toi 😉',
+        startTimestamp: new Date(),
+        largeImageKey: 'logo',
+        largeImageText: 'GO MUSCU',
+        smallImageKey: 'logo',
+        smallImageText: 'Petite',
+        instance: false,
+        buttons: [
+            { label: 'REJOINDRE', url: 'https://discord.gg/T9fUEbsJrt' },
+        ]
       });
     });
-    
+  });
 
 client.on("interactionCreate", interaction => {
     // Gérer les interactions ici
