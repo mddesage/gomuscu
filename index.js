@@ -20,27 +20,9 @@ client.on("ready", () => {
         status: 'online', // Vous pouvez choisir parmi 'online', 'idle', 'dnd' ou 'invisible'
         activities: [
           {
-            ndetails : "Rejoins nous !",
-            // 3ème ligne du RP (Minimum 2 caractères)
-            state : "On attend plus que toi 😉",
-            
-            assets : {
-            // Grande image avec texte non cliquable (minuscule seulement)
-            large_image : "grid_1",
-            large_text : "GO MUSCU",
-            // Petite image avec texte non cliquable (minuscule seul_ement)
-            small_image : "logo",
-            small_text : "Petite"
-            
-            // Bouton(s) du RP : Maximum 2 - Minimum 0
-            // (Vous ne pouvez pas cliquer sur vos propres boutons)
-            },
-            buttons : [
-            // Bouton n'1 | (Ajouter des // devant pour les désactiver : "// {label : [...]" )
-            {label : "REJOINDRE" , url : "https://discord.gg/T9fUEbsJrt"},
-            // Bouton n'2 | (Ajouter des // devant pour les désactiver : "// {label : [...]" )
-            //{label : "2B",url : "https://peopleofhell.fr/tuto/rich"}
-            ]
+            name: 'Personnaliser le Rich Presence', // Le texte à afficher
+            type: 'PLAYING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
+            url: 'https://www.example.com', // URL facultative pour le type 'STREAMING'
           },
         ],
       });
