@@ -16,25 +16,16 @@ const prefix = (process.env.PREFIX);
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
-    const activities = [
-        {
-          text: "Rejoins nous !",
-          type: "PLAYING"
-        },
-        {
-          text: "On attend plus que toi 😉",
-          type: "PLAYING"
-        }
-      ];
-    
-      let activityIndex = 0;
-    
-      setInterval(() => {
-        const activity = activities[activityIndex];
-        client.user.setActivity(activity.text, { type: activity.type });
-    
-        activityIndex = (activityIndex + 1) % activities.length;
-      }, 10000); // Change the bot's status every 10 seconds
+    client.user.setPresence({
+        status: 'online', // Vous pouvez choisir parmi 'online', 'idle', 'dnd' ou 'invisible'
+        activities: [
+          {
+            name: '𝐺𝑂𝑀𝑈𝑆𝐶𝑈', // Le texte à afficher
+            type: 'PLAYING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
+            url: 'https://discord.gg/T9fUEbsJrt', // URL facultative pour le type 'STREAMING'
+          },
+        ],
+      });
     });
 
 client.on("interactionCreate", interaction => {
@@ -339,17 +330,4 @@ client.on('messageCreate', async (message) => {
   });
 
 
-//!invite
-client.on('messageCreate', async (message) => {
-    if (message.content === '!invite') {
-      const row = new MessageActionRow()
-        .addComponents(
-          new MessageButton()
-            .setLabel('REJOINDRE')
-            .setStyle('LINK')
-            .setURL('https://discord.gg/T9fUEbsJrt')
-        );
-  
-      await message.reply({ content: 'Cliquez sur le bouton pour rejoindre le serveur:', components: [row] });
-    }
-  });
+//rich presence
