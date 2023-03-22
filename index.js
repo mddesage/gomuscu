@@ -13,10 +13,27 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
+const RPC = require('discord-rpc');
+const rpc = new RPC.Client({ transport: 'ipc' });
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
-});
+    rpc.on('ready', () => {
+        console.log('RPC connected!');
+    
+        rpc.setActivity({
+          details: 'Titre de votre Rich Presence',
+          state: 'Description de votre Rich Presence',
+          startTimestamp: new Date(),
+          largeImageKey: 'nom_de_votre_image_large',
+          largeImageText: 'Texte pour l\'image large',
+          smallImageKey: 'nom_de_votre_image_petite',
+          smallImageText: 'Texte pour l\'image petite',
+          instance: false,
+        });
+      });
+    });
+    
 
 client.on("interactionCreate", interaction => {
     // Gérer les interactions ici
@@ -320,20 +337,5 @@ client.on('messageCreate', async (message) => {
   });
 
 
-  const dotenv = require('dotenv');
-
-  // Charger les variables d'environnement
-  dotenv.config();
-  
-    client.on('messageReactionAdd', async (reaction, user) => {
-      // Vérifiez si la réaction a été ajoutée par un bot, auquel cas ne faites rien
-      if (user.bot) return;
-  
-      // Ajouter la même réaction que celle ajoutée par l'utilisateur
-      try {
-          await reaction.message.react(reaction.emoji);
-      } catch (error) {
-          console.error('Erreur lors de l\'ajout de la réaction:', error);
-      }
-  });
-  
+//rich presence
+rpc.login({ clientId: 'votre_client_id' }).catch(console.error);
