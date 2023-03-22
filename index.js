@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const openai = require('openai');
 const client = new Discord.Client({
     intents: [
         Discord.Intents.FLAGS.GUILDS,
@@ -320,9 +321,8 @@ client.on('messageCreate', async (message) => {
   });
 
   //gpt
-  const openai = require('openai');
   openai.apiKey = (process.env.GPT_KEY);
-  
+
   async function chatGPT(msg) {
     const res = await openai.Completion.create({ engine: 'text-davinci-002', prompt: `Répondre à ce message : "${msg}"`, max_tokens: 150, n: 1, stop: null, temperature: 0.7 });
     return res.choices[0].text.trim();
@@ -340,4 +340,3 @@ client.on('messageCreate', async (message) => {
       message.reply("Désolé, une erreur s'est produite. Veuillez réessayer plus tard.");
     }
   });
-  
