@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const openai = require('openai');
 const client = new Discord.Client({
     intents: [
         Discord.Intents.FLAGS.GUILDS,
@@ -343,4 +342,3 @@ client.on('messageCreate', async (message) => {
 
 
 //rich presence
-rpc.login({ clientId: 'votre_client_id' }).catch(console.error);
