@@ -34,7 +34,7 @@ client.on("interactionCreate", interaction => {
 });
 
 client.on('message', message => {
-    if (message.content.includes('<@994859660727291985>')) {
+    if (message.content === '<@994859660727291985>') {
       message.reply('Oui ?');
     }
   });
