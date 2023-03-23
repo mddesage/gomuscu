@@ -437,13 +437,117 @@ const exercices = [
     {
       nom: 'Développé couché',
       description: 'Un exercice classique pour travailler les pectoraux, les triceps et les deltoïdes antérieurs.',
+      image: 'https://media.giphy.com/media/7z0hNl6vQUgWpf79Nc/giphy.gif'
     },
     {
       nom: 'Squat',
       description: 'Un exercice de base pour renforcer les quadriceps, les ischio-jambiers, les fessiers et le bas du dos.',
+      image: 'https://media.giphy.com/media/8fen5LSZcHQ5O/giphy.gif'
     },
-    // Ajoutez ici d'autres exercices
-  ];
+    {
+      nom: 'Traction à la barre fixe',
+      description: "Un exercice de base pour travailler les muscles du dos, notamment les grands dorsaux, les biceps et les avant-bras.",
+      image: 'https://media.giphy.com/media/UJG4jKpU4Ylqg/giphy.gif'
+    },
+    {
+      nom: 'Rowing haltère',
+      description: "Un exercice qui cible principalement les grands dorsaux, les trapèzes, les rhomboïdes et les biceps.",
+      image: 'https://media.giphy.com/media/xUOwGjKz9GHFkmC8hy/giphy.gif'
+    },
+    {
+      nom: 'Curl biceps',
+      description: "Un exercice classique pour développer la force et la masse des biceps et des avant-bras.",
+      image: 'https://media.giphy.com/media/13NFPU6Z1NL0n6/giphy.gif'
+    },
+    {
+      nom: 'Dips',
+      description: "Un exercice pour renforcer les triceps, les pectoraux et les deltoïdes antérieurs en utilisant le poids du corps.",
+      image: 'https://media.giphy.com/media/13rQ7rrTrvZXlm/giphy.gif'
+    },
+    {
+      nom: 'Leg press',
+      description: "Un exercice de musculation des jambes qui cible les quadriceps, les fessiers, les ischio-jambiers et les mollets.",
+      image: 'https://media.giphy.com/media/Tj83GRql5Vh8A/giphy.gif'
+    },
+    {
+      nom: 'Soulevé de terre',
+      description: "Un exercice polyarticulaire qui renforce le dos, les jambes, les fessiers et les muscles du tronc.",
+      image: 'https://media.giphy.com/media/13GV4kwFzH4D9C/giphy.gif'
+    },
+    {
+      nom: 'Élévation latérale',
+      description: "Un exercice d'isolation pour travailler les deltoïdes latéraux et améliorer la largeur des épaules.",
+      image: 'https://media.giphy.com/media/H3lf6hW8qVz1K/giphy.gif'
+    },
+    {
+      nom: 'Fentes avant',
+      description: "Un exercice pour renforcer les quadriceps, les ischio-jambiers et les fessiers, tout en améliorant l'équilibre et la stabilité.",
+      image: 'https://media.giphy.com/media/lnKJuBPiPiwbu/giphy.gif'
+    },
+   
+    {
+        nom: 'Crunch',
+        description: "Un exercice pour renforcer les muscles abdominaux, notamment le grand droit de l'abdomen.",
+        image: 'https://media.giphy.com/media/lXuJ7Vx0D0trpKnZdI/giphy.gif'
+      },
+      {
+        nom: 'Extension des mollets',
+        description: "Un exercice d'isolation pour renforcer et tonifier les muscles du mollet, notamment le gastrocnémien et le soléaire.",
+        image: 'https://media.giphy.com/media/xUOwG1mU5C6G5mXRwA/giphy.gif'
+      },
+      {
+        nom: 'Développé épaules (militaire)',
+        description: "Un exercice pour développer la force et la masse des épaules, en ciblant principalement les deltoïdes et les trapèzes.",
+        image: 'https://media.giphy.com/media/9xNPUKjOWxFbJGkYnG/giphy.gif'
+      },
+      {
+        nom: 'Pull-over avec haltère',
+        description: "Un exercice pour étirer et renforcer les muscles du haut du corps, notamment les pectoraux, les grands dorsaux et les triceps.",
+        image: 'https://media.giphy.com/media/MOcV5Bq3aKO7Z0b0Xu/giphy.gif'
+      },
+      {
+        nom: 'Biceps curl à la barre',
+        description: "Un exercice pour travailler les biceps et les avant-bras, en utilisant une barre droite ou une barre EZ pour varier la prise.",
+        image: 'https://media.giphy.com/media/xT9IglNIKpMlZVwWnK/giphy.gif'
+      },
+      {
+        nom: 'Skullcrushers (barre au front)',
+        description: "Un exercice d'isolation pour les triceps, qui cible spécifiquement la longue portion du triceps.",
+        image: 'https://media.giphy.com/media/l378eTlCmklFLmYc8/giphy.gif'
+      },
+      {
+        nom: 'Pec deck (butterfly)',
+        description: "Un exercice pour renforcer les pectoraux, en utilisant une machine spécifique pour effectuer des mouvements d'adduction des bras.",
+        image: 'https://media.giphy.com/media/m4E4Pi45DrifK/giphy.gif'
+      },
+      {
+        nom: 'Presse à cuisses',
+        description: "Un exercice pour travailler les quadriceps, les fessiers, les ischio-jambiers et les mollets, en utilisant une machine à presse.",
+        image: 'https://media.giphy.com/media/l4EpfxSeko5S1ShH6/giphy.gif'
+      },
+      {
+        nom: 'Good mornings',
+        description: "Un exercice pour renforcer les muscles du bas du dos, les ischio-jambiers et les fessiers, en réalisant une flexion du tronc vers l'avant.",
+        image: 'https://media.giphy.com/media/ZF9dIgZ2ywWiDlMpPZ/giphy.gif'
+      },
+      {
+        nom: 'Face pull',
+        description: "Un exercice pour renforcer les muscles des épaules, notamment les deltoïdes postérieurs, les trapèzes et les rhomboïdes.",
+        image: 'https://media.giphy.com/media/12oBhWpWYxkMUw/giphy.gif'
+      },
+      {
+        nom: 'Cable crunch',
+        description: "Un exercice pour renforcer les abdominaux, en utilisant un câble et une poulie pour effectuer des mouvements de crunch.",
+        image: 'https://media.giphy.com/media/l2Sqf3qBvLjWkV8JG/giphy.gif'
+      },
+      {
+        nom: 'Donkey calf raises',
+        description: "Un exercice pour renforcer les muscles du mollet, en réalisant des extensions des mollets avec un partenaire ou une machine spécifique.",
+        image: 'https://media.giphy.com/media/l1J9L9A9v6FSHLJW8/giphy.gif'
+      }
+    ];
+    
+      
 
   client.on('message', (message) => {
     if (message.author.bot) return;
