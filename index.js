@@ -184,7 +184,8 @@ Hier vous avez rejoins le serveur **𝐺𝑂𝑀𝑈𝑆𝐶𝑈**, cependant il
 **Lors  de votre arrivé, pensez à passer la vérification en réécrivant les lettres que vous voyez sur  : <#987834307651457044> .**
 
 Cordialement,
-<@994859660727291985>,*équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈*
+*Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈*
+
 https://discord.gg/T9fUEbsJrt`;
                 
                         user.send(invitationMessage)
