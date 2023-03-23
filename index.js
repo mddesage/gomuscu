@@ -569,9 +569,8 @@ client.on('messageCreate', async message => {
   const command = args.shift().toLowerCase();
 
   if (command === 'exercice+') {
-
     // Créer les boutons
-    const boutons = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios jambiers', 'Quadriceps', 'Mollets'].map((groupe, index) => {
+    const boutons = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios Jambiers', 'Quadriceps', 'Mollets'].map((groupe, index) => {
       return new MessageButton()
         .setCustomId(`groupeMusculaire-${index}`)
         .setLabel(groupe)
@@ -583,8 +582,28 @@ client.on('messageCreate', async message => {
     const row2 = new MessageActionRow().addComponents(boutons.slice(5, 10));
 
     // Envoyer le message avec les boutons
-    const exerciceMessage = await message.channel.send({ content: 'Choisissez un groupe musculaire pour afficher un exercice :', components: [row1, row2] });
-
-    // ... Ajoutez ici le reste de votre code pour gérer les interactions avec les boutons
+    await message.channel.send({ content: 'Choisissez un groupe musculaire pour afficher un exercice :', components: [row1, row2] });
   }
+});
+
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isButton()) return;
+
+  const buttonId = interaction.customId;
+  const index = parseInt(buttonId.split('-')[1]);
+
+  const groupesMusculaires = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios Jambiers', 'Quadriceps', 'Mollets'];
+  const groupeMusculaire = groupesMusculaires[index];
+
+  let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
+
+  if (exercicesFiltres.length === 0) {
+    await interaction.reply(`Aucun exercice trouvé pour le groupe musculaire "${groupeMusculaire}". Vérifiez que le groupe musculaire est correct.`);
+    return;
+  }
+
+  const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
+  const exercice = exercicesFiltres[exerciceIndex];
+
+  await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)*`);
 });
