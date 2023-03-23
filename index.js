@@ -432,28 +432,46 @@ async function getChatGPTResponse(prompt) {
     }
 }
 
+//EXERCICE
 client.on('message', message => {
-    // Ignorer les messages du bot et les messages sans le préfixe
-    if (message.author.bot || !message.content.startsWith(prefix)) {
-      return;
-    }
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
   
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
   
-    // Commande pour afficher les conseils nutritionnels
-    if (command === 'nutrition') {
-      message.reply('Voici quelques conseils pour une alimentation saine: [insérer des conseils ici]');
-    }
+    if (command === 'exercice') {
+      const searchQuery = args.join('+');
+      const searchUrl = `https://www.bodybuilding.com/exercises/search?q=${searchQuery}`;
   
-    // Commande pour ajouter un exercice à son programme d'entraînement
-    if (command === 'addex') {
-      const exercise = args.join(' ');
-      message.reply(`Exercice ajouté à votre programme d'entraînement: ${exercise}`);
-    }
+      request(searchUrl, (error, response, html) => {
+        if (!error && response.statusCode == 200) {
+          const $ = cheerio.load(html);
+          const firstResult = $('.ExResult-row a').attr('href');
   
-    // Commande pour afficher les vidéos inspirantes
-    if (command === 'videos') {
-      message.reply('Voici quelques vidéos inspirantes pour vous motiver: [insérer des liens ici]');
+          if (firstResult) {
+            request(`https://www.bodybuilding.com${firstResult}`, (error, response, html) => {
+              if (!error && response.statusCode == 200) {
+                const $ = cheerio.load(html);
+                const name = $('.ExHeading--h2').text().trim();
+                const muscles = $('.ExMuscleTargeted-bodyPart').text().trim();
+                const equipment = $('.ExEquipmentType-name').text().trim();
+                const description = $('.ExDetail-description').text().trim();
+  
+                const embed = new Discord.MessageEmbed()
+                  .setColor('#0099ff')
+                  .setTitle(name)
+                  .addField('Muscles ciblés', muscles)
+                  .addField('Équipement nécessaire', equipment)
+                  .setDescription(description)
+                  .setThumbnail('https://i.imgur.com/AfFp7pu.png');
+  
+                message.channel.send(embed);
+              }
+            });
+          } else {
+            message.channel.send('Aucun résultat trouvé pour cette recherche.');
+          }
+        }
+      });
     }
   });
