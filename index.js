@@ -199,7 +199,7 @@ https://discord.gg/T9fUEbsJrt`;
                            
         }
 
-        
+      
 
 //SUPPR
 switch (command) {
