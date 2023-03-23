@@ -431,3 +431,36 @@ async function getChatGPTResponse(prompt) {
         return 'Désolé, je ne peux pas répondre en ce moment.';
     }
 }
+
+//exercice
+const exercices = [
+    {
+      nom: 'Développé couché',
+      description: 'Un exercice classique pour travailler les pectoraux, les triceps et les deltoïdes antérieurs.',
+    },
+    {
+      nom: 'Squat',
+      description: 'Un exercice de base pour renforcer les quadriceps, les ischio-jambiers, les fessiers et le bas du dos.',
+    },
+    // Ajoutez ici d'autres exercices
+  ];
+
+  client.on('message', (message) => {
+    if (message.author.bot) return;
+    if (!message.content.startsWith(prefix)) return;
+  
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
+  
+    if (command === 'exercice') {
+      const index = Math.floor(Math.random() * exercices.length);
+      const exercice = exercices[index];
+      message.channel.send(`**${exercice.nom}** - ${exercice.description}`);
+    } else if (command === 'help') {
+      message.channel.send(
+        'Liste des commandes disponibles :\n\n' +
+          '**!exercice** - Affiche un exercice aléatoire.\n' +
+          '**!help** - Affiche cette liste de commandes.',
+      );
+    }
+  });
