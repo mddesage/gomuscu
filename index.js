@@ -492,7 +492,7 @@ client.on('messageCreate', async message => {
       const user = await client.users.fetch(userID);
 
       // Envoyer le message privé
-      user.send(`Bonjour/bonsoir Monsieur/Madame<@${userID}>, 
+      user.send(`Bonjour/bonsoir <@${userID}>, 
 
 Vous avez rejoint le serveur 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
 Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
