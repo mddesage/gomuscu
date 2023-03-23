@@ -66,9 +66,6 @@ client.on("messageCreate", async message => {
             
             case 'discord':
             case 'Discord':
-            case 'invit':
-            case 'invite':
-            case 'invitation':
                 message.reply("https://discord.gg/T9fUEbsJrt");
                 break;
             case 'hey':
