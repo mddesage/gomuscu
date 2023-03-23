@@ -561,43 +561,47 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
   }
 });
 
-//BOUTON
+//BOUTONS
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-
   if (command === 'exercice+') {
-    const row = new MessageActionRow()
-      .addComponents(
-        new MessageButton()
-          .setCustomId('epaules')
-          .setLabel('Épaules')
-          .setStyle('PRIMARY'),
-        new MessageButton()
-          .setCustomId('biceps')
-          .setLabel('Biceps')
-          .setStyle('PRIMARY'),
-        // Ajoutez les autres boutons ici de manière similaire
-      );
+      // Créer les boutons
+      const row = new MessageActionRow()
+        .addComponents(
+          ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios jambiers', 'Quadriceps', 'Mollets'].map((groupe, index) => {
+            return new MessageButton()
+              .setCustomId(`groupeMusculaire-${index}`)
+              .setLabel(groupe)
+              .setStyle('PRIMARY');
+          })
+        );
+    
+      // Envoyer le message avec les boutons
+      const exerciceMessage = await message.channel.send({ content: 'Choisissez un groupe musculaire pour afficher un exercice :', components: [row] });
+    
+      // Créer un collecteur de boutons
+      const filter = i => i.user.id === message.author.id;
+      const collector = exerciceMessage.createMessageComponentCollector({ filter, componentType: 'BUTTON', time: 60000 });
+    
+      collector.on('collect', async i => {
+        i.deferUpdate();
+    
+        // Obtenir le groupe musculaire sélectionné
+        const selectedGroupe = i.customId.split('-')[1];
+    
+        // Récupérer un exercice correspondant au groupe musculaire sélectionné (à implémenter)
+        const exercice = getExerciceByGroupeMusculaire(selectedGroupe);
+    
+        // Envoyer le message avec les informations sur l'exercice
+        message.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)*`);
+      });
+    
+      collector.on('end', collected => {
+        exerciceMessage.edit({ components: [] });
+      });
+    }
 
-    await message.reply({ content: 'Choisissez un groupe musculaire :', components: [row] });
+
   }
-});
-
-client.on('interactionCreate', async interaction => {
-  if (!interaction.isButton()) return;
-
-  // Vérifiez si l'ID personnalisé du bouton correspond à un groupe musculaire
-  const muscleGroups = [
-    'epaules', 'biceps', 'triceps', 'avants_bras', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios_jambiers', 'quadriceps', 'mollets'
-  ];
-
-  if (muscleGroups.includes(interaction.customId)) {
-    // Exécutez la logique de la commande "exercice" avec le groupe musculaire sélectionné
-    // Remplacez ceci par la logique de votre commande "exercice"
-    const response = `Exercices pour ${interaction.customId.replace('_', ' ')}`;
-    await interaction.reply({ content: response, ephemeral: true });
-  }
-});
+);
