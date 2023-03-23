@@ -56,6 +56,7 @@ client.on("messageCreate", async message => {
         switch (command) {
             case '':
                 message.reply("Oui ?");
+                break;
             case 'discord':
             case 'Discord':
             case 'invit':
@@ -152,7 +153,7 @@ client.on("messageCreate", async message => {
                     message.channel.send({ embeds: [embed] });
                     } else {
                     message.reply("Désolé, cette commande est réservée aux employés.");
-                    }break;
+                    } break;
             case 'reinvit': 
             case 'reinvite': 
             case 'réinvite': 
@@ -168,17 +169,20 @@ client.on("messageCreate", async message => {
                             return message.channel.send(`L'utilisateur avec l'ID ${userID} n'a pas été trouvé.`);
                         }
                 
-                        const invitationMessage = `Bonjour <@${userID}>, 
-                Vous avez rejoint le serveur **𝐺𝑂𝑀𝑈𝑆𝐶𝑈**, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
-                **Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>.** 
-                Cordialement, <@994859660727291985>, 
-                *Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈* 
-                https://discord.gg/T9fUEbsJrt`;
+                        const invitationMessage = `
+                            Bonjour <@${userID}>, 
+                            Vous avez rejoint le serveur **𝐺𝑂𝑀𝑈𝑆𝐶𝑈**, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
+                            **Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>.** 
+                            Cordialement, <@994859660727291985>, 
+                            *Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈* 
+                            https://discord.gg/T9fUEbsJrt`;
                 
                         user.send(invitationMessage)
-                            .then(() => message.channel.send(`Invitation envoyée à <@${userID}>!`))
+                            .then(() => message.channel.send(`Invitation envoyée à <@${userID}> !`))
                             .catch(error => message.channel.send(`Impossible d'envoyer un message à <@${userID}>: ${error}`));
-                    }
+                    } else {
+                            message.reply("Désolé, cette commande est réservée aux employés.");
+                    } break;
 
                 };
                 
