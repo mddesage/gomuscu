@@ -837,6 +837,7 @@ const exercices = [
           }
           const index = Math.floor(Math.random() * exercicesFiltres.length);
           const exercice = exercicesFiltres[index];
-          message.channel.send(`**${exercice.nom}** - ${exercice.description}`);
+          message.channel.send(`**${exercice.nom}** - ${exercice.description}
+          Groupe musculaire : ${groupeMusculaire}`);
         }
       });
