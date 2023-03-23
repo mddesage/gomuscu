@@ -592,7 +592,7 @@ client.on('interactionCreate', async interaction => {
   const buttonId = interaction.customId;
   const index = parseInt(buttonId.split('-')[1]);
 
-  const groupesMusculaires = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios Jambiers', 'Quadriceps', 'Mollets'];
+  const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios jambiers', 'quadriceps', 'mollets'];
   const groupeMusculaire = groupesMusculaires[index];
 
   let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
