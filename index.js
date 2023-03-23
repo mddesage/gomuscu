@@ -145,7 +145,7 @@ client.on("messageCreate", async message => {
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **discord** \n<@994859660727291985> **roles**\n<@994859660727291985> **departements**\n<@994859660727291985> **discussion**\n<@994859660727291985> **performances**\n<@994859660727291985> **evolutions**\n<@994859660727291985> **programmes**\n<@994859660727291985> **playlist**\n<@994859660727291985> **reseauxsociaux**\n<@994859660727291985> **gymbro**")
                         .setTitle("Liste des commandes");
-                    message.channel.send({ embeds: [embed] });
+                    message.reply({ embeds: [embed] });
                     break;
             case 'aide+':
             case 'help+':
@@ -157,7 +157,7 @@ client.on("messageCreate", async message => {
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **suppr** *[nombre de messages]*\n<@994859660727291985> **code**\n<@994859660727291985> **repete** *[message]*\n<@994859660727291985> **repete&suppr** *[message]*\n<@994859660727291985> **reinvite** *[user_id]*")
                         .setTitle("Liste des commandes EMPLOYÉS");
-                    message.channel.send({ embeds: [embed] });
+                    message.reply({ embeds: [embed] });
                     } else {
                     message.reply("Désolé, cette commande est réservée aux employés.");
                     } break;
