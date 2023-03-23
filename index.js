@@ -589,7 +589,7 @@ client.on('messageCreate', async message => {
     const row3 = new MessageActionRow().addComponents(boutonAleatoire);
 
     // Envoyer le message avec les boutons
-    await message.channel.send({ content: 'Choisissez un groupe musculaire pour afficher un exercice au hasard parmi celui si :', components: [row1, row2, row3] });
+    await message.channel.send({ content: 'Choisissez un groupe musculaire pour afficher un exercice au hasard parmi celui ci :', components: [row1, row2, row3] });
   }
 });
 
