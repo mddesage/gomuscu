@@ -46,7 +46,7 @@ client.on('message', message => {
 client.on("messageCreate", async message => {
     if (message.author.bot) return;
 
-    if (message.content === prefix)
+    if (message.content === prefix);
     message.reply("Oui? ");
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
