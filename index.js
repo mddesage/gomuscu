@@ -145,7 +145,7 @@ client.on("messageCreate", async message => {
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **discord** \n<@994859660727291985> **roles**\n<@994859660727291985> **departements**\n<@994859660727291985> **discussion**\n<@994859660727291985> **performances**\n<@994859660727291985> **evolutions**\n<@994859660727291985> **programmes**\n<@994859660727291985> **playlist**\n<@994859660727291985> **reseauxsociaux**\n<@994859660727291985> **gymbro**")
                         .setTitle("Liste des commandes");
-                    message.reply({ embeds: [embed] });
+                    message.channel.send({ embeds: [embed] });
                     break;
             case 'aide+':
             case 'help+':
@@ -157,7 +157,7 @@ client.on("messageCreate", async message => {
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **suppr** *[nombre de messages]*\n<@994859660727291985> **code**\n<@994859660727291985> **repete** *[message]*\n<@994859660727291985> **repete&suppr** *[message]*\n<@994859660727291985> **reinvite** *[user_id]*")
                         .setTitle("Liste des commandes EMPLOYÉS");
-                    message.reply({ embeds: [embed] });
+                    message.channel.send({ embeds: [embed] });
                     } else {
                     message.reply("Désolé, cette commande est réservée aux employés.");
                     } break;
@@ -173,7 +173,7 @@ client.on("messageCreate", async message => {
                         const user = await client.users.fetch(userID);
                 
                         if (!user) {
-                            return message.reply(`L'utilisateur avec l'ID ${userID} n'a pas été trouvé.`);
+                            return message.channel.send(`L'utilisateur avec l'ID ${userID} n'a pas été trouvé.`);
                         }
                 
                         const invitationMessage = `
@@ -199,7 +199,7 @@ https://discord.gg/T9fUEbsJrt`;
                            
         }
 
-      
+        
 
 //SUPPR
 switch (command) {
@@ -483,7 +483,7 @@ client.on("messageCreate", async message => {
             .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
             .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
             .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-            .setDescription(" \n\n\nLe prefix de <@994859660727291985> est **sa mention**.\n\n\n<@994859660727291985> **exercice** \n\n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité)\n\n\n<@994859660727291985> **exercice** *[groupe musculaire]*\n\nEnvoie un exercice au hasard sur le groupe musculaire cité (11 groupes musculaire)\n       - épaules\n       - biceps\n       - triceps\n       - avants bras\n       - pectoraux\n       - abdominaux\n       - dos\n       - fessiers\n       - ischios jambiers\n       - quadriceps\n       - mollets")
+            .setDescription("\n\n\nLe prefix de <@994859660727291985> est **sa mention**.\n\n\n<@994859660727291985> **exercice** \n\n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité)\n\n\n<@994859660727291985> **exercice** *[groupe musculaire]*\n\nEnvoie un exercice au hasard sur le groupe musculaire cité (11 groupes musculaire)\n       - épaules\n       - biceps\n       - triceps\n       - avants bras\n       - pectoraux\n       - abdominaux\n       - dos\n       - fessiers\n       - ischios jambiers\n       - quadriceps\n       - mollets")
             .setTitle("Liste des commandes EXERCICE");
             message.reply({ embeds: [embed] });
           break;
