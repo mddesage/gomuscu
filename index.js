@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 const axios = require('axios');
+const cheerio = require('cheerio');
+const request = require('request');
 const client = new Discord.Client({
     intents: [
         Discord.Intents.FLAGS.GUILDS,
