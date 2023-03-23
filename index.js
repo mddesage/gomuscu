@@ -177,13 +177,13 @@ client.on("messageCreate", async message => {
                         }
                 
                         const invitationMessage = `
-                            Bonjour <@${userID}>, 
-                            Hier vous avez rejoins le serveur **𝐺𝑂𝑀𝑈𝑆𝐶𝑈**, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté.
-                            **Lors  de votre arrivé, pensez à passer la vérification en réécrivant les lettres que vous voyez sur  : <#987834307651457044> .**
-                            Cordialement,
-                            <@1088472561786048602>,
-                            *Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈*
-                            https://discord.gg/T9fUEbsJrt`;
+Bonjour <@${userID}>, 
+Hier vous avez rejoins le serveur **𝐺𝑂𝑀𝑈𝑆𝐶𝑈**, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté.
+**Lors  de votre arrivé, pensez à passer la vérification en réécrivant les lettres que vous voyez sur  : <#987834307651457044> .**
+Cordialement,
+<@994859660727291985>,
+*Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈*
+https://discord.gg/T9fUEbsJrt`;
                 
                         user.send(invitationMessage)
                             .then(() => message.reply(`Invitation envoyée à <@${userID}> !`))
