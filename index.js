@@ -33,7 +33,11 @@ client.on("interactionCreate", interaction => {
     // Gérer les interactions ici
 });
 
-
+client.on('message', message => {
+    if (message.content.includes('<@994859660727291985>')) {
+      message.reply('Oui ?');
+    }
+  });
 
 client.on('message', message => {
     if (message.author.bot) return;
