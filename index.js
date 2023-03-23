@@ -568,7 +568,7 @@ client.on('messageCreate', async message => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  if (command === 'exercice') {
+  if (command === 'exercice+') {
 
     // Créer les boutons
     const boutons = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios jambiers', 'Quadriceps', 'Mollets'].map((groupe, index) => {
