@@ -431,3 +431,29 @@ async function getChatGPTResponse(prompt) {
         return 'Désolé, je ne peux pas répondre en ce moment.';
     }
 }
+
+client.on('message', message => {
+    // Ignorer les messages du bot et les messages sans le préfixe
+    if (message.author.bot || !message.content.startsWith(prefix)) {
+      return;
+    }
+  
+    const args = message.content.slice(prefix.length).trim().split(/ +/g);
+    const command = args.shift().toLowerCase();
+  
+    // Commande pour afficher les conseils nutritionnels
+    if (command === 'nutrition') {
+      message.reply('Voici quelques conseils pour une alimentation saine: [insérer des conseils ici]');
+    }
+  
+    // Commande pour ajouter un exercice à son programme d'entraînement
+    if (command === 'addex') {
+      const exercise = args.join(' ');
+      message.reply(`Exercice ajouté à votre programme d'entraînement: ${exercise}`);
+    }
+  
+    // Commande pour afficher les vidéos inspirantes
+    if (command === 'videos') {
+      message.reply('Voici quelques vidéos inspirantes pour vous motiver: [insérer des liens ici]');
+    }
+  });
