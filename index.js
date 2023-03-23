@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const axios = require('axios');
 const client = new Discord.Client({
     intents: [
         Discord.Intents.FLAGS.GUILDS,
@@ -13,6 +14,9 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
+const CHATGPT_COMMAND = 'chatgpt';
+const CHATGPT_API_URL = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+const CHATGPT_API_KEY = (process.env.GPT_KEY);
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -385,3 +389,41 @@ client.on('messageReactionAdd', async (reaction, user) => {
       console.error('Erreur lors de l\'ajout de la réaction:', error);
     }
   });
+
+  //ChatGPT
+  client.on('message', async (message) => {
+    if (message.author.bot) return;
+
+    if (message.content.startsWith(PREFIX + CHATGPT_COMMAND)) {
+        const userInput = message.content.slice(PREFIX.length + CHATGPT_COMMAND.length).trim();
+
+        const response = await getChatGPTResponse(userInput);
+        message.channel.send(response);
+    }
+});
+
+async function getChatGPTResponse(prompt) {
+    try {
+        const response = await axios.post(
+            CHATGPT_API_URL,
+            {
+                prompt: prompt,
+                max_tokens: 100,
+                n: 1,
+                stop: null,
+                temperature: 1.0,
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${CHATGPT_API_KEY}`,
+                },
+            }
+        );
+
+        return response.data.choices[0].text.trim();
+    } catch (error) {
+        console.error('Erreur lors de l\'appel à l\'API ChatGPT:', error);
+        return 'Désolé, je ne peux pas répondre en ce moment.';
+    }
+}
