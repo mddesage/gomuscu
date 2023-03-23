@@ -564,7 +564,8 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
 //BOUTONS
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
-
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
   if (command === 'exercice+') {
       // Créer les boutons
       const row = new MessageActionRow()
