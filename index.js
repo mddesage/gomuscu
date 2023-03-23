@@ -458,6 +458,17 @@ client.on("messageCreate", async message => {
   
 
 //reinvit
+client.on("message", async message => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'reinvit' || command === 'reinvite' || command === 'réinvite') {
+      reinviteUser(message, client);
+  }
+  // Vous pouvez ajouter d'autres commandes et leur logique ici.
+});
 async function reinviteUser(message, client) {
   if (message.member.permissions.has("ADMINISTRATOR")) {
       const args = message.content.slice(prefix.length).trim().split(/ +/);
