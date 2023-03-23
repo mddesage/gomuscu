@@ -33,6 +33,11 @@ client.on("interactionCreate", interaction => {
     // Gérer les interactions ici
 });
 
+client.on('messageCreate', async (message) => {
+    if (message.content === prefix);
+message.reply("Oui? ");
+});
+
 client.on('message', message => {
     if (message.author.bot) return;
     const greetings = ['salut', 'slt', 'bonjour', 'bjr', 'bonsoir', 'bsr', 'wesh', 'hey'];
@@ -53,7 +58,7 @@ client.on("messageCreate", async message => {
 
     if (message.content.startsWith(prefix)) {
         switch (command) {
-            case ' ':
+            case '':
                 message.reply("Oui ?");
                 break;
             case 'discord':
