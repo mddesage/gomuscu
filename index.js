@@ -33,11 +33,7 @@ client.on("interactionCreate", interaction => {
     // Gérer les interactions ici
 });
 
-client.on('messageCreate', async (message) => {
-    if (message.author.bot) return;
-    if (message.content === "<@994859660727291985> ");
-message.reply("Oui? ");
-});
+
 
 client.on('message', message => {
     if (message.author.bot) return;
