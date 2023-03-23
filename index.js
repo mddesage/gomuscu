@@ -468,7 +468,7 @@ client.on('messageCreate', async message => {
   if (['reinvit', 'reinvite', 'réinvite'].includes(command)) {
     // Vérifier si l'utilisateur est un administrateur
     if (!message.member.permissions.has('ADMINISTRATOR')) {
-      return message.reply("Vous n'avez pas les permissions nécessaires pour utiliser cette commande.");
+      return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
     const userID = args[0];
@@ -483,15 +483,15 @@ client.on('messageCreate', async message => {
       const user = await client.users.fetch(userID);
 
       // Envoyer le message privé
-      user.send(`Bonjour <@${userID}>,
+      user.send(`Bonjour <@${userID}>, 
 
-Hier, vous avez rejoint le serveur 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté.
-Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>.
-
-Cordialement,
-Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈
-
-https://discord.gg/T9fUEbsJrt`);
+      Vous avez rejoint le serveur 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
+      Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
+      
+      *Cordialement,  
+      Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
+      
+      https://discord.gg/T9fUEbsJrt`);
 
       message.channel.send(`Un message d'invitation a été envoyé à <@${userID}>.`);
     } catch (error) {
