@@ -485,7 +485,7 @@ client.on("messageCreate", async message => {
             .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
             .setDescription("\n\n\nLe prefix de <@994859660727291985> est **sa mention**.\n\n\n<@994859660727291985> **exercice** \n\n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité)\n\n\n<@994859660727291985> **exercice** *[groupe musculaire]*\n\nEnvoie un exercice au hasard sur le groupe musculaire cité (11 groupes musculaire)\n       - épaules\n       - biceps\n       - triceps\n       - avants bras\n       - pectoraux\n       - abdominaux\n       - dos\n       - fessiers\n       - ischios jambiers\n       - quadriceps\n       - mollets")
             .setTitle("Liste des commandes EXERCICE");
-            message.channel.send({ embeds: [embed] });
+            message.reply({ embeds: [embed] });
           break;
       }
     }
