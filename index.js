@@ -178,8 +178,8 @@ client.on("messageCreate", async message => {
                             https://discord.gg/T9fUEbsJrt`;
                 
                         user.send(invitationMessage)
-                            .then(() => message.channel.send(`Invitation envoyée à <@${userID}> !`))
-                            .catch(error => message.channel.send(`Impossible d'envoyer un message à <@${userID}>: ${error}`));
+                            .then(() => message.reply(`Invitation envoyée à <@${userID}> !`))
+                            .catch(error => message.reply(`Impossible d'envoyer un message à <@${userID}>: ${error}`));
                     } else {
                             message.reply("Désolé, cette commande est réservée aux employés.");
                     } break;
