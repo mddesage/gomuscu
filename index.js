@@ -395,8 +395,7 @@ async function getChatGPTResponse(prompt) {
     }
 }
 
-//exercice
-
+//EXERCICE
 const { exercices } = require('./commands/exercices.js');
   
   client.on('message', (message) => {
@@ -445,7 +444,7 @@ client.on("messageCreate", async message => {
             .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
             .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
             .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-            .setDescription("\n\n\nLe prefix de <@994859660727291985> est **sa mention**.\n\n\n<@994859660727291985> **exercice** \n\n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité)\n\n\n<@994859660727291985> **exercice** *[groupe musculaire]*\n\nEnvoie un exercice au hasard sur le groupe musculaire cité (11 groupes musculaire)\n       - épaules\n       - biceps\n       - triceps\n       - avants bras\n       - pectoraux\n       - abdominaux\n       - dos\n       - fessiers\n       - ischios jambiers\n       - quadriceps\n       - mollets")
+            .setDescription("\n\n\nLe prefix de <@994859660727291985> est **sa mention**.\n\n\n<@994859660727291985> **exercice** \n\n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité)\n\n\n<@994859660727291985> **exercice** *[groupe musculaire]*\n\nEnvoie un exercice au hasard sur le groupe musculaire cité (11 groupes musculaire)\n       - épaules\n       - biceps\n       - triceps\n       - pectoraux\n       - abdominaux\n       - dos\n       - fessiers\n       - ischios jambiers\n       - quadriceps\n       - mollets")
             .setTitle("Liste des commandes EXERCICE");
             message.reply({ embeds: [embed] });
           break;
@@ -559,5 +558,46 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
       console.error(error);
       message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct.");
     }
+  }
+});
+
+//BOUTON
+client.on('messageCreate', async message => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'exercice+') {
+    const row = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('epaules')
+          .setLabel('Épaules')
+          .setStyle('PRIMARY'),
+        new MessageButton()
+          .setCustomId('biceps')
+          .setLabel('Biceps')
+          .setStyle('PRIMARY'),
+        // Ajoutez les autres boutons ici de manière similaire
+      );
+
+    await message.reply({ content: 'Choisissez un groupe musculaire :', components: [row] });
+  }
+});
+
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isButton()) return;
+
+  // Vérifiez si l'ID personnalisé du bouton correspond à un groupe musculaire
+  const muscleGroups = [
+    'epaules', 'biceps', 'triceps', 'avants_bras', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios_jambiers', 'quadriceps', 'mollets'
+  ];
+
+  if (muscleGroups.includes(interaction.customId)) {
+    // Exécutez la logique de la commande "exercice" avec le groupe musculaire sélectionné
+    // Remplacez ceci par la logique de votre commande "exercice"
+    const response = `Exercices pour ${interaction.customId.replace('_', ' ')}`;
+    await interaction.reply({ content: response, ephemeral: true });
   }
 });
