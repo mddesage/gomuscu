@@ -457,7 +457,7 @@ client.on("messageCreate", async message => {
   }); 
   
 
-//reinvit
+//REINVITE
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -500,9 +500,64 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
       *Cordialement,  
       Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
       
-      https://discord.gg/T9fUEbsJrt`);
+  https://discord.gg/T9fUEbsJrt`);
 
-      message.channel.send(`Le message de réinvitation a été envoyé à <@${userID}>.`);
+      message.channel.send(`Le message de ré-invitation a été envoyé à <@${userID}>.`);
+    } catch (error) {
+      console.error(error);
+      message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct.");
+    }
+  }
+});
+
+
+
+//INVITE
+client.on('messageCreate', async message => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  // Vérifier si la commande est "reinvit", "reinvite" ou "réinvite"
+  if (['invit', 'invite', 'invitation'].includes(command)) {
+    // Vérifier si l'utilisateur est un administrateur
+    if (!message.member.permissions.has('ADMINISTRATOR')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
+    let userID = args[0];
+
+    // Vérifier si un user_id est fourni
+    if (!userID) {
+      const response = await message.reply("Veuillez fournir un ID d'utilisateur.");
+
+      const filter = m => m.author.id === message.author.id;
+      const collected = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
+
+      if (collected.size === 0) {
+        return response.edit("Le temps est écoulé, veuillez réessayer.");
+      }
+
+      userID = collected.first().content;
+    }
+
+    try {
+      // Obtenir l'utilisateur
+      const user = await client.users.fetch(userID);
+
+      // Envoyer le message privé
+      user.send(`Bonjour/bonsoir <@${userID}>, 
+
+Je me permet de vous envoyer ce message pour le serveur discord 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, une super communauté de passionnés de sport plus précisément de musculation. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
+Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
+      
+      *Cordialement,  
+      Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
+      
+  https://discord.gg/T9fUEbsJrt`);
+
+      message.channel.send(`Le message d'invitation a été envoyé à <@${userID}>.`);
     } catch (error) {
       console.error(error);
       message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct.");
