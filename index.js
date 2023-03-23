@@ -196,7 +196,6 @@ message.reply("Désolé, cette commande est réservée aux administrateurs.");
                 };
                            
         }
-
         
 
 //SUPPR
