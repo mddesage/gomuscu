@@ -46,15 +46,16 @@ client.on('message', message => {
 client.on("messageCreate", async message => {
     if (message.author.bot) return;
 
-    if (message.content === prefix);
-    message.reply("Oui? ");
+
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     if (message.content.startsWith(prefix)) {
         switch (command) {
-            
+            case '':
+                message.reply("Oui ?");
+                break;
             case 'discord':
             case 'Discord':
             case 'invit':
@@ -182,13 +183,10 @@ client.on("messageCreate", async message => {
                             message.reply("Désolé, cette commande est réservée aux employés.");
                     } break;
 
-                };
-                
-              
-
-
-            
+                };           
         }
+
+        
 
 //SUPPR
 switch (command) {
