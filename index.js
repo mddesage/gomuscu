@@ -471,11 +471,20 @@ client.on('messageCreate', async message => {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
-    const userID = args[0];
+    let userID = args[0];
 
     // Vérifier si un user_id est fourni
     if (!userID) {
-      return message.reply("Veuillez fournir un ID d'utilisateur.");
+      const response = await message.reply("Veuillez fournir un ID d'utilisateur.");
+
+      const filter = m => m.author.id === message.author.id;
+      const collected = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
+
+      if (collected.size === 0) {
+        return response.edit("Le temps est écoulé, veuillez réessayer.");
+      }
+
+      userID = collected.first().content;
     }
 
     try {
