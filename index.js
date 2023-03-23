@@ -619,5 +619,5 @@ client.on('interactionCreate', async interaction => {
   const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
   const exercice = exercicesFiltres[exerciceIndex];
 
-  await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)*`);
+  await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)*`);
 });
