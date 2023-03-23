@@ -143,7 +143,7 @@ client.on("messageCreate", async message => {
                     .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
                     .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                     .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-                    .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **exercice** \n\n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité)\n<@994859660727291985> **exercice** *[groupe musculaire]*\nEnvoie un exercice au hasard sur le groupe musculaire cité (11 groupes musculaire)\n- épaules\n- biceps\n- triceps\n- avants bras\n- pectoraux\n- abdominaux\n- dos\n- fessiers\n- ischios jambiers\n- quadriceps\n- mollets")
+                    .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n\n<@994859660727291985> **exercice** \n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité)\n\n\n<@994859660727291985> **exercice** *[groupe musculaire]*\nEnvoie un exercice au hasard sur le groupe musculaire cité (11 groupes musculaire)\n- épaules\n- biceps\n- triceps\n- avants bras\n- pectoraux\n- abdominaux\n- dos\n- fessiers\n- ischios jambiers\n- quadriceps\n- mollets")
                     .setTitle("Liste des commandes EXERCICE");
                     message.channel.send({ embeds: [embed] });
                     break;
