@@ -1,7 +1,5 @@
 const Discord = require('discord.js');
 const axios = require('axios');
-const cheerio = require('cheerio');
-const request = require('request');
 const client = new Discord.Client({
     intents: [
         Discord.Intents.FLAGS.GUILDS,
@@ -433,47 +431,3 @@ async function getChatGPTResponse(prompt) {
         return 'Désolé, je ne peux pas répondre en ce moment.';
     }
 }
-
-//EXERCICE
-client.on('message', message => {
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
-  
-    const args = message.content.slice(prefix.length).trim().split(/ +/);
-    const command = args.shift().toLowerCase();
-  
-    if (command === 'exercice') {
-      const searchQuery = args.join('+');
-      const searchUrl = `https://www.bodybuilding.com/exercises/search?q=${searchQuery}`;
-  
-      request(searchUrl, (error, response, html) => {
-        if (!error && response.statusCode == 200) {
-          const $ = cheerio.load(html);
-          const firstResult = $('.ExResult-row a').attr('href');
-  
-          if (firstResult) {
-            request(`https://www.bodybuilding.com${firstResult}`, (error, response, html) => {
-              if (!error && response.statusCode == 200) {
-                const $ = cheerio.load(html);
-                const name = $('.ExHeading--h2').text().trim();
-                const muscles = $('.ExMuscleTargeted-bodyPart').text().trim();
-                const equipment = $('.ExEquipmentType-name').text().trim();
-                const description = $('.ExDetail-description').text().trim();
-  
-                const embed = new Discord.MessageEmbed()
-                  .setColor('#0099ff')
-                  .setTitle(name)
-                  .addField('Muscles ciblés', muscles)
-                  .addField('Équipement nécessaire', equipment)
-                  .setDescription(description)
-                  .setThumbnail('https://i.imgur.com/AfFp7pu.png');
-  
-                message.channel.send(embed);
-              }
-            });
-          } else {
-            message.channel.send('Aucun résultat trouvé pour cette recherche.');
-          }
-        }
-      });
-    }
-  });
