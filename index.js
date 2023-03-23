@@ -394,8 +394,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
-    if (message.content.startsWith(PREFIX + CHATGPT_COMMAND)) {
-        const userInput = message.content.slice(PREFIX.length + CHATGPT_COMMAND.length).trim();
+    if (message.content.startsWith(prefix + CHATGPT_COMMAND)) {
+        const userInput = message.content.slice(prefix.length + CHATGPT_COMMAND.length).trim();
 
         const response = await getChatGPTResponse(userInput);
         message.channel.send(response);
