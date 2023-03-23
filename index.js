@@ -54,9 +54,7 @@ client.on("messageCreate", async message => {
 
     if (message.content.startsWith(prefix)) {
         switch (command) {
-            case '':
-                message.reply("Oui ?");
-                break;
+            
             case 'discord':
             case 'Discord':
             case 'invit':
