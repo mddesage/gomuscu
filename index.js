@@ -492,20 +492,20 @@ client.on('messageCreate', async message => {
       const user = await client.users.fetch(userID);
 
       // Envoyer le message privé
-      user.send(`Bonjour <@${userID}>, 
+      user.send(`Bonjour/bonsoir Monsieur/Madame<@${userID}>, 
 
-      Vous avez rejoint le serveur 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
-      Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
+Vous avez rejoint le serveur 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
+Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
       
       *Cordialement,  
       Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
       
       https://discord.gg/T9fUEbsJrt`);
 
-      message.channel.send(`Un message d'invitation a été envoyé à <@${userID}>.`);
+      message.channel.send(`Le message de réinvitation a été envoyé à <@${userID}>.`);
     } catch (error) {
       console.error(error);
-      message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct et que le bot peut envoyer des messages privés.");
+      message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct.");
     }
   }
 });
