@@ -47,7 +47,7 @@ client.on("messageCreate", async message => {
     if (message.author.bot) return;
 
     if (message.content === prefix);
-    message.reply($(user.name) + "? ");
+    message.reply("Oui? ");
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
