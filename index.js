@@ -634,7 +634,7 @@ client.on('messageCreate', async (message) => {
   const command = args.shift().toLowerCase();
 
   if (command === 'mute') {
-    if (!message.member.hasPermission('MANAGE_ROLES')) {
+    if (!message.member.permissions.has('MANAGE_ROLES')) {
       return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
     }
 
@@ -682,7 +682,7 @@ client.on('messageCreate', async (message) => {
       }, muteTime);
     }
   } else if (command === 'demute') {
-    if (!message.member.hasPermission('MANAGE_ROLES')) {
+    if (!message.member.permissions.has('MANAGE_ROLES')) {
       return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
     }
 
