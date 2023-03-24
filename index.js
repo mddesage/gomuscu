@@ -635,7 +635,7 @@ client.on('messageCreate', async (message) => {
 
   if (command === 'mute') {
     if (!message.member.permissions.has('MANAGE_ROLES')) {
-      return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
+      return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
     const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
@@ -686,7 +686,7 @@ client.on('messageCreate', async (message) => {
     }
   } else if (command === 'demute') {
     if (!message.member.permissions.has('MANAGE_ROLES')) {
-      return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
+      return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
     const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
@@ -699,10 +699,10 @@ client.on('messageCreate', async (message) => {
     const muteRole = message.guild.roles.cache.get(muteRoleID);
 
     if (!muteRole) {
-      return message.reply("Le rôle de mute n'a pas été trouvé.");
+    return message.reply("Le rôle de mute n'a pas été trouvé.");
     }
 
     await target.roles.remove(muteRole);
-    message.channel.send(`${target} a été démuté.`);
+    message.channel.send(`${target} a été démuté. ${prefix}`);
   }
 });
