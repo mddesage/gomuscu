@@ -623,5 +623,5 @@ client.on('interactionCreate', async interaction => {
   const exercice = exercicesFiltres[exerciceIndex];
   const userId = interaction.user.id;
 
-  await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n${interaction.user.id} à demandé ${exercicesFiltres[exerciceIndex]}*`);
+  await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n<@${interaction.user.id}> à demandé ${exercicesFiltres[exerciceIndex]}*`);
 });
