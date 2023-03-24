@@ -444,7 +444,7 @@ client.on("messageCreate", async message => {
             .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
             .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
             .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-            .setDescription("\n\n\nLe prefix de <@994859660727291985> est **sa mention**.\n\n\n<@994859660727291985> **exercice** \n\n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité).\n\n\n<@994859660727291985> **exercice** *[groupe musculaire]*\n\nEnvoie un exercice au hasard sur le groupe musculaire cité (11 groupes musculaire).\n       - épaules\n       - biceps\n       - triceps\n       - pectoraux\n       - abdominaux\n       - dos\n       - fessiers\n       - ischios jambiers\n       - quadriceps\n       - mollets\n\n\n<@994859660727291985> **exercice+**\n\nEnvoie 11 boutons pour afficher des exercice de manière totalement aléatoire ou au choix du groupe musculaire.")
+            .setDescription("\n\n\nLe prefix de <@994859660727291985> est **sa mention**.\n\n\n<@994859660727291985> **exercice** \n\n Envoie un exercice au hasard sur n'importe quel groupe musculaire (75 possiblité).\n\n\n<@994859660727291985> **exercice** *[groupe musculaire]*\n\nEnvoie un exercice au hasard sur le groupe musculaire cité (10 groupes musculaires).\n       - épaules\n       - biceps\n       - triceps\n       - pectoraux\n       - abdominaux\n       - dos\n       - fessiers\n       - ischios jambiers\n       - quadriceps\n       - mollets\n\n\n<@994859660727291985> **exercice+**\n\nEnvoie 11 boutons pour afficher des exercice de manière totalement aléatoire ou au choix du groupe musculaire.")
             .setTitle("Liste des commandes EXERCICE");
             message.reply({ embeds: [embed] });
           break;
@@ -562,37 +562,6 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
 });
 
 //BOUTONS
-client.on('messageCreate', async message => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-
-  if (command === 'exercice+') {
-    // Créer les boutons
-    const boutons = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios Jambiers', 'Quadriceps', 'Mollets'].map((groupe, index) => {
-      return new MessageButton()
-        .setCustomId(`groupeMusculaire-${index}`)
-        .setLabel(groupe)
-        .setStyle('PRIMARY');
-    });
-
-    // Créer le bouton Aléatoire
-    const boutonAleatoire = new MessageButton()
-      .setCustomId('groupeMusculaire-aleatoire')
-      .setLabel('Aléatoire')
-      .setStyle('PRIMARY');
-
-    // Diviser les boutons en deux lignes
-    const row1 = new MessageActionRow().addComponents(boutons.slice(0, 5));
-    const row2 = new MessageActionRow().addComponents(boutons.slice(5, 10));
-    const row3 = new MessageActionRow().addComponents(boutonAleatoire);
-
-    // Envoyer le message avec les boutons
-    await message.channel.send({ content: 'Choisissez un groupe musculaire pour afficher un exercice au hasard parmi celui ci :', components: [row1, row2, row3] });
-  }
-});
-
 client.on('interactionCreate', async interaction => {
   if (!interaction.isButton()) return;
 
@@ -601,12 +570,15 @@ client.on('interactionCreate', async interaction => {
 
   const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios jambiers', 'quadriceps', 'mollets'];
   let groupeMusculaire;
+  let boutton_name;
 
   if (index === 'aleatoire') {
     const randomIndex = Math.floor(Math.random() * groupesMusculaires.length);
     groupeMusculaire = groupesMusculaires[randomIndex];
+    boutton_name = 'Aléatoire';
   } else {
     groupeMusculaire = groupesMusculaires[parseInt(index)];
+    boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
   }
 
   let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
@@ -618,6 +590,7 @@ client.on('interactionCreate', async interaction => {
 
   const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
   const exercice = exercicesFiltres[exerciceIndex];
+  const userId = interaction.user.id;
 
-  await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)*`);
+  await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)*\nDe <@${userId}> du bouton ${boutton_name}`);
 });
