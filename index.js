@@ -692,24 +692,23 @@ client.on('messageCreate', async (message) => {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
   
-    const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-  
+    const target = message.mentions.members.filter(member => member.id !== client.user.id).first() || message.guild.members.cache.get(args[0]);
     if (!target) {
       return message.reply("Veuillez mentionner un utilisateur ou fournir son ID.");
     }
-  
+    
     const muteRoleID = '991408401538105445';
     const muteRole = message.guild.roles.cache.get(muteRoleID);
-  
+    
     if (!muteRole) {
       return message.reply("Le rôle de mute n'a pas été trouvé.");
     }
-  
+    
     if (!target.roles.cache.has(muteRoleID)) {
       return message.reply(`${target} n'est pas actuellement mute.`);
     }
-  
+    
     await target.roles.remove(muteRole);
     message.channel.send(`${target} a été démuté.`);
   }
-});
+});    
