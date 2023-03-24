@@ -625,3 +625,39 @@ client.on('interactionCreate', async interaction => {
 
   await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`);
 });
+
+//MUTE
+const muteRoleId = '991408401538105445';
+
+client.on('messageCreate', async message => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'mute') {
+    if (!message.member.permissions.has('MANAGE_ROLES')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
+    const userToMute = message.mentions.users.first();
+
+    if (!userToMute) {
+      return message.reply("Veuillez mentionner l'utilisateur que vous souhaitez mute.");
+    }
+
+    const memberToMute = message.guild.members.cache.get(userToMute.id);
+
+    if (!memberToMute) {
+      return message.reply("L'utilisateur mentionné n'est pas un membre du serveur.");
+    }
+
+    try {
+      await memberToMute.roles.add(muteRoleId);
+      message.channel.send(`L'utilisateur <@${userToMute.id}> a été muté.`);
+    } catch (error) {
+      console.error(error);
+      message.reply("Une erreur s'est produite lors de la tentative de mute de l'utilisateur.");
+    }
+  }
+});
