@@ -593,4 +593,35 @@ client.on('messageCreate', async message => {
   }
 });
 
-// ... (autre code)
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isButton()) return;
+
+  const buttonId = interaction.customId;
+  const index = buttonId.split('-')[1];
+
+  const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios jambiers', 'quadriceps', 'mollets'];
+  let groupeMusculaire;
+  let boutton_name;
+
+  if (index === 'aleatoire') {
+    const randomIndex = Math.floor(Math.random() * groupesMusculaires.length);
+    groupeMusculaire = groupesMusculaires[randomIndex];
+    boutton_name = 'Aléatoire';
+  } else {
+    groupeMusculaire = groupesMusculaires[parseInt(index)];
+    boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
+  }
+
+  let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
+
+  if (exercicesFiltres.length === 0) {
+    await interaction.reply(`Aucun exercice trouvé pour le groupe musculaire "${groupeMusculaire}". Vérifiez que le groupe musculaire est correct.`);
+    return;
+  }
+
+  const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
+  const exercice = exercicesFiltres[exerciceIndex];
+  const userId = interaction.user.id;
+
+  await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)*`);
+});
