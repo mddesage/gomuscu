@@ -634,42 +634,68 @@ client.on('messageCreate', async message => {
   const command = args.shift().toLowerCase();
 
   if (command === 'mute') {
-    if (!message.member.permissions.has('MUTE_MEMBERS')) {
-      return message.reply("Vous n'avez pas la permission de muter des membres.");
+    const userId = args[0];
+    const timeArg = args[1];
+    const timeUnit = args[2];
+
+    if (!userId || !timeArg || !timeUnit) {
+      message.reply('Usage: !mute [user_id] [time] [unit (minutes/minute/min/hours/hour/h)]');
+      return;
     }
 
-    const userId = args.shift();
-    const userToMute = message.guild.members.cache.get(userId);
-
-    if (!userToMute) {
-      return message.reply("L'utilisateur mentionné n'a pas été trouvé.");
+    const user = await message.guild.members.fetch(userId);
+    if (!user) {
+      message.reply('Utilisateur introuvable');
+      return;
     }
 
-    const timeArg = args.shift();
-    const timeUnit = args.shift();
-    let timeInMilliseconds;
-
-    if (['minute', 'minutes', 'min'].includes(timeUnit)) {
-      timeInMilliseconds = parseInt(timeArg) * 60 * 1000;
-    } else if (['heure', 'heures', 'h'].includes(timeUnit)) {
-      timeInMilliseconds = parseInt(timeArg) * 60 * 60 * 1000;
-    } else {
-      return message.reply("Unité de temps invalide. Utilisez 'min' ou 'h'.");
+    let duration = parseInt(timeArg);
+    if (isNaN(duration)) {
+      message.reply('Veuillez entrer une durée valide');
+      return;
     }
 
-    const muteRoleId = '991408401538105445';
-    const muteRole = message.guild.roles.cache.get(muteRoleId);
-
-    if (!muteRole) {
-      return message.reply("Le rôle mute n'a pas été trouvé.");
+    let durationMs;
+    switch (timeUnit.toLowerCase()) {
+      case 'minutes':
+      case 'minute':
+      case 'min':
+        durationMs = duration * 60 * 1000;
+        break;
+      case 'hours':
+      case 'hour':
+      case 'h':
+        durationMs = duration * 60 * 60 * 1000;
+        break;
+      default:
+        message.reply('Unité de temps inconnue. Utilisez minutes/minute/min/hours/hour/h.');
+        return;
     }
 
-    await userToMute.roles.add(muteRole);
-    message.channel.send(`L'utilisateur <@${userId}> a été mute pour ${timeArg} ${timeUnit}.`);
+    await user.roles.add(muteRoleId);
+    message.reply(`<@${userId}> a été mis en sourdine pour ${duration} ${timeUnit}`);
 
     setTimeout(async () => {
-      await userToMute.roles.remove(muteRole);
-      message.channel.send(`L'utilisateur <@${userId}> n'est plus mute.`);
-    }, timeInMilliseconds);
+      await user.roles.remove(muteRoleId);
+      message.channel.send(`<@${userId}> n'est plus en sourdine`);
+    }, durationMs);
+  }
+
+  if (command === 'demute') {
+    const userId = args[0];
+
+    if (!userId) {
+      message.reply('Usage: !demute [user_id]');
+      return;
+    }
+
+    const user = await message.guild.members.fetch(userId);
+    if (!user) {
+      message.reply('Utilisateur introuvable');
+      return;
+    }
+
+    await user.roles.remove(muteRoleId);
+    message.reply(`<@${userId}> n'est plus en sourdine`);
   }
 });
