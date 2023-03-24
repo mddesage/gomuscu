@@ -152,7 +152,7 @@ client.on("messageCreate", async message => {
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-                        .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **suppr** *[nombre de messages]*\n<@994859660727291985> **code**\n<@994859660727291985> **repete** *[message]*\n<@994859660727291985> **repete&suppr** *[message]*\n<@994859660727291985> **reinvite** *[user_id]*\n<@994859660727291985> **invite** *[user_id]*\n<@994859660727291985> **mute** *[user_id] ou [user_mention] [temps en min/h] (temps : facultatif)*\n<@994859660727291985> **demute** *[user_id] ou [user_mention]*")
+                        .setDescription("Le prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> **suppr** *[nombre de messages]*\n<@994859660727291985> **code**\n<@994859660727291985> **repete** *[message]*\n<@994859660727291985> **repete&suppr** *[message]*\n<@994859660727291985> **reinvite** *[user_id]*\n<@994859660727291985> **invite** *[user_id]*\n\n<@994859660727291985> **mute** *[user_id] ou [user_mention] [temps en min/h] (temps : facultatif)*\n<@994859660727291985> **demute** *[user_id] ou [user_mention]*")
                         .setTitle("Liste des commandes EMPLOYÉS");
                     message.reply({ embeds: [embed] });
                     } else {
