@@ -628,9 +628,12 @@ client.on('interactionCreate', async interaction => {
 
 //MUTE
 client.on('messageCreate', async (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (!message.content.startsWith(`<@!${client.user.id}>`) || message.author.bot) return;
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const args = message.content
+    .replace(`<@!${client.user.id}>`, '')
+    .trim()
+    .split(/ +/);
   const command = args.shift().toLowerCase();
 
   if (command === 'mute') {
@@ -703,6 +706,6 @@ client.on('messageCreate', async (message) => {
     }
 
     await target.roles.remove(muteRole);
-    message.channel.send(`${target} a été démuté. ${prefix}`);
+    message.channel.send(`${target} a été démuté.`);
   }
 });
