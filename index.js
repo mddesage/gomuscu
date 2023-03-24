@@ -627,75 +627,79 @@ client.on('interactionCreate', async interaction => {
 });
 
 //MUTE
-client.on('messageCreate', async message => {
+client.on('message', async (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
   if (command === 'mute') {
-    const userId = args[0];
-    const timeArg = args[1];
-    const timeUnit = args[2];
-
-    if (!userId || !timeArg || !timeUnit) {
-      message.reply('Usage: !mute [user_id] [time] [unit (minutes/minute/min/hours/hour/h)]');
-      return;
+    if (!message.member.hasPermission('MANAGE_ROLES')) {
+      return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
     }
 
-    const user = await message.guild.members.fetch(userId);
-    if (!user) {
-      message.reply('Utilisateur introuvable');
-      return;
+    const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+
+    if (!target) {
+      return message.reply("Veuillez mentionner un utilisateur ou fournir son ID.");
     }
 
-    let duration = parseInt(timeArg);
-    if (isNaN(duration)) {
-      message.reply('Veuillez entrer une durée valide');
-      return;
+    const muteRoleID = '991408401538105445';
+    const muteRole = message.guild.roles.cache.get(muteRoleID);
+
+    if (!muteRole) {
+      return message.reply("Le rôle de mute n'a pas été trouvé.");
     }
 
-    let durationMs;
-    switch (timeUnit.toLowerCase()) {
-      case 'minutes':
-      case 'minute':
-      case 'min':
-        durationMs = duration * 60 * 1000;
-        break;
-      case 'hours':
-      case 'hour':
-      case 'h':
-        durationMs = duration * 60 * 60 * 1000;
-        break;
-      default:
-        message.reply('Unité de temps inconnue. Utilisez minutes/minute/min/hours/hour/h.');
-        return;
+    let muteDuration = args[1] || 'indefini';
+    let muteTime = null;
+
+    if (muteDuration !== 'indefini') {
+      const timePattern = /^(\d+)\s*(minutes?|minute|min|heures?|heure|h)$/i;
+      const match = muteDuration.match(timePattern);
+
+      if (!match) {
+        return message.reply('Veuillez spécifier une durée valide (en minutes ou heures). Exemple: 10min, 2h, 1heure');
+      }
+
+      const value = parseInt(match[1]);
+      const unit = match[2].toLowerCase();
+
+      if (unit.startsWith('min')) {
+        muteTime = value * 60 * 1000;
+      } else if (unit.startsWith('h') || unit.startsWith('heure')) {
+        muteTime = value * 60 * 60 * 1000;
+      }
     }
 
-    await user.roles.add(muteRoleId);
-    message.reply(`<@${userId}> a été mis en sourdine pour ${duration} ${timeUnit}`);
+    await target.roles.add(muteRole);
+    message.channel.send(`${target} a été muté${muteTime ? ` pour ${muteDuration}` : ' indéfiniment'}.`);
 
-    setTimeout(async () => {
-      await user.roles.remove(muteRoleId);
-      message.channel.send(`<@${userId}> n'est plus en sourdine`);
-    }, durationMs);
-  }
-
-  if (command === 'demute') {
-    const userId = args[0];
-
-    if (!userId) {
-      message.reply('Usage: !demute [user_id]');
-      return;
+    if (muteTime) {
+      setTimeout(async () => {
+        await target.roles.remove(muteRole);
+        message.channel.send(`${target} a été démuté.`);
+      }, muteTime);
+    }
+  } else if (command === 'demute') {
+    if (!message.member.hasPermission('MANAGE_ROLES')) {
+      return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
     }
 
-    const user = await message.guild.members.fetch(userId);
-    if (!user) {
-      message.reply('Utilisateur introuvable');
-      return;
+    const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+
+    if (!target) {
+      return message.reply("Veuillez mentionner un utilisateur ou fournir son ID.");
     }
 
-    await user.roles.remove(muteRoleId);
-    message.reply(`<@${userId}> n'est plus en sourdine`);
+    const muteRoleID = '991408401538105445';
+    const muteRole = message.guild.roles.cache.get(muteRoleID);
+
+    if (!muteRole) {
+      return message.reply("Le rôle de mute n'a pas été trouvé.");
+    }
+
+    await target.roles.remove(muteRole);
+    message.channel.send(`${target} a été démuté.`);
   }
 });
