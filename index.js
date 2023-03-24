@@ -677,8 +677,11 @@ client.on('messageCreate', async (message) => {
 
     if (muteTime) {
       setTimeout(async () => {
-        await target.roles.remove(muteRole);
-        message.channel.send(`${target} a été démuté.`);
+        // Vérifiez si l'utilisateur est toujours muté avant de le démuter.
+        if (target.roles.cache.has(muteRoleID)) {
+          await target.roles.remove(muteRole);
+          message.channel.send(`${target} a été démuté.`);
+        }
       }, muteTime);
     }
   } else if (command === 'demute') {
