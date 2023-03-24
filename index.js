@@ -396,7 +396,7 @@ async function getChatGPTResponse(prompt) {
 }
 
 //EXERCICE
-const { exercices } = require('./commands/exercices.js');
+const { exercices } = require('./commands/liste_exercices.js');
   
   client.on('message', (message) => {
     if (message.author.bot) return;
