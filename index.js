@@ -628,20 +628,20 @@ client.on('interactionCreate', async interaction => {
 
 //MUTE
 client.on('messageCreate', async (message) => {
-  if (!message.content.startsWith(`<@${client.user.id}> `) || message.author.bot) return;
+  if (!message.content.startsWith(`<@!${client.user.id}>`) || message.author.bot) return;
 
   const args = message.content
-    .replace(`<@${client.user.id}> `, '')
+    .replace(`<@!${client.user.id}>`, '')
     .trim()
     .split(/ +/);
   const command = args.shift().toLowerCase();
 
   if (command === 'mute') {
     if (!message.member.permissions.has('MANAGE_ROLES')) {
-      return message.reply("Désolé, cette commande est réservée aux employés.");
+      return message.reply("Vous n'avez pas la permission d'utiliser cette commande.");
     }
 
-    const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+    const target = message.mentions.members.filter(member => member.id !== client.user.id).first() || message.guild.members.cache.get(args[0]);
 
     if (!target) {
       return message.reply("Veuillez mentionner un utilisateur ou fournir son ID.");
