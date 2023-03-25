@@ -886,18 +886,18 @@ const { Client, Intents, MessageEmbed } = require('discord.js');
 const LESDIXMINDELEMBED = 10 * 60 * 1000;
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
-  if (!message.content.startsWith(':')) return;
+  if (!message.content.startsWith(prefix)) return;
 
-  const args = message.content.slice(1).trim().split(/ +/g); // Retirer le ":" du début du message
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
   if (command === 'embed') {
     if (!message.member.permissions.has('ADMINISTRATOR')) {
-      return message.reply('Désolé, cette commande est réservée aux employés.');
+      return message.channel.send(': Désolé, cette commande est réservée aux employés.');
     }
 
     const askForInput = async (question) => {
-      const sentMessage = await message.reply(question);
+      const sentMessage = await message.channel.send(`: ${question}`);
       const filter = (m) => m.author.id === message.author.id && m.reference && m.reference.messageId === sentMessage.id;
       const collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
       return collected.first().content;
@@ -922,7 +922,7 @@ client.on('messageCreate', async (message) => {
       ? message.channel
       : await message.guild.channels.fetch(targetChannelId);
 
-    targetChannel.send({ embeds: [embed] });
+    targetChannel.send({ content: `: `, embeds: [embed] });
   }
 });
 
