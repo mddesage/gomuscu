@@ -984,3 +984,78 @@ client.on('ready', () => {
       console.error('Erreur lors de la création de la session de logs Heroku:', err);
     });
 });
+
+
+
+//        ooooooooooooo ooooo   .oooooo.   oooo    oooo oooooooooooo ooooooooooooo      ooooooooooooo   .oooooo.     .oooooo.   ooooo        
+//        8'   888   `8 `888'  d8P'  `Y8b  `888   .8P'  `888'     `8 8'   888   `8      8'   888   `8  d8P'  `Y8b   d8P'  `Y8b  `888'        
+//             888       888  888           888  d8'     888              888                888      888      888 888      888  888         
+//             888       888  888           88888[       888oooo8         888                888      888      888 888      888  888         
+//             888       888  888           888`88b.     888    "         888                888      888      888 888      888  888         
+//             888       888  `88b    ooo   888  `88b.   888       o      888                888      `88b    d88' `88b    d88'  888       o 
+//            o888o     o888o  `Y8bood8P'  o888o  o888o o888ooooood8     o888o              o888o      `Y8bood8P'   `Y8bood8P'  o888ooooood8
+
+
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix)) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'tickettool') {
+      const embed = new MessageEmbed()
+          .setColor('GREEN')
+          .setTitle('Pour créer un ticket, réagissez avec 📩')
+          .setDescription('Mise en relation avec un <@988139071048142868>.')
+          .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
+
+      const button = new MessageButton()
+          .setCustomId('create_ticket')
+          .setLabel('📩 Créer un ticket')
+          .setStyle('SECONDARY');
+
+      const row = new MessageActionRow()
+          .addComponents(button);
+
+      await message.channel.send({ embeds: [embed], components: [row] });
+  }
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isButton()) return;
+  if (interaction.customId === 'create_ticket') {
+      const guild = interaction.guild;
+      const user = interaction.user;
+      const ticketName = `ticket-${user.username}`;
+
+      if (guild.channels.cache.find(channel => channel.name === ticketName)) {
+          return interaction.reply({ content: 'Vous avez déjà un ticket ouvert.', ephemeral: true });
+      }
+
+      guild.channels.create(ticketName, {
+          type: 'GUILD_TEXT',
+          parent: interaction.channel.parent,
+          permissionOverwrites: [
+              {
+                  id: guild.roles.everyone,
+                  deny: ['VIEW_CHANNEL']
+              },
+              {
+                  id: user.id,
+                  allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY']
+              },
+              {
+                  id: guild.roles.cache.find(role => role.permissions.has('ADMINISTRATOR')).id,
+                  allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY']
+              }
+          ]
+      }).then(channel => {
+          interaction.reply({ content: `Votre ticket a été créé: ${channel}`, ephemeral: true });
+      }).catch(err => {
+          console.log(err);
+          interaction.reply({ content: 'Une erreur s\'est produite lors de la création du ticket.', ephemeral: true });
+      });
+  }
+});
