@@ -891,24 +891,23 @@ client.on('messageCreate', async (message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
-  if (command === 'embed' && message.member.permissions.has('ADMINISTRATOR')) {
-    message.channel.send('Veuillez entrer le **titre** de l\'embed :');
+  if (command === 'embed') {
+    if (!message.member.permissions.has('ADMINISTRATOR')) {
+      return message.reply('Désolé, cette commande est réservée aux employés.');
+    }
 
-    let filter = (m) => m.author.id === message.author.id;
-    let collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
-    const embedTitle = collected.first().content;
+    const askForInput = async (question) => {
+      const sentMessage = await message.reply(question);
+      const filter = (m) => m.author.id === message.author.id && m.reference && m.reference.messageId === sentMessage.id;
+      const collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
+      return collected.first().content;
+    };
 
-    message.channel.send('Veuillez entrer la **description** de l\'embed :');
-    collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
-    const embedDescription = collected.first().content;
-
-    message.channel.send('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :');
-    collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
-    const embedColor = collected.first().content;
-
-    message.channel.send('Veuillez fournir l\'**URL de l\'image** (facultatif, répondez par "**skip**" pour ignorer) :');
-    collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
-    const imageURL = collected.first().content;
+    const embedTitle = await askForInput('Veuillez entrer le **titre** de l\'embed :\n*Faites **Répondre** à ce message.*');
+    const embedDescription = await askForInput('Veuillez entrer la **description** de l\'embed :\n*Faites **Répondre** à ce message.*');
+    const embedColor = await askForInput('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :');
+    const imageURL = await askForInput('Veuillez fournir l\'**URL** de l\'**image** (facultatif, répondez par "**skip**" pour ignorer) :\n*Faites **Répondre** à ce message.*');
+    const targetChannelId = await askForInput('Veuillez entrer l\'**ID** du salon où envoyer l\'embed, ou répondez par "**ici**" ou "**here**" pour envoyer dans le salon actuel :\n*Faites **Répondre** à ce message.*');
 
     const embed = new MessageEmbed()
       .setTitle(embedTitle)
@@ -919,6 +918,10 @@ client.on('messageCreate', async (message) => {
       embed.setImage(imageURL);
     }
 
-    message.channel.send({ embeds: [embed] });
+    const targetChannel = targetChannelId.toLowerCase() === 'ici' || targetChannelId.toLowerCase() === 'here'
+      ? message.channel
+      : await message.guild.channels.fetch(targetChannelId);
+
+    targetChannel.send({ embeds: [embed] });
   }
 });
