@@ -192,7 +192,7 @@ switch (command) {
 });
 
 // MENU : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT
-const { MessageActionRow, MessageSelectMenu, MessageButton } = Discord;
+const { MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
 
 const createMenu = (customId, start, end, extraOptions = []) => {
     const menu = new MessageSelectMenu()
@@ -214,40 +214,25 @@ const createMenu = (customId, start, end, extraOptions = []) => {
     return row;
 };
 
-const createRemoveButton = () => {
-    const button = new MessageButton()
-        .setCustomId('remove_departements')
-        .setLabel('Retirer tous les Départements')
-        .setStyle('DANGER');
-
-    const row = new MessageActionRow()
-        .addComponents(button);
-
-    return row;
-};
-
 const handleInteraction = async (interaction, customIdPrefix) => {
-    if (interaction.isButton() && interaction.customId === 'remove_departements') {
-        const removedRoles = [];
-        const regex = /^🧭┃Département \d{1,3}$/;
+    if (!interaction.isSelectMenu() || !interaction.customId.startsWith(customIdPrefix)) return;
 
-        interaction.member.roles.cache.forEach(async role => {
-            if (regex.test(role.name)) {
-                try {
-                    await interaction.member.roles.remove(role);
-                    removedRoles.push(role.name);
-                } catch (error) {
-                    console.error(`Impossible de retirer le rôle en raison de : ${error}`);
-                }
-            }
-        });
+    const choice = interaction.values[0];
+    const departementNumber = choice.split('_')[1];
+    const roleName = `🧭┃Département ${departementNumber}`;
+    const role = interaction.guild.roles.cache.find(r => r.name === roleName);
 
-        await interaction.reply({
-            content: `Les rôles suivants ont été retirés : ${removedRoles.join(', ')}`,
-            ephemeral: true
-        });
-    } else if (interaction.isSelectMenu() && interaction.customId.startsWith(customIdPrefix)) {
-        // Le reste du code de handleInteraction
+    if (!role) {
+        await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
+        return;
+    }
+
+    try {
+        await interaction.member.roles.add(role);
+        await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+    } catch (error) {
+        console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
+        await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
     }
 };
 
@@ -261,11 +246,23 @@ client.on("messageCreate", async message => {
             label: `Département ${num}`,
             value: `departement_${num}`,
         })));
-        const removeButtonRow = createRemoveButton();
+
+        const removeButton = new MessageButton()
+            .setCustomId('remove_departments')
+            .setLabel('Retirer tous les Départements')
+            .setStyle('DANGER');
+
+        const row = new MessageActionRow()
+            .addComponents(
+                new MessageSelectMenu()
+                    .setCustomId('dummy_menu')
+                    .setDisabled(true)
+            )
+            .addComponents(removeButton);
 
         await message.channel.send({
-            content: '**Sélectionnez votre département** :\n*(+971, 972, 973, 974, 976)*',
-            components: [menu1, menu2, menu3, menu4, removeButtonRow],
+            content: '**Sélectionnez votre département** : *(+971, 972, 973, 974, 976)*',
+            components: [menu1, menu2, menu3, menu4, row],
         });
     } else {
         message.reply("Désolé, cette commande est réservée aux employés.");
@@ -273,8 +270,27 @@ client.on("messageCreate", async message => {
 });
 
 client.on("interactionCreate", async interaction => {
-    handleInteraction(interaction, 'departement_menu');
+  if (interaction.isButton() && interaction.customId === 'remove_departments') {
+      const memberRoles = interaction.member.roles.cache;
+      const departmentRoles = memberRoles.filter(role => role.name.startsWith('🧭┃Département'));
+      const departmentNames = departmentRoles.map(role => role.name);
+      try {
+          await interaction.member.roles.remove(departmentRoles);
+          const messageContent = `Les rôles suivants ont été retirés : ${departmentNames.join(', ')}`;
+          const ephemeralMessage = await interaction.channel.send({ content: messageContent, ephemeral: true });
+          setTimeout(() => {
+              ephemeralMessage.delete();
+          }, 5000);
+      } catch (error) {
+          console.error(`Impossible de retirer les rôles en raison de: ${error}`);
+          await interaction.reply({ content: "Une erreur s'est produite lors du retrait des rôles.", ephemeral: true });
+      }
+  } else {
+      handleInteraction(interaction, 'departement_menu');
+  }
 });
+
+
 
 
   //CODE
