@@ -17,7 +17,7 @@ const prefix = (process.env.PREFIX);
 const CHATGPT_COMMAND = 'chatgpt';
 const CHATGPT_API_URL = 'https://api.openai.com/v1/engines/davinci-codex/completions';
 const CHATGPT_API_KEY = (process.env.GPT_KEY);
-const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios jambiers', 'quadriceps', 'mollets'];
+
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
@@ -635,7 +635,7 @@ client.on('interactionCreate', async interaction => {
   const buttonId = interaction.customId;
   const index = buttonId.split('-')[1];
 
- 
+  const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios jambiers', 'quadriceps', 'mollets'];
   let groupeMusculaire = '';
   let boutton_name = '';
 
