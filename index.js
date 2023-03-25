@@ -192,7 +192,7 @@ switch (command) {
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~command_MENU : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const selectdepartement = require('./selectdepartement.js');
+const selectdepartement = require('./commands/selectdepartement.js');
 client.on("messageCreate", async message => {
   if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
       if (message.member.permissions.has("ADMINISTRATOR")) {
