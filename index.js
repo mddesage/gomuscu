@@ -163,7 +163,7 @@ client.on("messageCreate", async message => {
         }
         
 
-//SUPPR
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~command_SUPPR~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 switch (command) {
 
     case 'suppr':
@@ -191,126 +191,103 @@ switch (command) {
 }
 });
 
-// MENU : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT
-const { MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~command_MENU : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const { MessageActionRow, MessageSelectMenu, MessageButton } = Discord;
 
 const createMenu = (customId, start, end, extraOptions = []) => {
-  const menu = new MessageSelectMenu()
-    .setCustomId(customId)
-    .setPlaceholder(`Choisissez votre département du ${start} au ${end}`)
-    .addOptions(
-      Array.from({ length: end - start + 1 }, (_, i) => {
-        const num = (i + start).toString().padStart(2, '0');
-        return {
-          label: `Département ${num}`,
-          value: `departement_${num}`,
-        };
-      }).concat(extraOptions)
-    );
+    const menu = new MessageSelectMenu()
+        .setCustomId(customId)
+        .setPlaceholder(`Choisissez votre département du ${start} au ${end}`)
+        .addOptions(
+            Array.from({ length: end - start + 1 }, (_, i) => {
+                const num = (i + start).toString().padStart(2, '0');
+                return {
+                    label: `Département ${num}`,
+                    value: `departement_${num}`,
+                };
+            }).concat(extraOptions)
+        );
 
-  const row = new MessageActionRow()
-    .addComponents(menu);
+    const row = new MessageActionRow()
+        .addComponents(menu);
 
-  return row;
+    return row;
 };
 
 const handleInteraction = async (interaction, customIdPrefix) => {
-  if (!interaction.isSelectMenu() && !interaction.isButton()) return;
+    if (!interaction.isSelectMenu() || !interaction.customId.startsWith(customIdPrefix)) return;
 
-  if (interaction.isSelectMenu() && interaction.customId.startsWith(customIdPrefix)) {
     const choice = interaction.values[0];
     const departementNumber = choice.split('_')[1];
     const roleName = `🧭┃Département ${departementNumber}`;
     const role = interaction.guild.roles.cache.find(r => r.name === roleName);
 
     if (!role) {
-      await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
-      return;
+        await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
+        return;
     }
 
     try {
-      await interaction.member.roles.add(role);
-      await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+        await interaction.member.roles.add(role);
+        await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
     } catch (error) {
-      console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
-      await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
+        console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
+        await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
     }
-  } else if (interaction.isButton() && interaction.customId === "remove_all_departments") {
-    const userRoles = interaction.member.roles.cache.filter(r => r.name.startsWith("🧭┃Département"));
-    const removedRoles = userRoles.map(r => r.name);
-
-    try {
-      await interaction.member.roles.remove(userRoles);
-      const removedRolesMessage = `Les rôles suivants vous ont été retirés : ${removedRoles.join(", ")}.`;
-      await interaction.reply({ content: "Tous vos rôles départementaux ont été retirés.", ephemeral: true });
-      await interaction.followUp({ content: removedRolesMessage, ephemeral: true });
-    } catch (error) {
-      console.error(`Impossible de retirer les rôles en raison de : ${error}`);
-      await interaction.reply({ content: "Une erreur s'est produite lors du retrait des rôles.", ephemeral: true });
-    }
-  }
 };
 
 client.on("messageCreate", async message => {
-  if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") 
+    if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") 
     if (message.member.permissions.has("ADMINISTRATOR")) {
-      const menu1 = createMenu('departement_menu1', 1, 25);
-      const menu2 = createMenu('departement_menu2', 26, 50);
-      const menu3 = createMenu('departement_menu3', 51, 75);
-      const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
-          label: `Département ${num}`,
-          value: `departement_${num}`,
-      })));
+        const menu1 = createMenu('departement_menu1', 1, 25);
+        const menu2 = createMenu('departement_menu2', 26, 50);
+        const menu3 = createMenu('departement_menu3', 51, 75);
+        const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
+            label: `Département ${num}`,
+            value: `departement_${num}`,
+        })));
 
-      const removeButton = new MessageButton()
-        .setCustomId("remove_all_departments")
-        .setLabel("Retirer tous les Départements")
-        .setStyle("DANGER");
+        const removeDepartmentsButton = new MessageButton()
+            .setCustomId('remove_departments_button')
+            .setLabel('Retirer tous les Départements')
+            .setStyle('DANGER');
 
-      const row = new MessageActionRow()
-        .addComponents(menu1, menu2, menu3, menu4, removeButton);
+        const row1 = new MessageActionRow()
+            .addComponents(menu1, menu2);
+        const row2 = new MessageActionRow()
+            .addComponents(menu3, menu4);
+        const row3 = new MessageActionRow()
+            .addComponents(removeDepartmentsButton);
 
-      await message.channel.send({
-        content: '**Sélectionnez votre département** : *(+971, 972, 973, 974, 976)*',
-        components: [row],
-      });
+        await message.channel.send({
+            content: '**Sélectionnez votre département** :',
+            components: [row1, row2, { type: 'ACTION_ROW', components: [row3] }],
+        });
     } else {
-      message.reply("Désolé, cette commande est réservée aux employés.");
+        message.reply("Désolé, cette commande est réservée aux employés.");
     }
 });
 
 client.on("interactionCreate", async interaction => {
-  if (interaction.isSelectMenu()) {
-    handleInteraction(interaction, 'departement_menu');
-  } else if (interaction.isButton()) {
-    if (interaction.customId === 'remove_all_departments') {
-      const rolesToRemove = [];
-      interaction.member.roles.cache.forEach(role => {
-        if (role.name.startsWith("🧭┃Département")) {
-          rolesToRemove.push(role);
-        }
-      });
-
-      if (rolesToRemove.length === 0) {
-        await interaction.reply({ content: "Vous n'avez pas de rôles de département à retirer.", ephemeral: true });
-        return;
-      }
+  if (interaction.isButton() && interaction.customId === 'remove_departments_button') {
+      const member = interaction.member;
+      const rolesToRemove = member.roles.cache.filter(r => r.name.startsWith('🧭┃Département '));
 
       try {
-        await interaction.member.roles.remove(rolesToRemove);
-        await interaction.reply({
-          content: `Les rôles suivants ont été retirés : ${rolesToRemove.map(role => role.name).join(", ")}`,
-          ephemeral: true
-        });
+          await member.roles.remove(rolesToRemove);
+          const removedRoles = rolesToRemove.map(r => r.name).join(", ");
+          const messageContent = `Vos rôles suivants ont été retirés : ${removedRoles}`;
+          await interaction.reply({ content: messageContent, ephemeral: true });
       } catch (error) {
-        console.error(`Impossible de retirer des rôles en raison de: ${error}`);
-        await interaction.reply({ content: "Une erreur s'est produite lors du retrait des rôles.", ephemeral: true });
+          console.error(`Impossible de retirer les rôles en raison de : ${error}`);
+          await interaction.reply({ content: "Une erreur s'est produite lors de la suppression des rôles.", ephemeral: true });
       }
-    }
+  } else {
+      handleInteraction(interaction, 'departement_menu');
   }
 });
-    
-  //CODE
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('message', async message => {
   if (message.author.bot) return;
 
@@ -331,7 +308,7 @@ client.on('message', async message => {
   }
 });
   
-//REPETE
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_REPETE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async (message) => {
     // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
     if (message.author.bot || !message.content.startsWith(prefix)) return;
@@ -360,7 +337,7 @@ client.on('messageCreate', async (message) => {
     }
   });
 
-  //REPETE&SUPPR
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_REPETE&SUPPR~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   client.on('messageCreate', async (message) => {
     // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
     if (message.author.bot || !message.content.startsWith(prefix)) return;
@@ -407,7 +384,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
   });
 
-  //ChatGPT
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_ChatGPT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   client.on('message', async (message) => {
     if (message.author.bot) return;
 
@@ -445,7 +422,7 @@ async function getChatGPTResponse(prompt) {
     }
 }
 
-//EXERCICE
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_EXERCICE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const { exercices } = require('./commands/liste_exercices.js');
   
   client.on('message', (message) => {
@@ -503,7 +480,7 @@ client.on("messageCreate", async message => {
   }); 
   
 
-//REINVITE
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_REINVITE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -558,7 +535,7 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
 
 
 
-//INVITE
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_INVITE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -611,7 +588,7 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
   }
 });
 
-//BOUTONS
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_EXERCICE+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -676,7 +653,7 @@ client.on('interactionCreate', async interaction => {
   await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`);
 });
 
-//MUTE
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_MUTE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async (message) => {
   if (!message.content.startsWith(`<@994859660727291985>`) || message.author.bot) return;
 
