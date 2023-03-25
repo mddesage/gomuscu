@@ -50,29 +50,30 @@ module.exports = {
         const randomIndex = Math.floor(Math.random() * groupesMusculaires.length);
         groupeMusculaire = groupesMusculaires[randomIndex];
         boutton_name = 'Aléatoire';
-      } else {
+    } else {
         groupeMusculaire = groupesMusculaires[parseInt(index)];
         if (groupeMusculaire) {
-          boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
+            boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
         } else {
-          console.error('groupeMusculaire est undefined');
-          await interaction.reply({ content: "Une erreur s'est produite lors du traitement de votre interaction.", ephemeral: true });
-          return;
+            console.error('groupeMusculaire est undefined');
+            await interaction.reply(`Une erreur s'est produite. Groupe musculaire inconnu.`, { ephemeral: true });
+            return;
         }
-      }
+    }
     
-      let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
+    let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
     
-      if (exercicesFiltres.length === 0) {
+    if (exercicesFiltres.length === 0) {
         await interaction.reply(`Aucun exercice trouvé pour le groupe musculaire "${groupeMusculaire}". Vérifiez que le groupe musculaire est correct.`);
         return;
-      }
+    }
     
-      const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
-      const exercice = exercicesFiltres[exerciceIndex];
-      const userId = interaction.user.id;
+    const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
+    const exercice = exercicesFiltres[exerciceIndex];
+    const userId = interaction.user.id;
     
-      await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`);
+    await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`);
+    
     });
   },
 };
