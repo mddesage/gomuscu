@@ -201,11 +201,9 @@ const createMenu = (customId, start, end, extraOptions = []) => {
         .addOptions(
             Array.from({ length: end - start + 1 }, (_, i) => {
                 const num = (i + start).toString().padStart(2, '0');
-                const disabled = (num === '54' || num === '55');
                 return {
                     label: `Département ${num}`,
                     value: `departement_${num}`,
-                    disabled: disabled
                 };
             }).concat(extraOptions)
         );
@@ -229,29 +227,23 @@ const createRemoveButton = () => {
 };
 
 const handleInteraction = async (interaction) => {
-    if (!interaction.isCommand() || !interaction.guild) return;
-    if (!interaction.inGuild()) return;
-    if (!interaction.isButton() && !interaction.isSelectMenu()) return;
-    if (interaction.deferred || interaction.replied) return;
-
-    await interaction.deferReply({ ephemeral: true });
-    if (interaction.isSelectMenu()) {
+    if (interaction.isSelectMenu() && interaction.customId.startsWith('departement_menu')) {
         const choice = interaction.values[0];
         const departementNumber = choice.split('_')[1];
         const roleName = `🧭┃Département ${departementNumber}`;
         const role = interaction.guild.roles.cache.find(r => r.name === roleName);
 
         if (!role) {
-            await interaction.editReply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
+            await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
             return;
         }
 
         try {
             await interaction.member.roles.add(role);
-            await interaction.editReply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+            await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
         } catch (error) {
             console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
-            await interaction.editReply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
+            await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
         }
     } else if (interaction.isButton() && interaction.customId === 'remove_departements') {
         const departementRoles = interaction.member.roles.cache.filter(role => role.name.startsWith('🧭┃Département'));
@@ -266,17 +258,7 @@ const handleInteraction = async (interaction) => {
             }
         }
 
-        if (removedRoles.length > 0) {
-            await interaction.editReply({
-                content: `Les rôles suivants vous ont été retirés : ${removedRoles.join(', ')}`,
-                ephemeral: true,
-            });
-        } else {
-            await interaction.editReply({
-                content: "Vous n'avez aucun rôle de département à retirer.",
-                ephemeral: true,
-            });
-        }
+        await interaction.reply({ content: `Les rôles suivants vous ont été retirés : ${removedRoles.join(', ')}`, ephemeral: true });
     }
 };
 
@@ -286,29 +268,29 @@ client.on("messageCreate", async message => {
           const menu1 = createMenu('departement_menu1', 1, 25);
           const menu2 = createMenu('departement_menu2', 26, 50);
           const menu3 = createMenu('departement_menu3', 51, 75);
-          const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
-            label: `Département ${num}`,
-            value: `departement_${num}`,
-        })));
-        
-        const removeButtonRow = createRemoveButton();
-        
-        await message.channel.send({ content: '**Sélectionnez votre département** :', components: [menu1, menu2, menu3, menu4] });
-        await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
-        await message.channel.send({ content: ' ', components: [removeButtonRow] });
-    } else {
-        message.reply("Désolé, cette commande est réservée aux employés.");
-    }
-}
+const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
+              label: `Département ${num}`,
+              value: `departement_${num}`,
+          })));
+          
+          const removeButtonRow = createRemoveButton();
+          
+          await message.channel.send({ content: '**Sélectionnez votre département** :', components: [menu1, menu2, menu3, menu4] });
+          await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
+          await message.channel.send({ content: ' ', components: [removeButtonRow] });
+      } else {
+          message.reply("Désolé, cette commande est réservée aux employés.");
+      }
+  }
 });
 
 client.on("interactionCreate", async interaction => {
-  try {
-      await handleInteraction(interaction);
-  } catch (error) {
-      console.error(error);
-      await interaction.reply({ content: "Une erreur s'est produite lors du traitement de votre interaction.", ephemeral: true });
-  }
+    try {
+        await handleInteraction(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({ content: "Une erreur s'est produite lors du traitement de votre interaction.", ephemeral: true });
+    }
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
