@@ -1111,3 +1111,71 @@ client.on('interactionCreate', async (interaction) => {
               }, 2000);
           }
       });
+
+
+
+//        ooo        ooooo ooooo     ooo  .oooooo..o ooooo   .oooooo.      ooooo     ooo oooooooooooo 
+//        `88.       .888' `888'     `8' d8P'    `Y8 `888'  d8P'  `Y8b     `888'     `8' `888'     `8 
+//         888b     d'888   888       8  Y88bo.       888  888      888     888       8   888         
+//         8 Y88. .P  888   888       8   `"Y8888o.   888  888      888     888       8   888oooo8    
+//         8  `888'   888   888       8       `"Y88b  888  888      888     888       8   888    "    
+//         8    Y     888   `88.    .8'  oo     .d8P  888  `88b    d88b     `88.    .8'   888       o 
+//        o8o        o888o    `YbodP'    8""88888P'  o888o  `Y8bood8P'Ybd'    `YbodP'    o888ooooood8 
+
+
+
+const { joinVoiceChannel, createAudioResource, StreamType, AudioPlayerStatus, createAudioPlayer, getVoiceConnection } = require('@discordjs/voice');
+const ytdl = require('ytdl-core');
+
+client.on('messageCreate', async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'musique') {
+    if (!args[0]) {
+      message.reply('Veuillez fournir un lien YouTube.');
+      return;
+    }
+
+    const youtubeLink = args[0];
+
+    if (!ytdl.validateURL(youtubeLink)) {
+      message.reply('Veuillez fournir un lien YouTube valide.');
+      return;
+    }
+
+    const voiceChannel = message.member.voice.channel;
+
+    if (!voiceChannel) {
+      message.reply('Veuillez rejoindre un salon vocal pour utiliser cette commande.');
+      return;
+    }
+
+    const connection = joinVoiceChannel({
+      channelId: voiceChannel.id,
+      guildId: voiceChannel.guild.id,
+      adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+    });
+
+    const stream = ytdl(youtubeLink, { filter: 'audioonly' });
+    const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
+
+    const player = createAudioPlayer();
+    player.play(resource);
+
+    connection.subscribe(player);
+
+    player.on(AudioPlayerStatus.Idle, () => {
+      connection.destroy();
+    });
+
+    player.on('error', (error) => {
+      console.error(error);
+      message.reply('Il y a eu une erreur lors de la lecture de la vidéo.');
+    });
+  }
+});
+
+client.login(token);
