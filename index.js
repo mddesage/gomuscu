@@ -13,9 +13,7 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
-const CHATGPT_COMMAND = 'chatgpt';
-const CHATGPT_API_URL = 'https://api.openai.com/v1/engines/davinci-codex/completions';
-const CHATGPT_API_KEY = (process.env.GPT_KEY);
+
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -466,7 +464,11 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
 
 
+const CHATGPT_COMMAND = 'chatgpt';
+const CHATGPT_API_URL = 'https://api.openai.com/v1/engines/davinci-codex/completions';
+const CHATGPT_API_KEY = (process.env.GPT_KEY);
 const axios = require('axios');
+
 client.on('message', async (message) => {
     if (message.author.bot) return;
 
@@ -867,3 +869,46 @@ client.on('messageCreate', async (message) => {
     message.channel.send(`${target} a été démuté.`);
   }
 });    
+
+
+
+//        oooooooooooo ooo        ooooo oooooooooo.  oooooooooooo oooooooooo.   
+//        `888'     `8 `88.       .888' `888'   `Y8b `888'     `8 `888'   `Y8b  
+//         888          888b     d'888   888     888  888          888      888 
+//         888oooo8     8 Y88. .P  888   888oooo888'  888oooo8     888      888 
+//         888    "     8  `888'   888   888    `88b  888    "     888      888 
+//         888       o  8    Y     888   888    .88P  888       o  888     d88' 
+//        o888ooooood8 o8o        o888o o888bood8P'  o888ooooood8 o888bood8P'   
+
+
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix)) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'embed' && message.member.permissions.has('ADMINISTRATOR')) {
+    message.channel.send('Veuillez entrer le titre de l\'embed :');
+
+    let filter = (m) => m.author.id === message.author.id;
+    let collected = await message.channel.awaitMessages({ filter, max: 1, time: 60000 });
+    const embedTitle = collected.first().content;
+
+    message.channel.send('Veuillez entrer la description de l\'embed :');
+    collected = await message.channel.awaitMessages({ filter, max: 1, time: 60000 });
+    const embedDescription = collected.first().content;
+
+    message.channel.send('Veuillez entrer la couleur de l\'embed (en hexadécimal) :');
+    collected = await message.channel.awaitMessages({ filter, max: 1, time: 60000 });
+    const embedColor = collected.first().content;
+
+    const embed = new MessageEmbed()
+      .setTitle(embedTitle)
+      .setDescription(embedDescription)
+      .setColor(embedColor);
+
+    message.channel.send({ embeds: [embed] });
+  }
+});
