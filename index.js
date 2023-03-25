@@ -192,7 +192,7 @@ switch (command) {
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~command_MENU : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const { MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
+const { MessageActionRow, MessageSelectMenu, MessageButton, Client } = require('discord.js');
 
 const createMenu = (customId, start, end, extraOptions = []) => {
     const menu = new MessageSelectMenu()
@@ -263,29 +263,29 @@ const handleInteraction = async (interaction, customIdPrefix) => {
 };
 
 client.on("messageCreate", async message => {
-  if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
-      if (message.member.permissions.has("ADMINISTRATOR")) {
-          const menu1 = createMenu('departement_menu1', 1, 25);
-          const menu2 = createMenu('departement_menu2', 26, 50);
-          const menu3 = createMenu('departement_menu3', 51, 75);
-          const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
-              label: `Département ${num}`,
-              value: `departement_${num}`,
-          })));
-          
-          const removeButtonRow = createRemoveButton();
-          
-          await message.channel.send({ content: '**Sélectionnez votre département** :', components: [menu1, menu2, menu3, menu4] });
-          await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
-          await message.channel.send({ content: ' ', components: [removeButtonRow] });
-      } else {
-          message.reply("Désolé, cette commande est réservée aux employés.");
-      }
-  }
+    if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
+        if (message.member.permissions.has("ADMINISTRATOR")) {
+            const menu1 = createMenu('departement_menu1', 1, 25);
+            const menu2 = createMenu('departement_menu2', 26, 50);
+            const menu3 = createMenu('departement_menu3', 51, 75);
+            const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
+                label: `Département ${num}`,
+                value: `departement_${num}`,
+            })));
+
+            const removeButtonRow = createRemoveButton();
+
+            await message.channel.send({ content: '**Sélectionnez votre département** :', components: [menu1, menu2, menu3, menu4] });
+            await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*' });
+            await message.channel.send({ content: ' ', components: [removeButtonRow] });
+        } else {
+            message.reply("Désolé, cette commande est réservée aux employés.");
+        }
+    }
 });
 
 client.on("interactionCreate", async interaction => {
-  handleInteraction(interaction, 'departement_menu');
+    handleInteraction(interaction, 'departement_menu');
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
