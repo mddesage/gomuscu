@@ -925,3 +925,72 @@ client.on('messageCreate', async (message) => {
     targetChannel.send({ embeds: [embed] });
   }
 });
+
+
+
+//        ooooo          .oooooo.     .oooooo.     .oooooo..o 
+//        `888'         d8P'  `Y8b   d8P'  `Y8b   d8P'    `Y8 
+//         888         888      888 888           Y88bo.      
+//         888         888      888 888            `"Y8888o.  
+//         888         888      888 888     ooooo      `"Y88b 
+//         888       o `88b    d88' `88.    .88'  oo     .d8P 
+//        o888ooooood8  `Y8bood8P'   `Y8bood8P'   8""88888P'  
+
+
+
+const fetch = require('node-fetch');
+const herokuAppName = 'gomuscu';
+const herokuApiKey = (process.env.HEROKU_KEY);
+const channelId = '987820203016618014';
+
+client.on('ready', () => {
+  console.log(`Le bot est connecté en tant que ${client.user.tag} !`);
+
+  const channel = client.channels.cache.get(channelId);
+  if (!channel) {
+    console.error(`Impossible de trouver le salon avec l'ID ${channelId}`);
+    return;
+  }
+
+  const herokuUrl = `https://api.heroku.com/apps/${herokuAppName}/log-sessions`;
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/vnd.heroku+json; version=3',
+      'Authorization': `Bearer ${herokuApiKey}`
+    },
+    body: JSON.stringify({ 'tail': true })
+  };
+
+  fetch(herokuUrl, requestOptions)
+    .then(response => response.json())
+    .then(json => {
+      const logStreamUrl = json.logplex_url;
+
+      if (!logStreamUrl) {
+        console.error('Impossible de récupérer l\'URL du flux de logs Heroku');
+        return;
+      }
+
+      fetch(logStreamUrl)
+        .then(response => {
+          response.body
+            .on('data', chunk => {
+              const message = chunk.toString().trim();
+              if (message) {
+                channel.send(`\`\`\`${message}\`\`\``);
+              }
+            })
+            .on('error', err => {
+              console.error('Erreur lors de la lecture du flux de logs Heroku:', err);
+            });
+        })
+        .catch(err => {
+          console.error('Erreur lors de la récupération du flux de logs Heroku:', err);
+        });
+    })
+    .catch(err => {
+      console.error('Erreur lors de la création de la session de logs Heroku:', err);
+    });
+});
