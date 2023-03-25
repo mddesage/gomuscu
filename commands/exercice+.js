@@ -15,14 +15,14 @@ module.exports = {
         // Créer les boutons
         const boutons = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios Jambiers', 'Quadriceps', 'Mollets'].map((groupe, index) => {
           return new MessageButton()
-            .setCustomId(`groupeMusculaire-${index}`)
+            .setCustomId(`exercice_groupeMusculaire-${index}`)
             .setLabel(groupe)
             .setStyle('PRIMARY');
         });
 
         // Créer le bouton Aléatoire
         const boutonAleatoire = new MessageButton()
-          .setCustomId('groupeMusculaire-aleatoire')
+          .setCustomId('exercice_groupeMusculaire-aleatoire')
           .setLabel('Aléatoire')
           .setStyle('PRIMARY');
 
@@ -50,7 +50,7 @@ module.exports = {
         const randomIndex = Math.floor(Math.random() * groupesMusculaires.length);
         groupeMusculaire = groupesMusculaires[randomIndex];
         boutton_name = 'Aléatoire';
-    } else {
+      } else {
         groupeMusculaire = groupesMusculaires[parseInt(index)];
         if (groupeMusculaire) {
             boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
@@ -59,21 +59,21 @@ module.exports = {
             await interaction.reply(`Une erreur s'est produite. Groupe musculaire inconnu.`, { ephemeral: true });
             return;
         }
-    }
-    
-    let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
-    
-    if (exercicesFiltres.length === 0) {
-        await interaction.reply(`Aucun exercice trouvé pour le groupe musculaire "${groupeMusculaire}". Vérifiez que le groupe musculaire est correct.`);
-        return;
-    }
-    
-    const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
-    const exercice = exercicesFiltres[exerciceIndex];
-    const userId = interaction.user.id;
-    
-    await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`, { ephemeral: true });
-    
+      }
+
+      let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
+
+      if (exercicesFiltres.length === 0) {
+          await interaction.reply(`Aucun exercice trouvé pour le groupe musculaire "${groupeMusculaire}". Vérifiez que le groupe musculaire est correct.`);
+          return;
+      }
+
+      const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
+      const exercice = exercicesFiltres[exerciceIndex];
+      const userId = interaction.user.id;
+
+      await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`, { ephemeral: true });
+
     });
   },
 };
