@@ -595,11 +595,11 @@ const EXERCICES = require('./exercices.js');
 // ...
 
 client.on('messageCreate', async message => {
-  await EXERCICES.handleExerciceCommand(message, prefix, exercicesData);
+  await EXERCICES.handleExerciceCommand(message, prefix, EXERCICESData);
 });
 
 client.on('interactionCreate', async interaction => {
-  await EXERCICES.handleInteraction(interaction, exercicesData);
+  await EXERCICES.handleInteraction(interaction, EXERCICESData);
 });
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_MUTE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async (message) => {
