@@ -287,7 +287,24 @@ client.on("interactionCreate", async interaction => {
   handleInteraction(interaction, 'departement_menu');
   handleRemoveDepartementsInteraction(interaction);
 });
-      
+const handleRemoveDepartementsInteraction = async (interaction) => {
+  if (interaction.isButton() && interaction.customId === 'remove_departements') {
+      const departementRoles = interaction.member.roles.cache.filter(role => role.name.startsWith('🧭┃Département'));
+      const removedRoles = [];
+
+      for (const role of departementRoles.values()) {
+          try {
+              await interaction.member.roles.remove(role);
+              removedRoles.push(role.name);
+          } catch (error) {
+              console.error(`Impossible de retirer le rôle en raison de: ${error}`);
+          }
+      }
+
+      await interaction.reply({ content: `Les rôles suivants vous ont été retirés : ${removedRoles.join(', ')}`, ephemeral: true });
+  }
+};
+  
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('message', async message => {
