@@ -252,24 +252,24 @@ const handleInteraction = async (interaction, customIdPrefix) => {
 };
 
 client.on("messageCreate", async message => {
-  if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
+  if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") 
     if (message.member.permissions.has("ADMINISTRATOR")) {
       const menu1 = createMenu('departement_menu1', 1, 25);
       const menu2 = createMenu('departement_menu2', 26, 50);
       const menu3 = createMenu('departement_menu3', 51, 75);
       const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
-        label: `Département ${num}`,
-        value: `departement_${num}`,
+          label: `Département ${num}`,
+          value: `departement_${num}`,
       })));
-    
+
       const removeButton = new MessageButton()
         .setCustomId("remove_all_departments")
         .setLabel("Retirer tous les Départements")
         .setStyle("DANGER");
-    
+
       const row = new MessageActionRow()
         .addComponents(menu1, menu2, menu3, menu4, removeButton);
-    
+
       await message.channel.send({
         content: '**Sélectionnez votre département** : *(+971, 972, 973, 974, 976)*',
         components: [row],
@@ -277,12 +277,38 @@ client.on("messageCreate", async message => {
     } else {
       message.reply("Désolé, cette commande est réservée aux employés.");
     }
+});
+
+client.on("interactionCreate", async interaction => {
+  if (interaction.isSelectMenu()) {
+    handleInteraction(interaction, 'departement_menu');
+  } else if (interaction.isButton()) {
+    if (interaction.customId === 'remove_all_departments') {
+      const rolesToRemove = [];
+      interaction.member.roles.cache.forEach(role => {
+        if (role.name.startsWith("🧭┃Département")) {
+          rolesToRemove.push(role);
+        }
+      });
+
+      if (rolesToRemove.length === 0) {
+        await interaction.reply({ content: "Vous n'avez pas de rôles de département à retirer.", ephemeral: true });
+        return;
+      }
+
+      try {
+        await interaction.member.roles.remove(rolesToRemove);
+        await interaction.reply({
+          content: `Les rôles suivants ont été retirés : ${rolesToRemove.map(role => role.name).join(", ")}`,
+          ephemeral: true
+        });
+      } catch (error) {
+        console.error(`Impossible de retirer des rôles en raison de: ${error}`);
+        await interaction.reply({ content: "Une erreur s'est produite lors du retrait des rôles.", ephemeral: true });
+      }
     }
-  });
-    
-    client.on("interactionCreate", async interaction => {
-      handleInteraction(interaction, 'departement_menu');
-    });
+  }
+});
     
   //CODE
 client.on('message', async message => {
