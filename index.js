@@ -590,17 +590,7 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_EXERCICE+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const EXERCICES = require('./exercices.js');
 
-// ...
-
-client.on('messageCreate', async message => {
-  await EXERCICES.handleExerciceCommand(message, prefix, EXERCICESData);
-});
-
-client.on('interactionCreate', async interaction => {
-  await EXERCICES.handleInteraction(interaction, EXERCICESData);
-});
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_MUTE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async (message) => {
   if (!message.content.startsWith(`<@994859660727291985>`) || message.author.bot) return;
