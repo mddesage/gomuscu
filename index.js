@@ -284,8 +284,10 @@ client.on("messageCreate", async message => {
 });
 
 client.on("interactionCreate", async interaction => {
-    handleInteraction(interaction, 'departement_menu');
-});        
+  handleInteraction(interaction, 'departement_menu');
+  handleRemoveDepartementsInteraction(interaction);
+});
+      
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('message', async message => {
