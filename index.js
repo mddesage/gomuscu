@@ -272,15 +272,15 @@ const handleInteraction = async (interaction) => {
         const role = interaction.guild.roles.cache.find(r => r.name === roleName);
 
         if (!role) {
-            await interaction.reply({ content: `Le rôle ${roleName} n'a pas été trouvé.`, ephemeral: true });
+            await interaction.reply({ content: `Le rôle **${roleName}** n'a pas été trouvé.`, ephemeral: true });
             return;
         }
 
         try {
             await interaction.member.roles.add(role);
-            await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+            await interaction.reply({ content: `Le rôle **${roleName}** vous a été attribué.`, ephemeral: true });
         } catch (error) {
-            console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
+            console.error(`Impossible d'attribuer le rôle en raison de: **${error}**`);
             await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
         }
     } else if (interaction.isButton() && interaction.customId === 'departement_remove_departements') {
@@ -292,11 +292,11 @@ const handleInteraction = async (interaction) => {
                 await interaction.member.roles.remove(role);
                 removedRoles.push(role.name);
             } catch (error) {
-                console.error(`Impossible de retirer le rôle en raison de: ${error}`);
+                console.error(`Impossible de retirer le rôle en raison de: **${error}**`);
             }
         }
 
-            await interaction.reply({ content: `Le(s) rôle(s) suivant(s) vous ont été retiré(s) :** ${removedRoles.join('**, **')}**`, ephemeral: true });
+            await interaction.reply({ content: `Le(s) rôle(s) suivant(s) vous ont été retiré(s) : **${removedRoles.join('**, **')}**`, ephemeral: true });
     }
 };
 
