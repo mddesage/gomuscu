@@ -236,6 +236,39 @@ const handleInteraction = async (interaction, customIdPrefix) => {
     }
 };
 
+const createRemoveButton = (customId) => {
+    const button = new MessageButton()
+        .setCustomId(customId)
+        .setLabel('Retirer tous les Départements')
+        .setStyle('DANGER');
+
+    const row = new MessageActionRow()
+        .addComponents(button);
+
+    return row;
+};
+
+const handleButtonInteraction = async (interaction, customId) => {
+    if (!interaction.isButton() || interaction.customId !== customId) return;
+
+    const departementRoles = interaction.member.roles.cache.filter(r => r.name.startsWith('🧭┃Département'));
+    const removedRoles = [];
+
+    for (const role of departementRoles.values()) {
+        try {
+            await interaction.member.roles.remove(role);
+            removedRoles.push(role.name);
+        } catch (error) {
+            console.error(`Impossible de retirer le rôle en raison de: ${error}`);
+        }
+    }
+
+    if (removedRoles.length > 0) {
+        await interaction.reply({ content: `Les rôles suivants vous ont été retirés : ${removedRoles.join(', ')}`, ephemeral: true });
+    } else {
+        await interaction.reply({ content: "Aucun rôle de département n'a été trouvé.", ephemeral: true });
+    }
+};
 client.on("messageCreate", async message => {
     if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") 
     if (message.member.permissions.has("ADMINISTRATOR")) {
@@ -245,8 +278,9 @@ client.on("messageCreate", async message => {
         const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
             label: `Département ${num}`,
             value: `departement_${num}`,
+            
         })));
-
+        const removeButtonRow = createRemoveButton('remove_departements');
         await message.channel.send({
             content: '**Sélectionnez votre département** :',
             components: [menu1, menu2, menu3, menu4],
@@ -258,6 +292,8 @@ client.on("messageCreate", async message => {
 
 client.on("interactionCreate", async interaction => {
     handleInteraction(interaction, 'departement_menu');
+    handleInteraction(interaction, 'departement_menu');
+    handleButtonInteraction(interaction, 'remove_departements');
 });
 
   //CODE
