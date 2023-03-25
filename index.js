@@ -240,8 +240,8 @@ const handleInteraction = async (interaction) => {
 
         try {
             await interaction.member.roles.add(role);
-            await interaction.update({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
-        } catch (error) {
+            await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+          } catch (error) {
             console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
             await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
         }

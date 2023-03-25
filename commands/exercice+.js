@@ -72,7 +72,7 @@ module.exports = {
     const exercice = exercicesFiltres[exerciceIndex];
     const userId = interaction.user.id;
     
-    await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`);
+    await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`, { ephemeral: true });
     
     });
   },
