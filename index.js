@@ -22,21 +22,29 @@ client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
     client.user.setPresence({
-        status: 'online', // Vous pouvez choisir parmi 'online', 'idle', 'dnd' ou 'invisible'
+        status: 'online', //'online', 'idle', 'dnd' ou 'invisible'
         activities: [
           {
-            name: '𝐺𝑂𝑀𝑈𝑆𝐶𝑈', // Le texte à afficher
-            type: 'PLAYING', // Vous pouvez choisir parmi 'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
+            name: '𝐺𝑂𝑀𝑈𝑆𝐶𝑈',
+            type: 'STREAMING', //'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
             url: 'https://discord.gg/T9fUEbsJrt', // URL facultative pour le type 'STREAMING'
           },
         ],
       });
     });
 
-client.on("interactionCreate", interaction => {
-    // Gérer les interactions ici
-});
 
+
+//          .oooooo.         .oooooo.   ooooo   ooooo       .o.       ooooo      ooo ooooo      ooo oooooooooooo ooooo        
+//         d'     `b        d8P'  `Y8b  `888'   `888'      .888.      `888b.     `8' `888b.     `8' `888'     `8 `888'        
+//        d' .d"bd  8      888           888     888      .8"888.      8 `88b.    8   8 `88b.    8   888          888         
+//        8  8. 8  .d      888           888ooooo888     .8' `888.     8   `88b.  8   8   `88b.  8   888oooo8     888         
+//        Y.  YoP"b'       888           888     888    .88ooo8888.    8     `88b.8   8     `88b.8   888    "     888         
+//         8.      .8      `88b    ooo   888     888   .8'     `888.   8       `888   8       `888   888       o  888       o 
+//          YooooooP        `Y8bood8P'  o888o   o888o o88o     o8888o o8o        `8  o8o        `8  o888ooooood8 o888ooooood8 
+                                                                                                                    
+                                                                                                                    
+                                                                                                                    
 client.on('message', message => {
     if (message.content === prefix) {
       message.reply('Oui ?');
@@ -133,6 +141,18 @@ client.on("messageCreate", async message => {
             case 'gym bro':
                 message.reply("Voici le salon des <#987842500997820477>");
                 break;
+
+
+//        ooooo   ooooo oooooooooooo ooooo        ooooooooo.     .o            o.   
+//        `888'   `888' `888'     `8 `888'        `888   `Y88.  .8'            `8.  
+//         888     888   888          888          888   .d88' .8'      88      `8. 
+//         888ooooo888   888oooo8     888          888ooo88P'  88       88       88 
+//         888     888   888    "     888          888         88   8888888888   88 
+//         888     888   888       o  888       o  888         `8.      88      .8' 
+//        o888o   o888o o888ooooood8 o888ooooood8 o888o         `8.     88     .8'   
+
+
+
             case 'aide':
             case 'help':
                     const embed = new Discord.MessageEmbed()
@@ -163,7 +183,17 @@ client.on("messageCreate", async message => {
         }
         
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~command_SUPPR~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//        .oooooo..o ooooo     ooo ooooooooo.   ooooooooo.   ooooooooo.   
+//        d8P'    `Y8 `888'     `8' `888   `Y88. `888   `Y88. `888   `Y88. 
+//        Y88bo.       888       8   888   .d88'  888   .d88'  888   .d88' 
+//         `"Y8888o.   888       8   888ooo88P'   888ooo88P'   888ooo88P'  
+//             `"Y88b  888       8   888          888          888`88b.    
+//        oo     .d8P  `88.    .8'   888          888          888  `88b.  
+//        8""88888P'     `YbodP'    o888o        o888o        o888o  o888o 
+                                                                         
+                                                                         
+                                                                         
 switch (command) {
 
     case 'suppr':
@@ -191,7 +221,18 @@ switch (command) {
 }
 });
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~command_MENU : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+//        .oooooo..o oooooooooooo ooooo        oooooooooooo   .oooooo.   ooooooooooooo      ooo        ooooo oooooooooooo ooooo      ooo ooooo     ooo  .oooooo..o 
+//        d8P'    `Y8 `888'     `8 `888'        `888'     `8  d8P'  `Y8b  8'   888   `8      `88.       .888' `888'     `8 `888b.     `8' `888'     `8' d8P'    `Y8 
+//        Y88bo.       888          888          888         888               888            888b     d'888   888          8 `88b.    8   888       8  Y88bo.      
+//         `"Y8888o.   888oooo8     888          888oooo8    888               888            8 Y88. .P  888   888oooo8     8   `88b.  8   888       8   `"Y8888o.  
+//             `"Y88b  888    "     888          888    "    888               888            8  `888'   888   888    "     8     `88b.8   888       8       `"Y88b 
+//        oo     .d8P  888       o  888       o  888       o `88b    ooo       888            8    Y     888   888       o  8       `888   `88.    .8'  oo     .d8P 
+//        8""88888P'  o888ooooood8 o888ooooood8 o888ooooood8  `Y8bood8P'      o888o          o8o        o888o o888ooooood8 o8o        `8     `YbodP'    8""88888P'  
+
+
+
 const { MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
 
 const createMenu = (customId, start, end, extraOptions = []) => {
@@ -296,7 +337,16 @@ client.on("interactionCreate", async interaction => {
 
              
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//          .oooooo.     .oooooo.   oooooooooo.   oooooooooooo 
+//         d8P'  `Y8b   d8P'  `Y8b  `888'   `Y8b  `888'     `8 
+//        888          888      888  888      888  888         
+//        888          888      888  888      888  888oooo8    
+//        888          888      888  888      888  888    "    
+//        `88b    ooo  `88b    d88'  888     d88'  888       o 
+//         `Y8bood8P'   `Y8bood8P'  o888bood8P'   o888ooooood8 
+                                                                                                                           
+                                                                                                                           
+                                                                                                                           
 client.on('message', async message => {
   if (message.author.bot) return;
 
@@ -316,8 +366,19 @@ client.on('message', async message => {
     }
   }
 });
-  
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_REPETE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+
+
+//        ooooooooo.   oooooooooooo ooooooooo.   oooooooooooo ooooooooooooo oooooooooooo 
+//        `888   `Y88. `888'     `8 `888   `Y88. `888'     `8 8'   888   `8 `888'     `8 
+//        888   .d88'  888          888   .d88'  888              888       888         
+//        888ooo88P'   888oooo8     888ooo88P'   888oooo8         888       888oooo8    
+//        888`88b.     888    "     888          888    "         888       888    "    
+//        888  `88b.   888       o  888          888       o      888       888       o 
+//        o888o  o888o o888ooooood8 o888o        o888ooooood8     o888o     o888ooooood8 
+                                                                              
+                                                                              
+                                                                              
 client.on('messageCreate', async (message) => {
     // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
     if (message.author.bot || !message.content.startsWith(prefix)) return;
@@ -346,8 +407,19 @@ client.on('messageCreate', async (message) => {
     }
   });
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_REPETE&SUPPR~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  client.on('messageCreate', async (message) => {
+
+
+//        ooooooooo.   oooooooooooo ooooooooo.   oooooooooooo ooooooooooooo oooooooooooo        .oo.           .oooooo..o ooooo     ooo ooooooooo.   ooooooooo.   ooooooooo.   
+//        `888   `Y88. `888'     `8 `888   `Y88. `888'     `8 8'   888   `8 `888'     `8      .88' `8.        d8P'    `Y8 `888'     `8' `888   `Y88. `888   `Y88. `888   `Y88. 
+//         888   .d88'  888          888   .d88'  888              888       888              88.  .8'        Y88bo.       888       8   888   .d88'  888   .d88'  888   .d88' 
+//         888ooo88P'   888oooo8     888ooo88P'   888oooo8         888       888oooo8         `88.8P           `"Y8888o.   888       8   888ooo88P'   888ooo88P'   888ooo88P'  
+//         888`88b.     888    "     888          888    "         888       888    "          d888[.8'            `"Y88b  888       8   888          888          888`88b.    
+//         888  `88b.   888       o  888          888       o      888       888       o      88' `88.        oo     .d8P  `88.    .8'   888          888          888  `88b.  
+//        o888o  o888o o888ooooood8 o888o        o888ooooood8     o888o     o888ooooood8      `bodP'`88.      8""88888P'     `YbodP'    o888o        o888o        o888o  o888o 
+
+
+
+client.on('messageCreate', async (message) => {
     // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
     if (message.author.bot || !message.content.startsWith(prefix)) return;
   
@@ -393,8 +465,19 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
   });
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_ChatGPT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  client.on('message', async (message) => {
+  
+
+//          .oooooo.   ooooo   ooooo       .o.       ooooooooooooo   .oooooo.    ooooooooo.   ooooooooooooo 
+//         d8P'  `Y8b  `888'   `888'      .888.      8'   888   `8  d8P'  `Y8b   `888   `Y88. 8'   888   `8 
+//        888           888     888      .8"888.          888      888            888   .d88'      888      
+//        888           888ooooo888     .8' `888.         888      888            888ooo88P'       888      
+//        888           888     888    .88ooo8888.        888      888     ooooo  888              888      
+//        `88b    ooo   888     888   .8'     `888.       888      `88.    .88'   888              888      
+//         `Y8bood8P'  o888o   o888o o88o     o8888o     o888o      `Y8bood8P'   o888o            o888o      
+
+
+
+client.on('message', async (message) => {
     if (message.author.bot) return;
 
     if (message.content.startsWith(prefix + CHATGPT_COMMAND)) {
@@ -431,7 +514,18 @@ async function getChatGPTResponse(prompt) {
     }
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_EXERCICE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+//        oooooooooooo ooooooo  ooooo oooooooooooo ooooooooo.     .oooooo.   ooooo   .oooooo.   oooooooooooo 
+//        `888'     `8  `8888    d8'  `888'     `8 `888   `Y88.  d8P'  `Y8b  `888'  d8P'  `Y8b  `888'     `8 
+//         888            Y888..8P     888          888   .d88' 888           888  888           888         
+//         888oooo8        `8888'      888oooo8     888ooo88P'  888           888  888           888oooo8    
+//         888    "       .8PY888.     888    "     888`88b.    888           888  888           888    "    
+//         888       o   d8'  `888b    888       o  888  `88b.  `88b    ooo   888  `88b    ooo   888       o 
+//        o888ooooood8 o888o  o88888o o888ooooood8 o888o  o888o  `Y8bood8P'  o888o  `Y8bood8P'  o888ooooood8
+
+
+
 const { exercices } = require('./commands/liste_exercices.js');
   
   client.on('message', (message) => {
@@ -488,116 +582,18 @@ client.on("messageCreate", async message => {
     }
   }); 
   
+  
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_REINVITE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-client.on('messageCreate', async message => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+//        oooooooooooo ooooooo  ooooo oooooooooooo ooooooooo.     .oooooo.   ooooo   .oooooo.   oooooooooooo            
+//        `888'     `8  `8888    d8'  `888'     `8 `888   `Y88.  d8P'  `Y8b  `888'  d8P'  `Y8b  `888'     `8            
+//         888            Y888..8P     888          888   .d88' 888           888  888           888             88     
+//         888oooo8        `8888'      888oooo8     888ooo88P'  888           888  888           888oooo8        88     
+//         888    "       .8PY888.     888    "     888`88b.    888           888  888           888    "    8888888888 
+//         888       o   d8'  `888b    888       o  888  `88b.  `88b    ooo   888  `88b    ooo   888       o     88     
+//        o888ooooood8 o888o  o88888o o888ooooood8 o888o  o888o  `Y8bood8P'  o888o  `Y8bood8P'  o888ooooood8     88     
+                                                                                                              
+                                                                                                              
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-
-  // Vérifier si la commande est "reinvit", "reinvite" ou "réinvite"
-  if (['reinvit', 'reinvite', 'réinvite'].includes(command)) {
-    // Vérifier si l'utilisateur est un administrateur
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
-      return message.reply("Désolé, cette commande est réservée aux employés.");
-    }
-
-    let userID = args[0];
-
-    // Vérifier si un user_id est fourni
-    if (!userID) {
-      const response = await message.reply("Veuillez fournir un ID d'utilisateur.");
-
-      const filter = m => m.author.id === message.author.id;
-      const collected = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
-
-      if (collected.size === 0) {
-        return response.edit("Le temps est écoulé, veuillez réessayer.");
-      }
-
-      userID = collected.first().content;
-    }
-
-    try {
-      // Obtenir l'utilisateur
-      const user = await client.users.fetch(userID);
-
-      // Envoyer le message privé
-      user.send(`Bonjour/bonsoir <@${userID}>, 
-
-Vous avez rejoint le serveur 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
-Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
-      
-      *Cordialement,  
-      Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
-      
-  https://discord.gg/T9fUEbsJrt`);
-
-      message.channel.send(`Le message de ré-invitation a été envoyé à <@${userID}>.`);
-    } catch (error) {
-      console.error(error);
-      message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct.");
-    }
-  }
-});
-
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_INVITE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-client.on('messageCreate', async message => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-
-  // Vérifier si la commande est "reinvit", "reinvite" ou "réinvite"
-  if (['invit', 'invite', 'invitation'].includes(command)) {
-    // Vérifier si l'utilisateur est un administrateur
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
-      return message.reply("Désolé, cette commande est réservée aux employés.");
-    }
-
-    let userID = args[0];
-
-    // Vérifier si un user_id est fourni
-    if (!userID) {
-      const response = await message.reply("Veuillez fournir un ID d'utilisateur.");
-
-      const filter = m => m.author.id === message.author.id;
-      const collected = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
-
-      if (collected.size === 0) {
-        return response.edit("Le temps est écoulé, veuillez réessayer.");
-      }
-
-      userID = collected.first().content;
-    }
-
-    try {
-      // Obtenir l'utilisateur
-      const user = await client.users.fetch(userID);
-
-      // Envoyer le message privé
-      user.send(`Bonjour/bonsoir <@${userID}>, 
-
-Je me permet de vous envoyer ce message pour le serveur discord 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, une super communauté de passionnés de sport plus précisément de musculation. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
-Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
-      
-      *Cordialement,  
-      Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
-      
-  https://discord.gg/T9fUEbsJrt`);
-
-      message.channel.send(`Le message d'invitation a été envoyé à <@${userID}>.`);
-    } catch (error) {
-      console.error(error);
-      message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct.");
-    }
-  }
-});
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_EXERCICE+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
@@ -671,7 +667,145 @@ client.on('interactionCreate', async interaction => {
 });
 
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_MUTE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+//        ooooo ooooo      ooo oooooo     oooo ooooo ooooooooooooo oooooooooooo 
+//        `888' `888b.     `8'  `888.     .8'  `888' 8'   888   `8 `888'     `8 
+//         888   8 `88b.    8    `888.   .8'    888       888       888         
+//         888   8   `88b.  8     `888. .8'     888       888       888oooo8    
+//         888   8     `88b.8      `888.8'      888       888       888    "    
+//         888   8       `888       `888'       888       888       888       o 
+//        o888o o8o        `8        `8'       o888o     o888o     o888ooooood8 
+                                                                      
+                                                                      
+
+client.on('messageCreate', async message => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  // Vérifier si la commande est "reinvit", "reinvite" ou "réinvite"
+  if (['invit', 'invite', 'invitation'].includes(command)) {
+    // Vérifier si l'utilisateur est un administrateur
+    if (!message.member.permissions.has('ADMINISTRATOR')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
+    let userID = args[0];
+
+    // Vérifier si un user_id est fourni
+    if (!userID) {
+      const response = await message.reply("Veuillez fournir un ID d'utilisateur.");
+
+      const filter = m => m.author.id === message.author.id;
+      const collected = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
+
+      if (collected.size === 0) {
+        return response.edit("Le temps est écoulé, veuillez réessayer.");
+      }
+
+      userID = collected.first().content;
+    }
+
+    try {
+      // Obtenir l'utilisateur
+      const user = await client.users.fetch(userID);
+
+      // Envoyer le message privé
+      user.send(`Bonjour/bonsoir <@${userID}>, 
+
+Je me permet de vous envoyer ce message pour le serveur discord 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, une super communauté de passionnés de sport plus précisément de musculation. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
+Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
+      
+      *Cordialement,  
+      Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
+      
+  https://discord.gg/T9fUEbsJrt`);
+
+      message.channel.send(`Le message d'invitation a été envoyé à <@${userID}>.`);
+    } catch (error) {
+      console.error(error);
+      message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct.");
+    }
+  }
+});
+
+
+
+//        ooooooooo.   oooooooooooo ooooo ooooo      ooo oooooo     oooo ooooo ooooooooooooo oooooooooooo 
+//        `888   `Y88. `888'     `8 `888' `888b.     `8'  `888.     .8'  `888' 8'   888   `8 `888'     `8 
+//         888   .d88'  888          888   8 `88b.    8    `888.   .8'    888       888       888         
+//         888ooo88P'   888oooo8     888   8   `88b.  8     `888. .8'     888       888       888oooo8    
+//         888`88b.     888    "     888   8     `88b.8      `888.8'      888       888       888    "    
+//         888  `88b.   888       o  888   8       `888       `888'       888       888       888       o 
+//        o888o  o888o o888ooooood8 o888o o8o        `8        `8'       o888o     o888o     o888ooooood8 
+
+
+
+client.on('messageCreate', async message => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  // Vérifier si la commande est "reinvit", "reinvite" ou "réinvite"
+  if (['reinvit', 'reinvite', 'réinvite'].includes(command)) {
+    // Vérifier si l'utilisateur est un administrateur
+    if (!message.member.permissions.has('ADMINISTRATOR')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
+    let userID = args[0];
+
+    // Vérifier si un user_id est fourni
+    if (!userID) {
+      const response = await message.reply("Veuillez fournir un ID d'utilisateur.");
+
+      const filter = m => m.author.id === message.author.id;
+      const collected = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
+
+      if (collected.size === 0) {
+        return response.edit("Le temps est écoulé, veuillez réessayer.");
+      }
+
+      userID = collected.first().content;
+    }
+
+    try {
+      // Obtenir l'utilisateur
+      const user = await client.users.fetch(userID);
+
+      // Envoyer le message privé
+      user.send(`Bonjour/bonsoir <@${userID}>, 
+
+Vous avez rejoint le serveur 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
+Lors de votre arrivée, pensez à passer la vérification en réécrivant les lettres que vous voyez sur : <#987834307651457044>. 
+      
+      *Cordialement,  
+      Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
+      
+  https://discord.gg/T9fUEbsJrt`);
+
+      message.channel.send(`Le message de ré-invitation a été envoyé à <@${userID}>.`);
+    } catch (error) {
+      console.error(error);
+      message.reply("Impossible d'envoyer un message à cet utilisateur. Assurez-vous que l'ID est correct.");
+    }
+  }
+});
+
+
+
+//        ooo        ooooo ooooo     ooo ooooooooooooo oooooooooooo 
+//        `88.       .888' `888'     `8' 8'   888   `8 `888'     `8 
+//         888b     d'888   888       8       888       888         
+//         8 Y88. .P  888   888       8       888       888oooo8    
+//         8  `888'   888   888       8       888       888    "    
+//         8    Y     888   `88.    .8'       888       888       o 
+//        o8o        o888o    `YbodP'        o888o     o888ooooood8 
+
+
+                                                          
 client.on('messageCreate', async (message) => {
   if (!message.content.startsWith(`<@994859660727291985>`) || message.author.bot) return;
 
