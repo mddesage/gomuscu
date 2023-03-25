@@ -597,9 +597,78 @@ Lors de votre arrivée, pensez à passer la vérification en réécrivant les le
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_EXERCICE+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const exercicePlus = require('./commands/exercice+.js');
-exercicePlus.execute(client, null, null, prefix, exercices);
+const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux'];
 
+client.once('ready', () => {
+  console.log('Ready!');
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isCommand()) return;
+
+  const { commandName } = interaction;
+
+  if (commandName === 'exercice') {
+    const menu1 = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('épaules')
+          .setLabel('Épaules')
+          .setStyle('PRIMARY'),
+        new MessageButton()
+          .setCustomId('biceps')
+          .setLabel('Biceps')
+          .setStyle('PRIMARY')
+      );
+
+    const menu2 = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('triceps')
+          .setLabel('Triceps')
+          .setStyle('PRIMARY'),
+        new MessageButton()
+          .setCustomId('pectoraux')
+          .setLabel('Pectoraux')
+          .setStyle('PRIMARY')
+      );
+
+    await interaction.reply({
+      content: 'Choisissez un groupe musculaire pour obtenir un exercice aléatoire :',
+      components: [menu1, menu2],
+      ephemeral: true
+    });
+  }
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isButton()) return;
+
+  const groupeMusculaire = interaction.customId;
+  const exercicesFiltres = exercices.filter((exercice) => exercice.groupeMusculaire === groupeMusculaire);
+
+  let boutton_name;
+  if (groupeMusculaire) {
+    boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
+  } else {
+    console.error('groupeMusculaire est undefined');
+    if (!interaction.deferred && !interaction.replied) {
+      await interaction.reply(`Une erreur s'est produite. Groupe musculaire inconnu.`, { ephemeral: true });
+    }
+    return;
+  }
+
+  if (exercicesFiltres.length === 0) {
+    if (!interaction.deferred && !interaction.replied) {
+      await interaction.reply(`Aucun exercice trouvé pour le groupe musculaire "${groupeMusculaire}". Vérifiez que le groupe musculaire est correct.`);
+    }
+    return;
+  }
+
+  const exercice = exercicesFiltres[Math.floor(Math.random() * exercicesFiltres.length)];
+
+  await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`, { ephemeral: true });
+});
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_MUTE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('messageCreate', async (message) => {
   if (!message.content.startsWith(`<@994859660727291985>`) || message.author.bot) return;
