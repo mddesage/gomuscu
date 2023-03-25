@@ -9,11 +9,8 @@ const client = new Discord.Client({
     ]
 });
 
-
-
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
-
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -57,11 +54,8 @@ client.on('message', message => {
     }
   });
 
-
 client.on("messageCreate", async message => {
     if (message.author.bot) return;
-
-
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
@@ -140,6 +134,7 @@ client.on("messageCreate", async message => {
                 break;
 
 
+                
 //        ooooo   ooooo oooooooooooo ooooo        ooooooooo.     .o            o.   
 //        `888'   `888' `888'     `8 `888'        `888   `Y88.  .8'            `8.  
 //         888     888   888          888          888   .d88' .8'      88      `8. 
@@ -229,7 +224,6 @@ switch (command) {
 
 
 const { MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
-
 const createMenu = (customId, start, end, extraOptions = []) => {
     const menu = new MessageSelectMenu()
         .setCustomId(customId)
@@ -344,7 +338,6 @@ client.on("interactionCreate", async interaction => {
                                                                                                                            
 client.on('message', async message => {
   if (message.author.bot) return;
-
   if (message.content === prefix + 'code') {
     if (!message.member.permissions.has('ADMINISTRATOR')) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
@@ -651,7 +644,6 @@ client.on('interactionCreate', async interaction => {
   const userId = interaction.user.id;
 
   await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`, { ephemeral: true });
-
 });
 
 
@@ -944,8 +936,6 @@ const herokuApiKey = (process.env.HEROKU_KEY);
 const channelId = '987820203016618014';
 
 client.on('ready', () => {
-  console.log(`Le bot est connecté en tant que ${client.user.tag} !`);
-
   const channel = client.channels.cache.get(channelId);
   if (!channel) {
     console.error(`Impossible de trouver le salon avec l'ID ${channelId}`);
