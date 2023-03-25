@@ -192,8 +192,8 @@ switch (command) {
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~command_MENU : ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const { MessageActionRow, MessageSelectMenu, MessageButton, MESSAGE_COMPONENT_TYPE_BUTTON } = Discord;
-
+const { MessageActionRow, MessageSelectMenu, MessageButton,  } = Discord;
+const { MESSAGE_COMPONENT_TYPE_BUTTON } = require('discord.js').Constants;
 
 const createMenu = (customId, start, end, extraOptions = []) => {
     const menu = new MessageSelectMenu()
