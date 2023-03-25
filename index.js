@@ -883,6 +883,7 @@ client.on('messageCreate', async (message) => {
 
 
 const { Client, Intents, MessageEmbed } = require('discord.js');
+const LESDIXMINDELEMBED = 10 * 60 * 1000;
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
@@ -891,24 +892,32 @@ client.on('messageCreate', async (message) => {
   const command = args.shift().toLowerCase();
 
   if (command === 'embed' && message.member.permissions.has('ADMINISTRATOR')) {
-    message.channel.send('Veuillez entrer le titre de l\'embed :');
+    message.channel.send('Veuillez entrer le **titre** de l\'embed :');
 
     let filter = (m) => m.author.id === message.author.id;
-    let collected = await message.channel.awaitMessages({ filter, max: 1, time: 60000 });
+    let collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
     const embedTitle = collected.first().content;
 
-    message.channel.send('Veuillez entrer la description de l\'embed :');
-    collected = await message.channel.awaitMessages({ filter, max: 1, time: 60000 });
+    message.channel.send('Veuillez entrer la **description** de l\'embed :');
+    collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
     const embedDescription = collected.first().content;
 
-    message.channel.send('Veuillez entrer la couleur de l\'embed (en hexadécimal) :');
-    collected = await message.channel.awaitMessages({ filter, max: 1, time: 60000 });
+    message.channel.send('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :');
+    collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
     const embedColor = collected.first().content;
+
+    message.channel.send('Veuillez fournir l\'**URL de l\'image** (facultatif, répondez par "**skip**" pour ignorer) :');
+    collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
+    const imageURL = collected.first().content;
 
     const embed = new MessageEmbed()
       .setTitle(embedTitle)
       .setDescription(embedDescription)
       .setColor(embedColor);
+
+    if (imageURL.toLowerCase() !== 'skip') {
+      embed.setImage(imageURL);
+    }
 
     message.channel.send({ embeds: [embed] });
   }
