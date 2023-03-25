@@ -1008,7 +1008,7 @@ client.on('messageCreate', async (message) => {
         const embed = new MessageEmbed()
             .setColor('GREEN')
             .setTitle('Pour créer un ticket, réagissez avec 📩')
-            .setDescription('Mise en relation avec un <@988139071048142868>.\n')
+            .setDescription('Mise en relation avec un <@&988139071048142868>.\n')
             .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
 
         const button = new MessageButton()
