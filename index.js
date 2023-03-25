@@ -630,7 +630,8 @@ client.on('messageCreate', async message => {
 });
 
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isButton()) return;
+  if (!interaction.isButton() || !interaction.customId.startsWith('exercice_groupeMusculaire')) return;
+
 
   const buttonId = interaction.customId;
   const index = buttonId.split('-')[1];
