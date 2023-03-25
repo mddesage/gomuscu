@@ -903,11 +903,11 @@ client.on('messageCreate', async (message) => {
       return collected.first().content;
     };
 
+    const targetChannelId = await askForInput('Veuillez entrer l\'**ID** du salon où envoyer l\'embed, ou répondez par "**ici**" ou "**here**" pour envoyer dans le salon actuel :\n*Faites **Répondre** à ce message.*');
     const embedTitle = await askForInput('Veuillez entrer le **titre** de l\'embed :\n*Faites **Répondre** à ce message.*');
     const embedDescription = await askForInput('Veuillez entrer la **description** de l\'embed :\n*Faites **Répondre** à ce message.*');
     const embedColor = await askForInput('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :');
     const imageURL = await askForInput('Veuillez fournir l\'**URL** de l\'**image** (facultatif, répondez par "**skip**" pour ignorer) :\n*Faites **Répondre** à ce message.*');
-    const targetChannelId = await askForInput('Veuillez entrer l\'**ID** du salon où envoyer l\'embed, ou répondez par "**ici**" ou "**here**" pour envoyer dans le salon actuel :\n*Faites **Répondre** à ce message.*');
 
     const embed = new MessageEmbed()
       .setTitle(embedTitle)
