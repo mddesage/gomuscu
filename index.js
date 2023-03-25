@@ -280,6 +280,37 @@ const handleInteraction = async (interaction) => {
     }
 };
 
+client.on("messageCreate", async message => {
+  if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
+      if (message.member.permissions.has("ADMINISTRATOR")) {
+          const menu1 = createMenu('departement_menu1', 1, 25);
+          const menu2 = createMenu('departement_menu2', 26, 50);
+          const menu3 = createMenu('departement_menu3', 51, 75);
+          const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
+            label: `Département ${num}`,
+            value: `departement_${num}`,
+        })));
+        
+        const removeButtonRow = createRemoveButton();
+        
+        await message.channel.send({ content: '**Sélectionnez votre département** :', components: [menu1, menu2, menu3, menu4] });
+        await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
+        await message.channel.send({ content: ' ', components: [removeButtonRow] });
+    } else {
+        message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+}
+});
+
+client.on("interactionCreate", async interaction => {
+  try {
+      await handleInteraction(interaction);
+  } catch (error) {
+      console.error(error);
+      await interaction.reply({ content: "Une erreur s'est produite lors du traitement de votre interaction.", ephemeral: true });
+  }
+});
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 client.on('message', async message => {
   if (message.author.bot) return;
