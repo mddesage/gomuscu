@@ -591,7 +591,6 @@ client.on('messageCreate', async message => {
   const command = args.shift().toLowerCase();
 
   if (command === 'exercice+') {
-    // Créer les boutons
     const boutons = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios Jambiers', 'Quadriceps', 'Mollets'].map((groupe, index) => {
       return new MessageButton()
         .setCustomId(`exercice_groupeMusculaire-${index}`)
@@ -599,18 +598,15 @@ client.on('messageCreate', async message => {
         .setStyle('PRIMARY');
     });
 
-    // Créer le bouton Aléatoire
     const boutonAleatoire = new MessageButton()
       .setCustomId('exercice_groupeMusculaire-aleatoire')
       .setLabel('Aléatoire')
       .setStyle('PRIMARY');
 
-    // Diviser les boutons en deux lignes
     const row1 = new MessageActionRow().addComponents(boutons.slice(0, 5));
     const row2 = new MessageActionRow().addComponents(boutons.slice(5, 10));
     const row3 = new MessageActionRow().addComponents(boutonAleatoire);
 
-    // Envoyer le message avec les boutons
     await message.reply({ content: 'Choisissez un groupe musculaire pour afficher un exercice au hasard parmi celui ci :', components: [row1, row2, row3] });
   }
 });
@@ -674,16 +670,13 @@ client.on('messageCreate', async message => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  // Vérifier si la commande est "reinvit", "reinvite" ou "réinvite"
   if (['invit', 'invite', 'invitation'].includes(command)) {
-    // Vérifier si l'utilisateur est un administrateur
     if (!message.member.permissions.has('ADMINISTRATOR')) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
     let userID = args[0];
 
-    // Vérifier si un user_id est fourni
     if (!userID) {
       const response = await message.reply("Veuillez fournir un ID d'utilisateur.");
 
@@ -698,10 +691,8 @@ client.on('messageCreate', async message => {
     }
 
     try {
-      // Obtenir l'utilisateur
       const user = await client.users.fetch(userID);
 
-      // Envoyer le message privé
       user.send(`Bonjour/bonsoir <@${userID}>, 
 
 Je me permet de vous envoyer ce message pour le serveur discord 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, une super communauté de passionnés de sport plus précisément de musculation. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
@@ -738,16 +729,13 @@ client.on('messageCreate', async message => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  // Vérifier si la commande est "reinvit", "reinvite" ou "réinvite"
   if (['reinvit', 'reinvite', 'réinvite'].includes(command)) {
-    // Vérifier si l'utilisateur est un administrateur
     if (!message.member.permissions.has('ADMINISTRATOR')) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
     let userID = args[0];
 
-    // Vérifier si un user_id est fourni
     if (!userID) {
       const response = await message.reply("Veuillez fournir un ID d'utilisateur.");
 
@@ -762,10 +750,8 @@ client.on('messageCreate', async message => {
     }
 
     try {
-      // Obtenir l'utilisateur
       const user = await client.users.fetch(userID);
 
-      // Envoyer le message privé
       user.send(`Bonjour/bonsoir <@${userID}>, 
 
 Vous avez rejoint le serveur 𝐺𝑂𝑀𝑈𝑆𝐶𝑈, cependant il semblerait que vous n'avez pas passé la vérification et donc avez été expulsé du serveur. Je vous invite donc à cliquer sur le lien ci-dessous afin de pouvoir réintégrer notre communauté. 
