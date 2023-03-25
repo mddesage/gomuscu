@@ -258,7 +258,7 @@ const handleInteraction = async (interaction) => {
             }
         }
 
-        await interaction.update({ content: `Les rôles suivants vous ont été retirés : ${removedRoles.join(', ')}`, ephemeral: true });
+            await interaction.reply({ content: `Les rôles suivants vous ont été retirés : ${removedRoles.join(', ')}`, ephemeral: true });
     }
 };
 
