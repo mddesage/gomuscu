@@ -892,7 +892,6 @@ client.on('messageCreate', async (message) => {
   const command = args.shift().toLowerCase();
 
   if (command === 'embed' && message.member.permissions.has('ADMINISTRATOR')) {
-    return message.reply("Désolé, cette commande est réservée aux employés.");
     message.channel.send('Veuillez entrer le **titre** de l\'embed :');
 
     let filter = (m) => m.author.id === message.author.id;
