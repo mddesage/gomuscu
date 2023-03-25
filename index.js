@@ -256,6 +256,7 @@ const handleInteraction = async (interaction) => {
             } catch (error) {
                 console.error(`Impossible de retirer le rôle en raison de: ${error}`);
             }
+            
         }
 
         await interaction.update({ content: `Les rôles suivants vous ont été retirés : ${removedRoles.join(', ')}`, ephemeral: true });
