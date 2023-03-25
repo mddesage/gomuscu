@@ -214,6 +214,18 @@ const createMenu = (customId, start, end, extraOptions = []) => {
     return row;
 };
 
+const createRemoveButton = (customId) => {
+    const button = new MessageButton()
+        .setCustomId(customId)
+        .setLabel('Retirer tous les Départements')
+        .setStyle('DANGER');
+
+    const row = new MessageActionRow()
+        .addComponents(button);
+
+    return row;
+};
+
 const handleInteraction = async (interaction, customIdPrefix) => {
     if (!interaction.isSelectMenu() || !interaction.customId.startsWith(customIdPrefix)) return;
 
@@ -234,18 +246,6 @@ const handleInteraction = async (interaction, customIdPrefix) => {
         console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
         await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
     }
-};
-
-const createRemoveButton = (customId) => {
-    const button = new MessageButton()
-        .setCustomId(customId)
-        .setLabel('Retirer tous les Départements')
-        .setStyle('DANGER');
-
-    const row = new MessageActionRow()
-        .addComponents(button);
-
-    return row;
 };
 
 const handleButtonInteraction = async (interaction, customId) => {
@@ -269,32 +269,35 @@ const handleButtonInteraction = async (interaction, customId) => {
         await interaction.reply({ content: "Aucun rôle de département n'a été trouvé.", ephemeral: true });
     }
 };
+
 client.on("messageCreate", async message => {
-    if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") 
-    if (message.member.permissions.has("ADMINISTRATOR")) {
-        const menu1 = createMenu('departement_menu1', 1, 25);
-        const menu2 = createMenu('departement_menu2', 26, 50);
-        const menu3 = createMenu('departement_menu3', 51, 75);
-        const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
-            label: `Département ${num}`,
-            value: `departement_${num}`,
-            
-        })));
-        const removeButtonRow = createRemoveButton('remove_departements');
-        await message.channel.send({
-            content: '**Sélectionnez votre département** :',
-            components: [menu1, menu2, menu3, menu4],
-        });
-    } else {
-        message.reply("Désolé, cette commande est réservée aux employés.");
+    if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
+        if (message.member.permissions.has("ADMINISTRATOR")) {
+            const menu1 = createMenu('departement_menu1', 1, 25);
+            const menu2 = createMenu('departement_menu2', 26, 50);
+            const menu3 = createMenu('departement_menu3', 51, 75);
+            const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
+                label: `Département ${num}`,
+                value: `departement_${num}`,
+            })));
+
+            const removeButtonRow = createRemoveButton('remove_departements');
+
+            await message.channel.send({
+                content: '**Sélectionnez votre département** :',
+                components: [menu1, menu2, menu3, menu4, removeButtonRow],
+            });
+        } else {
+            message.reply("Désolé, cette commande est réservée aux employés.");
+        }
     }
 });
 
 client.on("interactionCreate", async interaction => {
     handleInteraction(interaction, 'departement_menu');
-    handleInteraction(interaction, 'departement_menu');
     handleButtonInteraction(interaction, 'remove_departements');
 });
+
 
   //CODE
 client.on('message', async message => {
