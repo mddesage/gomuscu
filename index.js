@@ -241,6 +241,9 @@ const handleInteraction = async (interaction) => {
         try {
             await interaction.member.roles.add(role);
             await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+            setTimeout(() => {
+            reply.delete();
+            }, 30000);
         } catch (error) {
             console.error(`Impossible d'attribuer le rôle en raison de: ${error}`);
             await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
@@ -290,8 +293,11 @@ client.on("interactionCreate", async interaction => {
       await handleInteraction(interaction);
   } catch (error) {
       console.error(error);
-      await interaction.reply({ content: "Une erreur s'est produite lors du traitement de votre interaction.", ephemeral: true });
-  }
+      const reply = await interaction.reply({ content: "Une erreur s'est produite lors du traitement de votre interaction.", ephemeral: true });
+      setTimeout(() => {
+        reply.delete();
+      }, 30000);
+      }
 });
 
              
