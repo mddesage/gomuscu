@@ -226,8 +226,8 @@ const createRemoveButton = () => {
     return row;
 };
 
-const handleInteraction = async (interaction, customIdPrefix) => {
-    if (interaction.isSelectMenu() && interaction.customId.startsWith(customIdPrefix)) {
+const handleInteraction = async (interaction) => {
+    if (interaction.isSelectMenu() && interaction.customId.startsWith('departement_menu')) {
         const choice = interaction.values[0];
         const departementNumber = choice.split('_')[1];
         const roleName = `🧭┃Département ${departementNumber}`;
@@ -269,23 +269,28 @@ client.on("messageCreate", async message => {
           const menu2 = createMenu('departement_menu2', 26, 50);
           const menu3 = createMenu('departement_menu3', 51, 75);
           const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
-              label: `Département ${num}`,
-              value: `departement_${num}`,
-          })));
-          
-          const removeButtonRow = createRemoveButton();
-          
-          await message.channel.send({ content: '**Sélectionnez votre département** :', components: [menu1, menu2, menu3, menu4] });
-          await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
-          await message.channel.send({ content: ' ', components: [removeButtonRow] });
-      } else {
-          message.reply("Désolé, cette commande est réservée aux employés.");
-      }
-  }
+            label: `Département ${num}`,
+            value: `departement_${num}`,
+        })));
+        
+        const removeButtonRow = createRemoveButton();
+        
+        await message.channel.send({ content: '**Sélectionnez votre département** :', components: [menu1, menu2, menu3, menu4] });
+        await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
+        await message.channel.send({ content: ' ', components: [removeButtonRow] });
+    } else {
+        message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+}
 });
 
 client.on("interactionCreate", async interaction => {
-  handleInteraction(interaction, 'departement_menu');
+  try {
+      await handleInteraction(interaction);
+  } catch (error) {
+      console.error(error);
+      await interaction.reply({ content: "Une erreur s'est produite lors du traitement de votre interaction.", ephemeral: true });
+  }
 });
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Command_CODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
