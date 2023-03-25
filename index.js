@@ -157,7 +157,7 @@ client.on("messageCreate", async message => {
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-                        .setDescription("\nLe prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> *[le salon qye vous cherchez]*\n\n<@994859660727291985> **exerciceaide**\n<@994859660727291985> **exercice**\n<@994859660727291985> **exercice+**\n\n@994859660727291985> **chatgpt**")
+                        .setDescription("\nLe prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> *[le salon qye vous cherchez]*\n\n<@994859660727291985> **exerciceaide**\n<@994859660727291985> **exercice**\n<@994859660727291985> **exercice+**\n\n<@994859660727291985> **chatgpt**")
                         .setTitle("Liste des commandes GLOBALES");
                     message.reply({ embeds: [embed] });
                     break;
