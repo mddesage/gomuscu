@@ -43,8 +43,8 @@ module.exports = {
       const index = buttonId.split('-')[1];
 
       const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios jambiers', 'quadriceps', 'mollets'];
-      let groupeMusculaire;
-      let boutton_name;
+      let groupeMusculaire = '';
+      let boutton_name = '';
 
       if (index === 'aleatoire') {
         const randomIndex = Math.floor(Math.random() * groupesMusculaires.length);
@@ -56,20 +56,22 @@ module.exports = {
           boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
         } else {
           console.error('groupeMusculaire est undefined');
+          await interaction.reply({ content: "Une erreur s'est produite lors du traitement de votre interaction.", ephemeral: true });
+          return;
         }
       }
-
+    
       let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
-
+    
       if (exercicesFiltres.length === 0) {
         await interaction.reply(`Aucun exercice trouvé pour le groupe musculaire "${groupeMusculaire}". Vérifiez que le groupe musculaire est correct.`);
         return;
       }
-
+    
       const exerciceIndex = Math.floor(Math.random() * exercicesFiltres.length);
       const exercice = exercicesFiltres[exerciceIndex];
       const userId = interaction.user.id;
-
+    
       await interaction.channel.send(`**${exercice.nom}** - ${exercice.description}\n*(Groupe musculaire : **${exercice.groupeMusculaire}**)\n**${boutton_name}** demandé par <@${interaction.user.id}>*`);
     });
   },
