@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const axios = require('axios');
 const client = new Discord.Client({
     intents: [
         Discord.Intents.FLAGS.GUILDS,
@@ -179,7 +178,6 @@ client.on("messageCreate", async message => {
                     message.reply("Désolé, cette commande est réservée aux employés.");
                     } break;
                 };
-                           
         }
         
 
@@ -217,7 +215,6 @@ switch (command) {
                 message.reply("Une erreur s'est produite lors de la suppression des messages.");
             });
         break;
-    // ...
 }
 });
 
@@ -380,29 +377,22 @@ client.on('message', async message => {
                                                                               
                                                                               
 client.on('messageCreate', async (message) => {
-    // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
     if (message.author.bot || !message.content.startsWith(prefix)) return;
   
-    // Récupération de la commande et des arguments
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
   
-    // Gestion de la commande "repete"
     if (command === 'repete') {
-      // Vérifier si l'utilisateur a la permission d'administrateur
       if (!message.member.permissions.has('ADMINISTRATOR')) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
       }
   
-      // Obtenir le message à répéter
       const messageToRepeat = args.join(' ');
   
-      // Vérifier si un message a été fourni
       if (!messageToRepeat) {
         return message.reply('Veuillez fournir un message à répéter ( ex : **<@994859660727291985> repete [le message à répeter]** )');
       }
   
-      // Répéter le message
       message.channel.send(messageToRepeat);
     }
   });
@@ -420,51 +410,49 @@ client.on('messageCreate', async (message) => {
 
 
 client.on('messageCreate', async (message) => {
-    // Vérifier si l'auteur du message est un bot ou si le message ne commence pas par le préfixe
     if (message.author.bot || !message.content.startsWith(prefix)) return;
   
-    // Récupération de la commande et des arguments
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
   
-    // Gestion de la commande "repete"
     if (command === 'repete' || command === 'repete&suppr') {
-      // Vérifier si l'utilisateur a la permission d'administrateur
       if (!message.member.permissions.has('ADMINISTRATOR')) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
       }
   
-      // Obtenir le message à répéter
       const messageToRepeat = args.join(' ');
   
-      // Vérifier si un message a été fourni
       if (!messageToRepeat) {
         return message.reply('Veuillez fournir un message à répéterex : (ex : **<@994859660727291985> repete&suppr [le message à répeter]**).');
       }
   
-      // Répéter le message
       message.channel.send(messageToRepeat);
   
-      // Supprimer le message initial si la commande est 'repete&suppr'
       if (command === 'repete&suppr') {
         message.delete();
       }
     }
   });
 
-//react message
-client.on('messageReactionAdd', async (reaction, user) => {
-    if (user.bot) return; 
-  
-    try {
-      if (!reaction.message.guild) return; 
-  
-      await reaction.message.react(reaction.emoji);
-    } catch (error) {
-      console.error('Erreur lors de l\'ajout de la réaction:', error);
-    }
-  });
 
+
+//        ooooooooo.   oooooooooooo       .o.         .oooooo.   ooooooooooooo ooooo   .oooooo.   ooooo      ooo 
+//        `888   `Y88. `888'     `8      .888.       d8P'  `Y8b  8'   888   `8 `888'  d8P'  `Y8b  `888b.     `8' 
+//         888   .d88'  888             .8"888.     888               888       888  888      888  8 `88b.    8  
+//         888ooo88P'   888oooo8       .8' `888.    888               888       888  888      888  8   `88b.  8  
+//         888`88b.     888    "      .88ooo8888.   888               888       888  888      888  8     `88b.8  
+//         888  `88b.   888       o  .8'     `888.  `88b    ooo       888       888  `88b    d88'  8       `888  
+//        o888o  o888o o888ooooood8 o88o     o8888o  `Y8bood8P'      o888o     o888o  `Y8bood8P'  o8o        `8  
+
+
+
+client.on('messageReactionAdd', async (reaction, user) => {
+  if (user.bot) return;
+
+  const message = reaction.message;
+  if (message.author.bot) return; 
+  await message.react(reaction.emoji);
+});
   
 
 //          .oooooo.   ooooo   ooooo       .o.       ooooooooooooo   .oooooo.    ooooooooo.   ooooooooooooo 
@@ -477,6 +465,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
 
 
 
+
+const axios = require('axios');
 client.on('message', async (message) => {
     if (message.author.bot) return;
 
