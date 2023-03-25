@@ -636,8 +636,12 @@ client.on('interactionCreate', async interaction => {
     boutton_name = 'Aléatoire';
   } else {
     groupeMusculaire = groupesMusculaires[parseInt(index)];
-    boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
+    if (groupeMusculaire) {
+      boutton_name = groupeMusculaire.charAt(0).toUpperCase() + groupeMusculaire.slice(1);
+  } else {
+      console.error('groupeMusculaire est undefined');
   }
+    }
 
   let exercicesFiltres = exercices.filter(e => e.groupeMusculaire === groupeMusculaire);
 
