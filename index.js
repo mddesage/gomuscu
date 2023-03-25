@@ -603,7 +603,7 @@ client.on('messageCreate', async message => {
 
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
-
+  const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios jambiers', 'quadriceps', 'mollets'];
   if (command === 'exercice+') {
     // Créer les boutons
     const boutons = ['Épaules', 'Biceps', 'Triceps', 'Pectoraux', 'Abdominaux', 'Dos', 'Fessiers', 'Ischios Jambiers', 'Quadriceps', 'Mollets'].map((groupe, index) => {
@@ -635,7 +635,6 @@ client.on('interactionCreate', async interaction => {
   const buttonId = interaction.customId;
   const index = buttonId.split('-')[1];
 
-  const groupesMusculaires = ['épaules', 'biceps', 'triceps', 'pectoraux', 'abdominaux', 'dos', 'fessiers', 'ischios jambiers', 'quadriceps', 'mollets'];
   let groupeMusculaire = '';
   let boutton_name = '';
 
