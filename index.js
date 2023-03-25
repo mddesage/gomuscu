@@ -237,36 +237,38 @@ const handleInteraction = async (interaction, customIdPrefix) => {
 };
 
 client.on("messageCreate", async message => {
-    if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") 
-    if (message.member.permissions.has("ADMINISTRATOR")) {
-        const menu1 = createMenu('departement_menu1', 1, 25);
-        const menu2 = createMenu('departement_menu2', 26, 50);
-        const menu3 = createMenu('departement_menu3', 51, 75);
-        const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
-            label: `Département ${num}`,
-            value: `departement_${num}`,
-        })));
+  if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
+      if (message.member.permissions.has("ADMINISTRATOR")) {
+          const menu1 = createMenu('departement_menu1', 1, 25);
+          const menu2 = createMenu('departement_menu2', 26, 50);
+          const menu3 = createMenu('departement_menu3', 51, 75);
+          const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
+              label: `Département ${num}`,
+              value: `departement_${num}`,
+          })));
 
-        const removeDepartmentsButton = new MessageButton()
-            .setCustomId('remove_departments_button')
-            .setLabel('Retirer tous les Départements')
-            .setStyle('DANGER');
+          const removeDepartmentsButton = new MessageButton()
+              .setCustomId('remove_departments_button')
+              .setLabel('Retirer tous les Départements')
+              .setStyle('DANGER')
+              .setType(MESSAGE_COMPONENT_TYPE_BUTTON);
 
-        const row1 = new MessageActionRow()
-            .addComponents(menu1, menu2);
-        const row2 = new MessageActionRow()
-            .addComponents(menu3, menu4);
-        const row3 = new MessageActionRow()
-            .addComponents(removeDepartmentsButton);
+          const row = new MessageActionRow()
+              .addComponents(menu1, menu2, menu3, menu4, removeDepartmentsButton);
 
-        await message.channel.send({
-            content: '**Sélectionnez votre département** :',
-            components: [row1, row2, { type: 'ACTION_ROW', components: [row3] }],
-        });
-    } else {
-        message.reply("Désolé, cette commande est réservée aux employés.");
-    }
+          await message.channel.send({
+              content: '**Sélectionnez votre département** :',
+              components: [row],
+          });
+
+          // Ajouter le texte *(+971, 972, 973, 974, 976)* à la fin de la réponse
+          message.channel.send("*(+971, 972, 973, 974, 976)*");
+      } else {
+          message.reply("Désolé, cette commande est réservée aux employés.");
+      }
+  }
 });
+
 
 client.on("interactionCreate", async interaction => {
   if (interaction.isButton() && interaction.customId === 'remove_departments_button') {
