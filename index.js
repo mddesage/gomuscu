@@ -1294,9 +1294,9 @@ async function addToQueue(message, args, serverQueue) {
   message.channel.send(`**${song.title}** a été ajouté à la file d'attente.`);
 }
 
-function showQueue(serverQueue) {
+function showQueue(message, serverQueue) {
   if (!serverQueue || serverQueue.songs.length === 0) {
-    return message.channel.send("Aucune musique dans la file d'attente.");
+    return serverQueue.textChannel.send("Aucune musique dans la file d'attente.");
   }
 
   let queueMessage = "File d'attente:\n";
@@ -1306,6 +1306,7 @@ function showQueue(serverQueue) {
 
   message.channel.send(queueMessage);
 }
+
 
 function removeFromQueue(args, serverQueue) {
   if (!serverQueue || serverQueue.songs.length === 0) {
