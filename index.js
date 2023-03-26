@@ -1152,12 +1152,11 @@ function getWarnings(member) {
 }
 
 client.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
+  const botMention = `<@!${client.user.id}> `; 
+  if (!message.content.startsWith(botMention) || message.author.bot) return;
 
-  const content = message.content.trim();
-  if (!content.startsWith(prefix)) return;
-
-  const [command, ...args] = content.slice(prefix.length).trim().split(/ +/);
+  const args = message.content.slice(botMention.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
 
   if (command === 'avertissement') {
     const user = message.mentions.users.first();
