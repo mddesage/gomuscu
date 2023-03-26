@@ -1247,8 +1247,8 @@ client.on('messageCreate', async (message) => {
     if (args[0]) {
       const position = parseInt(args[0]) - 1;
       if (!isNaN(position) && position >= 0 && position < serverQueue.songs.length) {
-        serverQueue.songs.splice(0, position + 1);
-        playSong(message.guild, serverQueue.songs[0]);
+        serverQueue.songs.splice(0, position);
+        play(guild, serverQueue.songs[0]); // Correction: appel à la fonction play
         message.channel.send(`Passage à la musique numéro ${args[0]} dans la file d'attente.`);
       } else if (ytdl.validateURL(args[0])) {
         const youtubeLink = args[0];
@@ -1256,10 +1256,10 @@ client.on('messageCreate', async (message) => {
         const song = {
           title: songInfo.videoDetails.title,
           url: songInfo.videoDetails.video_url,
-};
-
+        };
+    
         serverQueue.songs.splice(0, 1, song);
-        playSong(message.guild, serverQueue.songs[0]);
+        play(guild, serverQueue.songs[0]); // Correction: appel à la fonction play
         message.channel.send(`Passage direct à la musique : "${song.title}"`);
       } else {
         message.channel.send('Veuillez fournir un numéro valide ou un lien YouTube valide.');
@@ -1267,6 +1267,7 @@ client.on('messageCreate', async (message) => {
     } else {
       message.channel.send('Veuillez fournir un numéro de musique dans la file d\'attente ou un lien YouTube.');
     }
+    
   }
   
 });
