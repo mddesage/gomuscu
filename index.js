@@ -192,7 +192,36 @@ client.on("messageCreate", async message => {
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-                        .setDescription(`test`)
+                        .setDescription(`
+                        
+                        Le prefix de <@994859660727291985> est **sa mention**.
+                        
+                        ${prefix}**code**
+                        Vous envoie le code du bot ${clien.user.tag}.
+                        
+                        ${prefix}**suppr** *[nombre de messages]*
+                        Supprime le nombre de derniers messages demandé.
+                        
+                        ${prefix}**repete** *[message]*
+                        Envoie un message avec le même compte que celui que vous avez envoyé.
+
+                        ${prefix}**repete&suppr** *[message]*
+                        Envoie un message avec le même compte que celui que vous avez envoyé et supprime le votre.
+
+                        ${prefix}**invite** *[user_id]*
+                        Envoie un message d'invitation à la personne demandée.
+
+                        ${prefix}**reinvite** *[user_id]*
+                        Envoie un message de ré-invitation à la personne demandée.
+
+                        ${prefix}**mute** *[user_id] ou [user_mention] ([temps en min/h])*
+                        Rend muet la personne demandée pendant le temps donné, ou indéfiniment en cas contraire.
+                         
+                        ${prefix}**demute** *[user_id] ou [user_mention]*
+                        Ne rend plus muet la personne demandée.
+
+                        ${prefix}**embed**
+                        Pour créer un embed depuis Discord.`)
                         .setTitle("Liste des commandes EMPLOYÉS");
                     message.reply({ embeds: [embed] });
                     } else {
