@@ -1142,20 +1142,13 @@ client.on('interactionCreate', async (interaction) => {
 
 
 
-function getWarnings(member) {
-  let warningCount = 0;
-  if (member.roles.cache.has('987820202177749086')) warningCount++;
-  if (member.roles.cache.has('987820202177749085')) warningCount++;
-  if (member.roles.cache.has('987820202177749084')) warningCount++;
-
-  return warningCount;
-}
-
 client.on('messageCreate', async (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (message.author.bot) return;
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
+  const content = message.content.trim();
+  if (!content.startsWith(prefix)) return;
+
+  const [command, ...args] = content.slice(prefix.length).trim().split(/ +/);
 
   if (command === 'avertissement') {
     const user = message.mentions.users.first();
@@ -1163,6 +1156,7 @@ client.on('messageCreate', async (message) => {
       message.channel.send('Veuillez mentionner un utilisateur.');
       return;
     }
+    if (!message.mentions.has(client.user.id)) return; // Check if the bot is mentioned
 
     const member = message.guild.members.cache.get(user.id);
     const warningCount = getWarnings(member);
@@ -1190,6 +1184,7 @@ client.on('messageCreate', async (message) => {
       message.channel.send('Veuillez mentionner un utilisateur.');
       return;
     }
+    if (!message.mentions.has(client.user.id)) return; // Check if the bot is mentioned
 
     const member = message.guild.members.cache.get(user.id);
     const warningCount = getWarnings(member);
@@ -1221,6 +1216,7 @@ client.on('messageCreate', async (message) => {
       message.channel.send('Veuillez mentionner un utilisateur.');
       return;
     }
+    if (!message.mentions.has(client.user.id)) return; // Check if the bot is mentioned
 
     const member = message.guild.members.cache.get(user.id);
     const warningCount = getWarnings(member);
