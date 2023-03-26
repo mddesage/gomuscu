@@ -201,6 +201,9 @@ client.on("messageCreate", async message => {
                         
                         ${prefix}**suppr** *[nombre de messages]*
                         Supprime le nombre de derniers messages demandé.
+
+                        ${prefix}**supprid** *[ID *premier* message]* *[ID *dernier* message]*
+                        Supprime tous les messages entre les deux messages envoyés.
                         
                         ${prefix}**repete** *[message]*
                         Envoie un message avec le même compte que celui que vous avez envoyé.
@@ -278,6 +281,7 @@ switch (command) {
                 message.reply("Une erreur s'est produite lors de la suppression des messages.");
             });
         break;
+
         case 'supprid':
     if (!message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
@@ -1011,7 +1015,7 @@ client.on('messageCreate', async (message) => {
     const targetChannelId = await askForInput('Veuillez entrer l\'**ID** du salon où envoyer l\'embed, ou répondez par "**ici**" ou "**here**" pour envoyer dans le salon actuel :\n*Faites **Répondre** à ce message.*');
     const embedTitle = await askForInput('Veuillez entrer le **titre** de l\'embed :\n*Faites **Répondre** à ce message.*');
     const embedDescription = await askForInput('Veuillez entrer la **description** de l\'embed :\n*Faites **Répondre** à ce message.*');
-    const embedColor = await askForInput('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :');
+    const embedColor = await askForInput('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :\nhttps://htmlcolorcodes.com/fr/\n*Faites **Répondre** à ce message.*');
     const imageURL = await askForInput('Veuillez fournir l\'**URL** de l\'**image** (facultatif, répondez par "**skip**" pour ignorer) :\n*Faites **Répondre** à ce message.*');
 
     const embed = new MessageEmbed()
