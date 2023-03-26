@@ -1199,14 +1199,14 @@ client.on('messageCreate', async (message) => {
       if (!serverQueue) {
         return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
       }
-      if (serverQueue.connection) {
-        const newPlayer = createAudioPlayer();
-        const audioPlayer = serverQueue.connection.subscribe(newPlayer);
-        if (audioPlayer) {
-          newPlayer.stop();
-        }
+    
+      if (serverQueue.songs.length > 1) {
+        serverQueue.songs.shift(); // Retire la chanson actuelle de la file d'attente
+        play(message.guild, serverQueue.songs[0]); // Joue la chanson suivante
+      } else {
+        message.channel.send('Il n\'y a pas de chanson suivante dans la file d\'attente.');
       }
-    }
+    }    
     
   } else if (command === 'musiqueattente') {
     const serverQueue = queue.get(message.guild.id);
