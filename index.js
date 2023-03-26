@@ -1305,10 +1305,12 @@ async function play(guild, song) {
   });
 }
 
-async function playSong(guild, song) {
+async function play(guild, song) {
   const serverQueue = queue.get(guild.id);
 
   if (!song) {
+    serverQueue.voiceChannel.leave();
+    queue.delete(guild.id);
     return;
   }
 
@@ -1323,9 +1325,14 @@ async function playSong(guild, song) {
   player.on(AudioPlayerStatus.Playing, () => {
     console.log(`La musique "${song.title}" se lance !`);
     serverQueue.textChannel.send(`La musique "${song.title}" se lance !`);
+    serverQueue.setPlaying(); 
   });
 
   player.on(AudioPlayerStatus.Idle, () => {
+    if (!serverQueue.isPlaying()) { 
+      return;
+    }
+    serverQueue.setNotPlaying(); 
     serverQueue.songs.shift();
     play(guild, serverQueue.songs[0]);
   });
@@ -1333,6 +1340,7 @@ async function playSong(guild, song) {
   player.on('error', (error) => {
     console.error(error);
     serverQueue.textChannel.send('Il y a eu une erreur lors de la lecture de la vidéo.');
+    serverQueue.setNotPlaying(); 
   });
 }
 
