@@ -1163,9 +1163,12 @@ function getWarnings(user) {
 }
 
 client.on('messageCreate', async (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (!message.content.startsWith(`<@994859660727291985>`) || message.author.bot) return;
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const args = message.content
+    .replace(`<@994859660727291985>`, '')
+    .trim()
+    .split(/ +/);
   const command = args.shift().toLowerCase();
 
   if (command === 'avertissement') {
