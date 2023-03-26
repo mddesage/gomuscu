@@ -1132,13 +1132,13 @@ client.on('interactionCreate', async (interaction) => {
 
 
 
-//              .o.       oooooo     oooo oooooooooooo ooooooooo.   ooooooooooooo ooooo  .oooooo..o  .oooooo..o oooooooooooo ooo        ooooo oooooooooooo ooooo      ooo ooooooooooooo 
-//             .888.       `888.     .8'  `888'     `8 `888   `Y88. 8'   888   `8 `888' d8P'    `Y8 d8P'    `Y8 `888'     `8 `88.       .888' `888'     `8 `888b.     `8' 8'   888   `8 
-//            .8"888.       `888.   .8'    888          888   .d88'      888       888  Y88bo.      Y88bo.       888          888b     d'888   888          8 `88b.    8       888      
-//           .8' `888.       `888. .8'     888oooo8     888ooo88P'       888       888   `"Y8888o.   `"Y8888o.   888oooo8     8 Y88. .P  888   888oooo8     8   `88b.  8       888      
-//          .88ooo8888.       `888.8'      888    "     888`88b.         888       888       `"Y88b      `"Y88b  888    "     8  `888'   888   888    "     8     `88b.8       888      
-//         .8'     `888.       `888'       888       o  888  `88b.       888       888  oo     .d8P oo     .d8P  888       o  8    Y     888   888       o  8       `888       888      
-//        o88o     o8888o       `8'       o888ooooood8 o888o  o888o     o888o     o888o 8""88888P'  8""88888P'  o888ooooood8 o8o        o888o o888ooooood8 o8o        `8      o888o     
+//              .o.  ooooo     oooo oooooooooooo ooooooooo.   ooooooooooooo ooooo  .oooooo..o  .oooooo..o oooooooooooo ooo        ooooo oooooooooooo ooooo      ooo ooooooooooooo 
+//             .888. `888.     .8'  `888'     `8 `888   `Y88. 8'   888   `8 `888' d8P'    `Y8 d8P'    `Y8 `888'     `8 `88.       .888' `888'     `8 `888b.     `8' 8'   888   `8 
+//            .8"888. `888.   .8'    888          888   .d88'      888       888  Y88bo.      Y88bo.       888          888b     d'888   888          8 `88b.    8       888      
+//           .8' `888. `888. .8'     888oooo8     888ooo88P'       888       888   `"Y8888o.   `"Y8888o.   888oooo8     8 Y88. .P  888   888oooo8     8   `88b.  8       888      
+//          .88ooo8888. `888.8'      888    "     888`88b.         888       888       `"Y88b      `"Y88b  888    "     8  `888'   888   888    "     8     `88b.8       888      
+//         .8'     `888. `888'       888       o  888  `88b.       888       888  oo     .d8P oo     .d8P  888       o  8    Y     888   888       o  8       `888       888      
+//        o88o     o8888o `8'       o888ooooood8 o888o  o888o     o888o     o888o 8""88888P'  8""88888P'  o888ooooood8 o8o        o888o o888ooooood8 o8o        `8      o888o     
 
 
 
@@ -1163,7 +1163,6 @@ client.on('messageCreate', async (message) => {
       message.channel.send('Veuillez mentionner un utilisateur.');
       return;
     }
-    if (!message.mentions.has(client.user.id)) return; 
 
     const member = message.guild.members.cache.get(user.id);
     const warningCount = getWarnings(member);
@@ -1191,7 +1190,6 @@ client.on('messageCreate', async (message) => {
       message.channel.send('Veuillez mentionner un utilisateur.');
       return;
     }
-    if (!message.mentions.has(client.user.id)) return; 
 
     const member = message.guild.members.cache.get(user.id);
     const warningCount = getWarnings(member);
@@ -1223,7 +1221,6 @@ client.on('messageCreate', async (message) => {
       message.channel.send('Veuillez mentionner un utilisateur.');
       return;
     }
-    if (!message.mentions.has(client.user.id)) return; 
 
     const member = message.guild.members.cache.get(user.id);
     const warningCount = getWarnings(member);
