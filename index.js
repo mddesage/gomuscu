@@ -1142,32 +1142,19 @@ client.on('interactionCreate', async (interaction) => {
 
 
 
-const warnings = new Map();
+function getWarnings(member) {
+  let warningCount = 0;
+  if (member.roles.cache.has('987820202177749086')) warningCount++;
+  if (member.roles.cache.has('987820202177749085')) warningCount++;
+  if (member.roles.cache.has('987820202177749084')) warningCount++;
 
-function addWarning(user) {
-  if (!warnings.has(user.id)) {
-    warnings.set(user.id, 1);
-  } else {
-    warnings.set(user.id, warnings.get(user.id) + 1);
-  }
-}
-
-function removeWarning(user) {
-  if (warnings.has(user.id)) {
-    warnings.set(user.id, Math.max(0, warnings.get(user.id) - 1));
-  }
-}
-
-function getWarnings(user) {
-  return warnings.get(user.id) || 0;
+  return warningCount;
 }
 
 client.on('messageCreate', async (message) => {
-  if (!message.content.startsWith(`<@!${client.user.id}>`) || message.author.bot) return;
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 
-  const args = message.content.split(/ +/);
-  args.shift(); 
+  const args = message.content.slice(PREFIX.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
   if (command === 'avertissement') {
@@ -1177,27 +1164,26 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
-    addWarning(user);
-    const warningCount = getWarnings(user);
+    const member = message.guild.members.cache.get(user.id);
+    const warningCount = getWarnings(member);
 
     let roleId;
     switch (warningCount) {
-      case 1:
+      case 0:
         roleId = '987820202177749086';
         break;
-      case 2:
+      case 1:
         roleId = '987820202177749085';
         break;
-      case 3:
+      case 2:
         roleId = '987820202177749084';
         break;
       default:
         return;
     }
 
-    const member = message.guild.members.cache.get(user.id);
     await member.roles.add(roleId);
-    message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant ${warningCount}.`);
+    message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant ${warningCount + 1}.`);
   } else if (command === 'avertissementretirer') {
     const user = message.mentions.users.first();
     if (!user) {
@@ -1205,27 +1191,30 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
-    removeWarning(user);
-    const warningCount = getWarnings(user);
+    const member = message.guild.members.cache.get(user.id);
+    const warningCount = getWarnings(member);
 
     let roleId;
-    switch (warningCount + 1) {
-      case 1:
+    switch (warningCount - 1) {
+      case 0:
         roleId = '987820202177749086';
         break;
-      case 2:
+      case 1:
         roleId = '987820202177749085';
         break;
-      case 3:
+      case 2:
         roleId = '987820202177749084';
         break;
       default:
         return;
     }
 
-    const member = message.guild.members.cache.get(user.id);
-    await member.roles.remove(roleId);
-    message.channel.send(`Un avertissement a été retiré pour ${user}. Il/elle en a maintenant ${warningCount}.`);
+    if (warningCount > 0) {
+      await member.roles.remove(roleId);
+      message.channel.send(`Un avertissement a été retiré pour ${user}. Il/elle en a maintenant ${warningCount - 1}.`);
+    } else {
+      message.channel.send(`${user} n'a pas d'avertissement à retirer.`);
+    }
   } else if (command === 'avertissementinfo') {
     const user = message.mentions.users.first();
     if (!user) {
@@ -1233,7 +1222,8 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
-    const warningCount = getWarnings(user);
+    const member = message.guild.members.cache.get(user.id);
+    const warningCount = getWarnings(member);
     message.channel.send(`${user} a ${warningCount} avertissement(s).`);
   }
 });
