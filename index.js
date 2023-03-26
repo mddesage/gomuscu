@@ -1129,10 +1129,7 @@ client.on('interactionCreate', async (interaction) => {
 
 const ytdl = require("ytdl-core");
 const ytSearch = require("yt-search");
-
-client.once("ready", () => {
-  console.log("Bot connecté");
-});
+const queue = new Map();
 
 client.on("messageCreate", async (message) => {
   if (!message.guild || message.author.bot || !message.content.startsWith(prefix)) return;
