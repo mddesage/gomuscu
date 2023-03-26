@@ -1238,6 +1238,38 @@ client.on('messageCreate', async (message) => {
     const removedSong = serverQueue.songs.splice(songIndex, 1)[0];
     message.channel.send(`La musique "${removedSong.title}" a été supprimée de la file d'attente.`);
   }
+  if (command === 'musiquedirect') {
+    const serverQueue = queue.get(message.guild.id);
+    if (!serverQueue) {
+      return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
+    }
+    
+    if (args[0]) {
+      const position = parseInt(args[0]) - 1;
+      if (!isNaN(position) && position >= 0 && position < serverQueue.songs.length) {
+        serverQueue.songs.splice(1, position);
+        serverQueue.songs.shift();
+        play(message.guild, serverQueue.songs[0]);
+        message.channel.send(`Passage à la musique numéro ${args[0]} dans la file d'attente.`);
+      } else if (ytdl.validateURL(args[0])) {
+        const youtubeLink = args[0];
+        const songInfo = await ytdl.getInfo(youtubeLink);
+        const song = {
+          title: songInfo.videoDetails.title,
+          url: songInfo.videoDetails.video_url,
+        };
+
+        serverQueue.songs.splice(1, 0, song);
+        serverQueue.songs.shift();
+        play(message.guild, serverQueue.songs[0]);
+        message.channel.send(`Passage à la musique "${song.title}" (${song.url})`);
+      } else {
+        message.reply('Veuillez fournir un numéro de musique valide dans la file d\'attente ou un lien YouTube valide.');
+      }
+    } else {
+      message.reply('Veuillez fournir un numéro de musique ou un lien YouTube.');
+    }
+  }
 });
 
 async function play(guild, song) {
