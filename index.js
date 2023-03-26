@@ -1164,9 +1164,10 @@ function getWarnings(user) {
 
 client.on('messageCreate', async (message) => {
   if (!message.content.startsWith(`<@!${client.user.id}>`) || message.author.bot) return;
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.split(/ +/);
-  args.shift();
+  args.shift(); 
   const command = args.shift().toLowerCase();
 
   if (command === 'avertissement') {
