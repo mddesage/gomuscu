@@ -221,7 +221,19 @@ client.on("messageCreate", async message => {
                         Ne rend plus muet la personne demandée.
 
                         ${prefix}**embed**
-                        Pour créer un embed depuis Discord.`)
+                        Pour créer un embed depuis Discord.
+                        
+                        ${prefix}**avertissement** *[user_mention]*
+                        Ajoute un avertissement à la personné mentionnée.
+
+                        ${prefix}**avertissementretire** *[user_mention]*
+                        Retire un avertissement à la personné mentionnée.
+
+
+                        ${prefix}**avertissementinfo** *[user_mention]*
+                        Envoie le nombre d'avertissement(s) de la personné mentionnée.
+
+                        `)
                         .setTitle("Liste des commandes EMPLOYÉS");
                     message.reply({ embeds: [embed] });
                     } else {
@@ -614,12 +626,8 @@ client.on("messageCreate", async message => {
         case 'helpexercices':
           const embed = new Discord.MessageEmbed()
             .setColor("YELLOW")
-            .setFooter({ 
-              text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.", 
-              image: { 
-                  url: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png" 
-              } 
-          })            .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+            .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
+            .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
             .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
             .setDescription(`
             
