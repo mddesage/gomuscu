@@ -1200,12 +1200,14 @@ client.on('messageCreate', async (message) => {
         return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
       }
       if (serverQueue.connection) {
-        const audioPlayer = serverQueue.connection.subscribe(player);
+        const newPlayer = createAudioPlayer();
+        const audioPlayer = serverQueue.connection.subscribe(newPlayer);
         if (audioPlayer) {
-          player.stop();
+          newPlayer.stop();
         }
       }
     }
+    
   } else if (command === 'musiqueattente') {
     const serverQueue = queue.get(message.guild.id);
     if (!serverQueue) {
