@@ -1340,29 +1340,41 @@ function showHelp(message) {
     .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
     .setTitle("Liste des commandes MUSIQUE")
     .setDescription(`
-      - ${prefix}musiquestart [lien YouTube]: Jouer une musique
+      - ${prefix}**musiquestart** *[lien YouTube]*
+      Jouer une musique
 
-      - ${prefix}musiquepause: Mettre en pause la musique
+      - ${prefix}**musiquepause**
+      Mettre en pause la musique
 
-      - ${prefix}musiquestop: Arrêter la musique et déconnecter le bot du salon vocal
+      - ${prefix}**musiquestop**
+      Arrêter la musique et déconnecter le bot du salon vocal
 
-      - ${prefix}musiquereprend: Reprendre la musique
+      - ${prefix}**musiquereprend**
+      Reprendre la musique
 
-      - ${prefix}musiquerredémarrer / ${prefix}musiquerredemarrer: Redémarrer la musique depuis le début
+      - ${prefix}**musiquerredemarrer**
+      Redémarrer la musique depuis le début
 
-      - ${prefix}musiqueajoute [lien YouTube]: Ajouter une musique à la file d'attente
+      - ${prefix}**musiqueajoute** *[lien YouTube]**
+      Ajouter une musique à la file d'attente
 
-      - ${prefix}musiqueattente: Afficher la liste d'attente
+      - ${prefix}**musiqueattente**
+      Afficher la liste d'attente
       
-      - ${prefix}musiquesuppr [numéro] / ${prefix}musiquesupprime [numéro]: Supprimer de la file d'attente
-      
-      - ${prefix}musiquesuivante: Passer à la musique suivante
+      - ${prefix}**musiquesuppr** *[numéro]*
+      Supprimer de la file d'attente
 
-      - ${prefix}musiquedirect [lien YouTube]: Passer directement à la musique du lien
+      - ${prefix}**musiquesuivante**
+      Passer à la musique suivante
 
-      - ${prefix}musiquedirect [numéro]: Passer directement à la musique du numéro de la file d'attente
+      - ${prefix}**musiquedirect** *[lien YouTube]*
+      Passer directement à la musique du lien
 
-      - ${prefix}musiqueaide / ${prefix}musiquehelp: Afficher cette liste de commandes
+      - ${prefix}**musiquedirect** *[numéro]*
+      Passer directement à la musique du numéro de la file d'attente
+
+      - ${prefix}**musiquehelp**
+      Afficher cette liste de commandes
 
     `);
 
