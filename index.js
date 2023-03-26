@@ -1157,7 +1157,7 @@ client.on('messageCreate', async (message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  const user = message.mentions.users.filter(user => user.id !== client.user.id).first();
+  const user = message.mentions.users.first();
   if (!user) {
     message.channel.send('Veuillez mentionner un utilisateur.');
     return;
@@ -1167,6 +1167,11 @@ client.on('messageCreate', async (message) => {
   const warningCount = getWarnings(member);
 
   if (command === 'avertissement') {
+    if (user.id === '994859660727291985') return;
+    if (!message.member.permissions.has('MANAGE_ROLES')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
     let roleId;
     switch (warningCount) {
       case 0:
@@ -1184,7 +1189,12 @@ client.on('messageCreate', async (message) => {
 
     await member.roles.add(roleId);
     message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant ${warningCount + 1}.`);
-  } else if (command === 'avertissementretirer') {
+  } else if (command === 'avertissementsuppr') {
+    if (user.id === '994859660727291985') return;
+    if (!message.member.permissions.has('MANAGE_ROLES')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
     let roleId;
     switch (warningCount - 1) {
       case 0:
@@ -1207,6 +1217,10 @@ client.on('messageCreate', async (message) => {
       message.channel.send(`${user} n'a pas d'avertissement à retirer.`);
     }
   } else if (command === 'avertissementinfo') {
+    if (user.id === '994859660727291985') return;    if (!message.member.permissions.has('MANAGE_ROLES')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
     message.channel.send(`${user} a ${warningCount} avertissement(s).`);
   }
 });
