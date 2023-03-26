@@ -1152,7 +1152,7 @@ function getWarnings(member) {
 }
 
 client.on('messageCreate', async (message) => {
-  const botMention = `<@994859660727291985> `; 
+  const botMention = prefix; 
   if (!message.content.startsWith(botMention) || message.author.bot) return;
 
   const args = message.content.slice(botMention.length).trim().split(/ +/);
