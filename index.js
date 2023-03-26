@@ -1128,7 +1128,14 @@ client.on('interactionCreate', async (interaction) => {
 
 
 
-const { joinVoiceChannel, createAudioResource, StreamType, AudioPlayerStatus, createAudioPlayer, getVoiceConnection } = require('@discordjs/voice');
+const {
+  joinVoiceChannel,
+  createAudioResource,
+  StreamType,
+  AudioPlayerStatus,
+  createAudioPlayer,
+  getVoiceConnection,
+} = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
 
 const queue = new Map();
@@ -1139,7 +1146,12 @@ client.on('messageCreate', async (message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  if (command === 'musique' || command === 'musiquesuivante') {
+  if (
+    command === 'musique' ||
+    command === 'musiquesuivante' ||
+    command === 'musiquesuppr' ||
+    command === 'musiquemaintenant'
+  ) {
     const voiceChannel = message.member.voice.channel;
     if (!voiceChannel) {
       message.reply('Veuillez rejoindre un salon vocal pour utiliser cette commande.');
@@ -1206,8 +1218,47 @@ client.on('messageCreate', async (message) => {
           newPlayer.stop();
         }
       }
+    } else if (command === 'musiquesuppr') {
+      if (!serverQueue || serverQueue.songs.length === 0) {
+        return message.channel.send('Il n\'y a pas de musique dans la file d\'attente.');
+      }
+      const index = parseInt(args[0]) - 1;
+      if (isNaN(index) || index < 0 || index >= serverQueue.songs.length) {
+        return message.channel.send('Veuillez fournir un numéro de musique valide dans la file d\'attente.');
+      }
+      serverQueue.songs.splice(index, 1);
+      return message.channel.send(`Musique #${index + 1} supprimée de la file d'attente.`);
+    } else if (command === 'musiquemaintenant') {
+      if (!serverQueue) {
+        return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
+      }
+      const youtubeLink = args[0];
+      let index;
+      if (ytdl.validateURL(youtubeLink)) {
+        const songInfo = await ytdl.getInfo(youtubeLink);
+        const song = {
+          title: songInfo.videoDetails.title,
+          url: songInfo.videoDetails.video_url,
+        };
+        serverQueue.songs.splice(1, 0, song);
+        index = 1;
+      } else {
+        index = parseInt(args[0]) - 1;
+        if (isNaN(index) || index < 0 || index >= serverQueue.songs.length) {
+          return message.channel.send('Veuillez fournir un numéro de musique valide dans la file d\'attente.');
+        }
+      }
+      if (serverQueue.connection) {
+        const newPlayer = createAudioPlayer();
+        const audioPlayer = serverQueue.connection.subscribe(newPlayer);
+        if (audioPlayer) {
+          newPlayer.stop();
+        }
+      }
+      const songToMove = serverQueue.songs[index];
+      serverQueue.songs.splice(index, 1);
+      serverQueue.songs.splice(1, 0, songToMove);
     }
-    
   } else if (command === 'musiqueattente') {
     const serverQueue = queue.get(message.guild.id);
     if (!serverQueue) {
