@@ -1247,9 +1247,8 @@ client.on('messageCreate', async (message) => {
     if (args[0]) {
       const position = parseInt(args[0]) - 1;
       if (!isNaN(position) && position >= 0 && position < serverQueue.songs.length) {
-        serverQueue.songs.splice(1, position);
-        serverQueue.songs.shift();
-        play(message.guild, serverQueue.songs[0]);
+        serverQueue.songs.splice(0, position + 1);
+        playSong(message.guild, serverQueue.songs[0]);
         message.channel.send(`Passage à la musique numéro ${args[0]} dans la file d'attente.`);
       } else if (ytdl.validateURL(args[0])) {
         const youtubeLink = args[0];
@@ -1257,19 +1256,19 @@ client.on('messageCreate', async (message) => {
         const song = {
           title: songInfo.videoDetails.title,
           url: songInfo.videoDetails.video_url,
-        };
+};
 
-        serverQueue.songs.splice(1, 0, song);
-        serverQueue.songs.shift();
-        play(message.guild, serverQueue.songs[0]);
-        message.channel.send(`Passage à la musique "${song.title}" (${song.url})`);
+        serverQueue.songs.splice(0, 1, song);
+        playSong(message.guild, serverQueue.songs[0]);
+        message.channel.send(`Passage direct à la musique : "${song.title}"`);
       } else {
-        message.reply('Veuillez fournir un numéro de musique valide dans la file d\'attente ou un lien YouTube valide.');
+        message.channel.send('Veuillez fournir un numéro valide ou un lien YouTube valide.');
       }
     } else {
-      message.reply('Veuillez fournir un numéro de musique ou un lien YouTube.');
+      message.channel.send('Veuillez fournir un numéro de musique dans la file d\'attente ou un lien YouTube.');
     }
   }
+  
 });
 
 async function play(guild, song) {
@@ -1304,6 +1303,38 @@ async function play(guild, song) {
     serverQueue.textChannel.send('Il y a eu une erreur lors de la lecture de la vidéo.');
   });
 }
+
+async function playSong(guild, song) {
+  const serverQueue = queue.get(guild.id);
+
+  if (!song) {
+    return;
+  }
+
+  const stream = ytdl(song.url, { filter: 'audioonly', quality: 'highestaudio' });
+  const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
+
+  const player = createAudioPlayer();
+  player.play(resource);
+
+  serverQueue.connection.subscribe(player);
+
+  player.on(AudioPlayerStatus.Playing, () => {
+    console.log(`La musique "${song.title}" se lance !`);
+    serverQueue.textChannel.send(`La musique "${song.title}" se lance !`);
+  });
+
+  player.on(AudioPlayerStatus.Idle, () => {
+    serverQueue.songs.shift();
+    play(guild, serverQueue.songs[0]);
+  });
+
+  player.on('error', (error) => {
+    console.error(error);
+    serverQueue.textChannel.send('Il y a eu une erreur lors de la lecture de la vidéo.');
+  });
+}
+
 
 
 
