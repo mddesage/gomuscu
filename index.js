@@ -1157,17 +1157,19 @@ client.on('messageCreate', async (message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
+  const user = message.mentions.users.first();
+  if (!user) {
+    message.channel.send('Veuillez mentionner un utilisateur.');
+    return;
+  }
+
+  // Ignorer l'utilisateur avec l'ID 994859660727291985
+  if (user.id === '994859660727291985') return;
+
+  const member = message.guild.members.cache.get(user.id);
+  const warningCount = getWarnings(member);
+
   if (command === 'avertissement') {
-    const user = message.mentions.users.first();
-    if (!user) {
-      message.channel.send('Veuillez mentionner un utilisateur.');
-      return;
-    }
-    if (user.id === '994859660727291985') return;
-
-    const member = message.guild.members.cache.get(user.id);
-    const warningCount = getWarnings(member);
-
     let roleId;
     switch (warningCount) {
       case 0:
@@ -1186,15 +1188,6 @@ client.on('messageCreate', async (message) => {
     await member.roles.add(roleId);
     message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant ${warningCount + 1}.`);
   } else if (command === 'avertissementretirer') {
-    const user = message.mentions.users.first();
-    if (!user) {
-      message.channel.send('Veuillez mentionner un utilisateur.');
-      return;
-    }
-
-    const member = message.guild.members.cache.get(user.id);
-    const warningCount = getWarnings(member);
-
     let roleId;
     switch (warningCount - 1) {
       case 0:
@@ -1217,14 +1210,6 @@ client.on('messageCreate', async (message) => {
       message.channel.send(`${user} n'a pas d'avertissement à retirer.`);
     }
   } else if (command === 'avertissementinfo') {
-    const user = message.mentions.users.first();
-    if (!user) {
-      message.channel.send('Veuillez mentionner un utilisateur.');
-      return;
-    }
-
-    const member = message.guild.members.cache.get(user.id);
-    const warningCount = getWarnings(member);
     message.channel.send(`${user} a ${warningCount} avertissement(s).`);
   }
 });
