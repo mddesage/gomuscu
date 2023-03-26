@@ -1131,7 +1131,6 @@ client.on('interactionCreate', async (interaction) => {
 const { joinVoiceChannel, createAudioResource, StreamType, AudioPlayerStatus, createAudioPlayer, getVoiceConnection } = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
 
-// Créer une file d'attente pour stocker les liens YouTube
 const queue = [];
 
 client.on('messageCreate', async (message) => {
@@ -1160,17 +1159,14 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
-    // Ajouter le lien YouTube à la file d'attente
     queue.push(youtubeLink);
 
-    // Vérifier si la musique est en train de jouer
     const connection = getVoiceConnection(voiceChannel.guild.id);
     if (connection && connection.state.status !== AudioPlayerStatus.Idle) {
       message.channel.send('La musique a été ajoutée à la file d\'attente.');
       return;
     }
 
-    // Jouer la première musique dans la file d'attente
     playMusic(voiceChannel);
   }
 
@@ -1194,7 +1190,6 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
-    // Ajouter le lien YouTube à la file d'attente
     queue.push(youtubeLink);
     message.channel.send('La musique a été ajoutée à la file d\'attente.');
   }
@@ -1234,7 +1229,6 @@ function playMusic(voiceChannel) {
   player.on(AudioPlayerStatus.Idle, () => {
     connection.destroy();
 
-    // Jouer la prochaine musique dans la file d'attente, s'il y en a une
     if (queue.length > 0) {
       playMusic(voiceChannel);
     }
@@ -1244,5 +1238,4 @@ function playMusic(voiceChannel) {
     console.error(error);
     message.reply('Il y a eu une erreur lors de la lecture de la vidéo.');
   });
-}
-
+};
