@@ -1127,7 +1127,6 @@ client.on('interactionCreate', async (interaction) => {
 //        o8o        o888o    `YbodP'    8""88888P'  o888o  `Y8bood8P'Ybd'    `YbodP'    o888ooooood8 
 
 
-const { Client, Intents, MessageEmbed } = require("discord.js");
 const ytdl = require("ytdl-core");
 const ytSearch = require("yt-search");
 
