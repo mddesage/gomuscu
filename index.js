@@ -1130,7 +1130,6 @@ client.on('interactionCreate', async (interaction) => {
 const { Client, Intents, MessageEmbed } = require("discord.js");
 const ytdl = require("ytdl-core");
 const ytSearch = require("yt-search");
-const queue = new Map();
 
 client.once("ready", () => {
   console.log("Bot connecté");
