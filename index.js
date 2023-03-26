@@ -1235,62 +1235,64 @@ client.on('messageCreate', async (message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  const user = message.mentions.users.filter(user => user.id !== client.user.id).first();
-  if (!user) {
-    message.channel.send('Veuillez mentionner un **utilisateur**.');
-    return;
-  }
-
-  const member = message.guild.members.cache.get(user.id);
-  const warningCount = getWarnings(member);
-
-  if (command === 'avertissement') {
-    if (!message.member.permissions.has('MANAGE_ROLES')) {
-      return message.reply("Désolé, cette commande est réservée aux employés.");
-    }
-    let roleId;
-    switch (warningCount) {
-      case 0:
-        roleId = '987820202177749086';
-        break;
-      case 1:
-        roleId = '987820202177749085';
-        break;
-      case 2:
-        roleId = '987820202177749084';
-        break;
-      default:
-        return;
+  if (command === 'avertissement' || command === 'avertissementretirer' || command === 'avertissementinfo') {
+    const user = message.mentions.users.filter(user => user.id !== client.user.id).first();
+    if (!user) {
+      message.channel.send('Veuillez mentionner un **utilisateur**.');
+      return;
     }
 
-    await member.roles.add(roleId);
-    message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant **${warningCount + 1}**.`);
-  } else if (command === 'avertissementretirer') {
-    if (!message.member.permissions.has('MANAGE_ROLES')) {
-      return message.reply("Désolé, cette commande est réservée aux employés.");
-    }
-    let roleId;
-    switch (warningCount - 1) {
-      case 0:
-        roleId = '987820202177749086';
-        break;
-      case 1:
-        roleId = '987820202177749085';
-        break;
-      case 2:
-        roleId = '987820202177749084';
-        break;
-      default:
-        return;
-    }
+    const member = message.guild.members.cache.get(user.id);
+    const warningCount = getWarnings(member);
 
-    if (warningCount > 0) {
-      await member.roles.remove(roleId);
-      message.channel.send(`Un avertissement a été retiré pour ${user}. Il/elle en a maintenant **${warningCount - 1}**.`);
-    } else {
-      message.channel.send(`${user} n'a pas d'avertissement à retirer.`);
+    if (command === 'avertissement') {
+      if (!message.member.permissions.has('MANAGE_ROLES')) {
+        return message.reply("Désolé, cette commande est réservée aux employés.");
+      }
+      let roleId;
+      switch (warningCount) {
+        case 0:
+          roleId = '987820202177749086';
+          break;
+        case 1:
+          roleId = '987820202177749085';
+          break;
+        case 2:
+          roleId = '987820202177749084';
+          break;
+        default:
+          return;
+      }
+
+      await member.roles.add(roleId);
+      message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant **${warningCount + 1}**.`);
+    } else if (command === 'avertissementretirer') {
+      if (!message.member.permissions.has('MANAGE_ROLES')) {
+        return message.reply("Désolé, cette commande est réservée aux employés.");
+      }
+      let roleId;
+      switch (warningCount - 1) {
+        case 0:
+          roleId = '987820202177749086';
+          break;
+        case 1:
+          roleId = '987820202177749085';
+          break;
+        case 2:
+          roleId = '987820202177749084';
+          break;
+        default:
+          return;
+      }
+
+      if (warningCount > 0) {
+        await member.roles.remove(roleId);
+        message.channel.send(`Un avertissement a été retiré pour ${user}. Il/elle en a maintenant **${warningCount - 1}**.`);
+      } else {
+        message.channel.send(`${user} n'a pas d'avertissement à retirer.`);
+      }
+    } else if (command === 'avertissementinfo') {
+      message.channel.send(`${user} a **${warningCount}** avertissement(s).`);
     }
-  } else if (command === 'avertissementinfo') {
-    message.channel.send(`${user} a **${warningCount}** avertissement(s).`);
   }
 });
