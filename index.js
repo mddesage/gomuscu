@@ -1128,264 +1128,144 @@ client.on('interactionCreate', async (interaction) => {
 //        o8o        o888o    `YbodP'    8""88888P'  o888o  `Y8bood8P'Ybd'    `YbodP'    o888ooooood8 
 
 
-const { joinVoiceChannel, createAudioResource, StreamType, AudioPlayerStatus, createAudioPlayer, getVoiceConnection } = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
+const { Client, Intents, MessageEmbed } = require('discord.js');
+const ytdl = require('ytdl-core-discord');
+let dispatcher;
+let connection;
+let queue = [];
 
-const queue = new Map();
-
-client.on('messageCreate', async (message) => {
+client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  if (command === 'musique' || command === 'musiquesuivante') {
-    const voiceChannel = message.member.voice.channel;
-    if (!voiceChannel) {
-      message.reply('Veuillez rejoindre un salon vocal pour utiliser cette commande.');
-      return;
+  if (command === 'musiquestart') {
+    if (!message.member.voice.channel) return message.reply('Vous devez être dans un salon vocal pour lancer une musique !');
+
+    const link = args[0];
+
+    if (!link) return message.reply('Veuillez fournir un lien YouTube pour lancer une musique !');
+
+    try {
+      connection = await message.member.voice.channel.join();
+      playMusic(link, message);
+    } catch (error) {
+      console.error(error);
+      message.reply('Une erreur est survenue lors de la connexion au salon vocal !');
     }
-
-    const serverQueue = queue.get(message.guild.id);
-
-    if (command === 'musique') {
-      if (!args[0]) {
-        message.reply('Veuillez fournir un lien YouTube.');
-        return;
-      }
-      const youtubeLink = args[0];
-
-      if (!ytdl.validateURL(youtubeLink)) {
-        message.reply('Veuillez fournir un lien YouTube valide.');
-        return;
-      }
-
-      const songInfo = await ytdl.getInfo(youtubeLink);
-      const song = {
-        title: songInfo.videoDetails.title,
-        url: songInfo.videoDetails.video_url,
-      };
-
-      if (!serverQueue) {
-        const queueConstructor = {
-          voiceChannel: voiceChannel,
-          textChannel: message.channel,
-          connection: null,
-          songs: [],
-          playing: true,
-        };
-
-        queue.set(message.guild.id, queueConstructor);
-        queueConstructor.songs.push(song);
-
-        try {
-          const connection = joinVoiceChannel({
-            channelId: voiceChannel.id,
-            guildId: voiceChannel.guild.id,
-            adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-          });
-          queueConstructor.connection = connection;
-          play(message.guild, queueConstructor.songs[0]);
-        } catch (err) {
-          console.error(err);
-          queue.delete(message.guild.id);
-          return message.channel.send(err);
-        }
-      } else {
-        serverQueue.songs.push(song);
-        return message.channel.send(`${song.title} a été ajouté à la file d'attente.`);
-      }
-    } else if (command === 'musiquesuivante') {
-      if (!serverQueue) {
-        return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
-      }
-    
-      if (serverQueue.songs.length > 1) {
-        serverQueue.songs.shift(); 
-        play(message.guild, serverQueue.songs[0]); 
-      } else {
-        message.channel.send('Il n\'y a pas de chanson suivante dans la file d\'attente.');
-      }
-    }    
-    
-  } else if (command === 'musiqueattente') {
-    const serverQueue = queue.get(message.guild.id);
-    if (!serverQueue) {
-      return message.channel.send('Il n\'y a pas de musique en file d\'attente.');
-    }
-    let queueMessage = 'File d\'attente:\n';
-    serverQueue.songs.forEach((song, index) => {
-      queueMessage += `${index + 1}. ${song.title} (${song.url})\n`;
-    });
-    message.channel.send(queueMessage);
-  }
-  if (command === 'musiquemaintenant') {
-    const serverQueue = queue.get(message.guild.id);
-    if (!serverQueue) {
-      return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
-    }
-    const currentSong = serverQueue.songs[0];
-    message.channel.send(`La musique actuelle est "${currentSong.title}".`);
-  } else if (command === 'musiquesuppr') {
-    const serverQueue = queue.get(message.guild.id);
-    if (!serverQueue) {
-      return message.channel.send('Il n\'y a pas de musique en file d\'attente.');
-    }
-    const songIndex = parseInt(args[0]) - 1;
-    if (isNaN(songIndex) || songIndex < 1 || songIndex >= serverQueue.songs.length) {
-      return message.channel.send('Veuillez fournir un numéro de musique valide dans la file d\'attente.');
-    }
-    const removedSong = serverQueue.songs.splice(songIndex, 1)[0];
-    message.channel.send(`La musique "${removedSong.title}" a été supprimée de la file d'attente.`);
-  }
-  if (command === 'musiquedirect') {
-    const serverQueue = queue.get(message.guild.id);
-    if (!serverQueue) {
-      return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
-    }
-    
-    if (args[0]) {
-      const position = parseInt(args[0]) - 1;
-      if (!isNaN(position) && position >= 0 && position < serverQueue.songs.length) {
-        serverQueue.songs.splice(0, position);
-        play(guild, serverQueue.songs[0]); // Correction: appel à la fonction play
-        message.channel.send(`Passage à la musique numéro ${args[0]} dans la file d'attente.`);
-      } else if (ytdl.validateURL(args[0])) {
-        const youtubeLink = args[0];
-        const songInfo = await ytdl.getInfo(youtubeLink);
-        const song = {
-          title: songInfo.videoDetails.title,
-          url: songInfo.videoDetails.video_url,
-        };
-    
-        serverQueue.songs.splice(0, 1, song);
-        play(guild, serverQueue.songs[0]); // Correction: appel à la fonction play
-        message.channel.send(`Passage direct à la musique : "${song.title}"`);
-      } else {
-        message.channel.send('Veuillez fournir un numéro valide ou un lien YouTube valide.');
-      }
-    } else {
-      message.channel.send('Veuillez fournir un numéro de musique dans la file d\'attente ou un lien YouTube.');
-    }
-    
-  }
-  
-});
-
-async function play(guild, song) {
-  const serverQueue = queue.get(guild.id);
-
-  if (!song) {
-    serverQueue.voiceChannel.leave();
-    queue.delete(guild.id);
-    return;
   }
 
-  const stream = ytdl(song.url, { filter: 'audioonly', quality: 'highestaudio' });
-  const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-
-  const player = createAudioPlayer();
-  player.play(resource);
-
-  serverQueue.connection.subscribe(player);
-
-  player.on(AudioPlayerStatus.Playing, () => {
-    console.log(`La musique "${song.title}" se lance !`);
-    serverQueue.textChannel.send(`La musique "${song.title}" se lance !`);
-  });
-
-  player.on(AudioPlayerStatus.Idle, () => {
-    serverQueue.songs.shift();
-    play(guild, serverQueue.songs[0]);
-  });
-
-  player.on('error', (error) => {
-    console.error(error);
-    serverQueue.textChannel.send('Il y a eu une erreur lors de la lecture de la vidéo.');
-  });
-}
-
-async function play(guild, song) {
-  const serverQueue = queue.get(guild.id);
-
-  if (!song) {
-    serverQueue.voiceChannel.leave();
-    queue.delete(guild.id);
-    return;
+  if (command === 'musiquepause') {
+    if (dispatcher) dispatcher.pause();
   }
 
-  const stream = ytdl(song.url, { filter: 'audioonly', quality: 'highestaudio' });
-  const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-
-  const player = createAudioPlayer();
-  player.play(resource);
-
-  serverQueue.connection.subscribe(player);
-
-  player.on(AudioPlayerStatus.Playing, () => {
-    console.log(`La musique "${song.title}" se lance !`);
-    serverQueue.textChannel.send(`La musique "${song.title}" se lance !`);
-    serverQueue.setPlaying(); 
-  });
-
-  player.on(AudioPlayerStatus.Idle, () => {
-    if (!serverQueue.isPlaying()) { 
-      return;
+  if (command === 'musiquestop') {
+    if (dispatcher) {
+      dispatcher.destroy();
+      message.member.voice.channel.leave();
+      queue = [];
     }
-    serverQueue.setNotPlaying(); 
-    serverQueue.songs.shift();
-    play(guild, serverQueue.songs[0]);
-  });
+  }
 
-  player.on('error', (error) => {
-    console.error(error);
-    serverQueue.textChannel.send('Il y a eu une erreur lors de la lecture de la vidéo.');
-    serverQueue.setNotPlaying(); 
-  });
-}
+  if (command === 'musiquereprend') {
+    if (dispatcher) dispatcher.resume();
+  }
 
+  if (command === 'musiquerredémarrer' || command === 'musiquerrestart') {
+    if (dispatcher) {
+      dispatcher.seek(0);
+      dispatcher.resume();
+    }
+  }
 
+  if (command === 'musiqueajoute') {
+    const link = args[0];
 
+    if (!link) return message.reply('Veuillez fournir un lien YouTube pour ajouter une musique à la file d\'attente !');
 
+    queue.push(link);
+    message.reply(`La musique ${link} a été ajoutée à la file d'attente !`);
 
-client.on('messageCreate', async (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!dispatcher) playNext(message);
+  }
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
+  if (command === 'musiqueattente') {
+    if (queue.length === 0) return message.reply('Il n\'y a pas de musiques en attente !');
 
-  if (command === 'musiqueaide') {
     const embed = new MessageEmbed()
-      .setTitle('Commandes du bot musique')
-      .setColor('#0099ff')
-      .addFields(
-        {
-          name: 'musique [lien YouTube]',
-          value: 'Ajoute une musique à la file d\'attente et la joue si aucune musique n\'est en cours de lecture.',
-        },
-        {
-          name: 'musiquesuivante',
-          value: 'Passe à la musique suivante dans la file d\'attente.',
-        },
-        {
-          name: 'musiqueattente',
-          value: 'Affiche la liste des musiques en file d\'attente.',
-        },
-        {
-          name: 'musiquesuppr [numéro]',
-          value: 'Supprime la musique correspondant au numéro donné dans la file d\'attente.',
-        },
-        {
-          name: 'musiquemaintenant [numéro]',
-          value: 'Passe directement à la musique correspondant au numéro donné dans la file d\'attente.',
-        },
-        {
-          name: 'musiquemaintenant [lien YouTube]',
-          value: 'Passe directement à la musique du lien YouTube fourni.',
-        }
-      )
-      .setFooter('Utilisez ces commandes pour contrôler le bot musique.');
+      .setColor("RED")
+      .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
+      .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+      .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
+      .setDescription(`Liste d'attente :\n\n${queue.map((link, index) => `${index + 1}. ${link}`).join('\n')}`);
 
-    message.channel.send({ embeds: [embed] });
-  }
-});
+      message.channel.send({ embeds: [embed] });
+    }
+  
+    if (command === 'musiquesuppr' || command === 'musiquesupprime') {
+      const index = parseInt(args[0]) - 1;
+  
+      if (isNaN(index)) return message.reply('Veuillez fournir un numéro valide pour supprimer une musique de la file d\'attente !');
+  
+      if (index < 0 || index >= queue.length) return message.reply('Le numéro fourni ne correspond à aucune musique de la file d\'attente !');
+  
+      const removed = queue.splice(index, 1);
+  
+      message.reply(`La musique ${removed} a été supprimée de la file d'attente !`);
+    }
+  
+    if (command === 'musiquesuivante') {
+      if (dispatcher) dispatcher.destroy();
+    }
+  
+    if (command === 'musiquedirect') {
+      const linkOrIndex = args[0];
+  
+      if (!linkOrIndex) return message.reply('Veuillez fournir un lien YouTube ou un numéro de la file d\'attente pour passer directement à une musique !');
+  
+      if (!isNaN(linkOrIndex)) {
+        const index = parseInt(linkOrIndex) - 1;
+  
+        if (index < 0 || index >= queue.length) return message.reply('Le numéro fourni ne correspond à aucune musique de la file d\'attente !');
+  
+        if (dispatcher) dispatcher.destroy();
+  
+        playMusic(queue[index], message);
+      } else {
+        if (dispatcher) dispatcher.destroy();
+  
+        playMusic(linkOrIndex, message);
+      }
+    }
+  
+    if (command === 'musiqueaide' || command === 'musiquehelp') {
+      const embed = new MessageEmbed()
+        .setColor("RED")
+        .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
+        .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+        .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
+        .setDescription(`Liste des commandes MUSIQUE :\n\n${prefix}musiquestart [lien YouTube] : pour que le bot se connecte au salon vocal où est l'utilisateur et joue la musique.\n${prefix}musiquepause : pour mettre en pause la musique.\n${prefix}musiquestop : pour arrêter la musique et déconnecter le bot du salon vocal.\n${prefix}musiquereprend : pour reprendre la musique.\n${prefix}musiquerredémarrer ou ${prefix}musiquerrestart : pour redémarrer la musique depuis le début.\n${prefix}musiqueajoute [lien YouTube] : pour ajouter une musique à la file d'attente.\n${prefix}musiqueattente : pour afficher la liste d'attente.\n${prefix}musiquesuppr [numéro] ou ${prefix}musiquesupprime [numéro] : pour supprimer une musique de la file d'attente.\n${prefix}musiquesuivante : pour passer directement à la musique suivante.\n${prefix}musiquedirect [lien YouTube] : pour passer directement à une musique sans prendre en compte la file d'attente.\n${prefix}musiquedirect [numéro] : pour passer directement à une musique de la file d'attente.\n`);
+
+        message.channel.send({ embeds: [embed] });
+      }
+    });
+    
+    async function playMusic(link, message) {
+      dispatcher = connection.play(await ytdl(link), { type: 'opus' });
+    
+      dispatcher.on('finish', () => {
+        if (queue.length === 0) {
+          dispatcher = null;
+          connection.disconnect();
+        } else {
+          playNext(message);
+        }
+      });
+    }
+    
+    function playNext(message) {
+      const link = queue.shift();
+    
+      playMusic(link, message);
+    }
