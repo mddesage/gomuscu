@@ -1127,255 +1127,111 @@ client.on('interactionCreate', async (interaction) => {
 //        o8o        o888o    `YbodP'    8""88888P'  o888o  `Y8bood8P'Ybd'    `YbodP'    o888ooooood8 
 
 
-const ytdl = require("ytdl-core");
-const ytSearch = require("yt-search");
-const queue = new Map();
 
-client.on("messageCreate", async (message) => {
-  if (!message.guild || message.author.bot || !message.content.startsWith(prefix)) return;
+//LE CODE ...
 
-  const args = message.content.slice(prefix.length).split(/ +/);
-  const command = args.shift().toLowerCase();
-  const serverQueue = queue.get(message.guild.id);
 
-  switch (command) {
-    case "musiquestart":
-      await execute(message, args, serverQueue);
-      break;
-    case "musiquepause":
-      pause(serverQueue);
-      break;
-    case "musiquestop":
-      stop(serverQueue);
-      break;
-    case "musiquereprend":
-      resume(serverQueue);
-      break;
-    case "musiquerredémarrer":
-    case "musiquerredemarrer":
-      restart(serverQueue);
-      break;
-    case "musiqueajoute":
-      await addToQueue(message, args, serverQueue);
-      break;
-    case "musiqueattente":
-      showQueue(serverQueue);
-      break;
-    case "musiquesuppr":
-    case "musiquesupprime":
-      removeFromQueue(args, serverQueue);
-      break;
-    case "musiquesuivante":
-      skip(serverQueue);
-      break;
-    case "musiquedirect":
-      playDirect(message, args, serverQueue);
-      break;
-    case "musiqueaide":
-    case "musiquehelp":
-      showHelp(message);
-      break;
-    default:
-        }
-});
 
-async function execute(message, args, serverQueue) {
-  const voiceChannel = message.member.voice.channel;
+//              .o.       oooooo     oooo oooooooooooo ooooooooo.   ooooooooooooo ooooo  .oooooo..o  .oooooo..o oooooooooooo ooo        ooooo oooooooooooo ooooo      ooo ooooooooooooo 
+//             .888.       `888.     .8'  `888'     `8 `888   `Y88. 8'   888   `8 `888' d8P'    `Y8 d8P'    `Y8 `888'     `8 `88.       .888' `888'     `8 `888b.     `8' 8'   888   `8 
+//            .8"888.       `888.   .8'    888          888   .d88'      888       888  Y88bo.      Y88bo.       888          888b     d'888   888          8 `88b.    8       888      
+//           .8' `888.       `888. .8'     888oooo8     888ooo88P'       888       888   `"Y8888o.   `"Y8888o.   888oooo8     8 Y88. .P  888   888oooo8     8   `88b.  8       888      
+//          .88ooo8888.       `888.8'      888    "     888`88b.         888       888       `"Y88b      `"Y88b  888    "     8  `888'   888   888    "     8     `88b.8       888      
+//         .8'     `888.       `888'       888       o  888  `88b.       888       888  oo     .d8P oo     .d8P  888       o  8    Y     888   888       o  8       `888       888      
+//        o88o     o8888o       `8'       o888ooooood8 o888o  o888o     o888o     o888o 8""88888P'  8""88888P'  o888ooooood8 o8o        o888o o888ooooood8 o8o        `8      o888o     
 
-  if (!voiceChannel) {
-    return message.channel.send("Vous devez être dans un salon vocal pour jouer de la musique.");
-  }
 
-  const permissions = voiceChannel.permissionsFor(message.client.user);
 
-  if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-    return message.channel.send("J'ai besoin des permissions pour rejoindre et parler dans le salon vocal.");
-  }
+const warnings = new Map();
 
-  const songInfo = await ytdl.getInfo(args[0]);
-  const song = {
-    title: songInfo.videoDetails.title,
-    url: songInfo.videoDetails.video_url,
-  };
-
-  if (!serverQueue) {
-    const queueConstruct = {
-      textChannel: message.channel,
-      voiceChannel: voiceChannel,
-      connection: null,
-      songs: [],
-      volume: 5,
-      playing: true,
-    };
-
-    queue.set(message.guild.id, queueConstruct);
-    queueConstruct.songs.push(song);
-
-    try {
-      const connection = await voiceChannel.join();
-      queueConstruct.connection = connection;
-      play(message.guild, queueConstruct.songs[0]);
-    } catch (err) {
-      console.log(err);
-      queue.delete(message.guild.id);
-      return message.channel.send(err);
-    }
+function addWarning(user) {
+  if (!warnings.has(user.id)) {
+    warnings.set(user.id, 1);
   } else {
-    serverQueue.songs.push(song);
-    return message.channel.send(`**${song.title}** a été ajouté à la file d'attente.`);
+    warnings.set(user.id, warnings.get(user.id) + 1);
   }
 }
 
-function play(guild, song) {
-  const serverQueue = queue.get(guild.id);
-  if (!song) {
-    serverQueue.voiceChannel.leave();
-    queue.delete(guild.id);
-    return;
+function removeWarning(user) {
+  if (warnings.has(user.id)) {
+    warnings.set(user.id, Math.max(0, warnings.get(user.id) - 1));
   }
-
-  const dispatcher = serverQueue.connection
-    .play(ytdl(song.url, { filter: "audioonly", quality: "highestaudio", highWaterMark: 1 << 25 }))
-    .on("finish", () => {
-      serverQueue.songs.shift();
-      play(guild, serverQueue.songs[0]);
-    })
-    .on("error", (error) => console.error(error));
-
-  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
-  serverQueue.textChannel.send(`En train de jouer: **${song.title}**`);
 }
 
-function pause(serverQueue) {
-  if (!serverQueue || !serverQueue.playing) {
-    return;
+function getWarnings(user) {
+  return warnings.get(user.id) || 0;
+}
+
+client.on('messageCreate', async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'avertissement') {
+    const user = message.mentions.users.first();
+    if (!user) {
+      message.channel.send('Veuillez mentionner un utilisateur.');
+      return;
+    }
+
+    addWarning(user);
+    const warningCount = getWarnings(user);
+
+    let roleId;
+    switch (warningCount) {
+      case 1:
+        roleId = '987820202177749086';
+        break;
+      case 2:
+        roleId = '987820202177749085';
+        break;
+      case 3:
+        roleId = '987820202177749084';
+        break;
+      default:
+        return;
+    }
+
+    const member = message.guild.members.cache.get(user.id);
+    await member.roles.add(roleId);
+    message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant ${warningCount}.`);
+  } else if (command === 'avertissementretirer') {
+    const user = message.mentions.users.first();
+    if (!user) {
+      message.channel.send('Veuillez mentionner un utilisateur.');
+      return;
+    }
+
+    removeWarning(user);
+    const warningCount = getWarnings(user);
+
+    let roleId;
+    switch (warningCount + 1) {
+      case 1:
+        roleId = '987820202177749086';
+        break;
+      case 2:
+        roleId = '987820202177749085';
+        break;
+      case 3:
+        roleId = '987820202177749084';
+        break;
+      default:
+        return;
+    }
+
+    const member = message.guild.members.cache.get(user.id);
+    await member.roles.remove(roleId);
+    message.channel.send(`Un avertissement a été retiré pour ${user}. Il/elle en a maintenant ${warningCount}.`);
+  } else if (command === 'avertissementinfo') {
+    const user = message.mentions.users.first();
+    if (!user) {
+      message.channel.send('Veuillez mentionner un utilisateur.');
+      return;
+    }
+
+    const warningCount = getWarnings(user);
+    message.channel.send(`${user} a ${warningCount} avertissement(s).`);
   }
-  serverQueue.connection.dispatcher.pause();
-  serverQueue.playing = false;
-}
-
-function resume(serverQueue) {
-  if (!serverQueue || serverQueue.playing) {
-    return;
-  }
-  serverQueue.connection.dispatcher.resume();
-  serverQueue.playing = true;
-}
-
-function stop(serverQueue) {
-  if (!serverQueue) {
-    return;
-  }
-  serverQueue.songs = [];
-  serverQueue.connection.dispatcher.end();
-}
-
-function restart(serverQueue) {
-  if (!serverQueue || !serverQueue.playing) {
-    return;
-  }
-  serverQueue.connection.dispatcher.end();
-  play(serverQueue.textChannel.guild, serverQueue.songs[0]);
-}
-
-async function addToQueue(message, args, serverQueue) {
-  if (!serverQueue) {
-    return message.channel.send("Aucune musique n'est en cours de lecture.");
-  }
-
-  const songInfo = await ytdl.getInfo(args[0]);
-  const song = {
-    title: songInfo.videoDetails.title,
-    url: songInfo.videoDetails.video_url,
-  };
-
-  serverQueue.songs.push(song);
-  message.channel.send(`**${song.title}** a été ajouté à la file d'attente.`);
-}
-
-function showQueue(message, serverQueue) {
-  if (!serverQueue || serverQueue.songs.length === 0) {
-    return serverQueue.textChannel.send("Aucune musique dans la file d'attente.");
-  }
-
-  let queueMessage = "File d'attente:\n";
-  serverQueue.songs.forEach((song, index) => {
-    queueMessage += `${index + 1}. ${song.title}\n`;
-  });
-
-  message.channel.send(queueMessage);
-}
-
-
-function removeFromQueue(args, serverQueue) {
-  if (!serverQueue || serverQueue.songs.length === 0) {
-    return;
-  }
-
-  const indexToRemove = parseInt(args[0]) - 1;
-  if (indexToRemove < 0 || indexToRemove >= serverQueue.songs.length) {
-    return;
-  }
-
-  const removedSong = serverQueue.songs.splice(indexToRemove, 1)[0];
-  message.channel.send(`**${removedSong.title}** a été supprimé de la file d'attente.`);
-}
-
-function skip(serverQueue) {
-  if (!serverQueue) {
-    return;
-  }
-  serverQueue.connection.dispatcher.end();
-}
-
-async function playDirect(message, args, serverQueue) {
-}
-
-function showHelp(message) {
-  const helpEmbed = new MessageEmbed()
-    .setColor("RED")
-    .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
-    .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
-    .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-    .setTitle("Liste des commandes MUSIQUE")
-    .setDescription(`
-      - ${prefix}**musiquestart** *[lien YouTube]*
-      Jouer une musique
-
-      - ${prefix}**musiquepause**
-      Mettre en pause la musique
-
-      - ${prefix}**musiquestop**
-      Arrêter la musique et déconnecter le bot du salon vocal
-
-      - ${prefix}**musiquereprend**
-      Reprendre la musique
-
-      - ${prefix}**musiquerredemarrer**
-      Redémarrer la musique depuis le début
-
-      - ${prefix}**musiqueajoute** *[lien YouTube]**
-      Ajouter une musique à la file d'attente
-
-      - ${prefix}**musiqueattente**
-      Afficher la liste d'attente
-      
-      - ${prefix}**musiquesuppr** *[numéro]*
-      Supprimer de la file d'attente
-
-      - ${prefix}**musiquesuivante**
-      Passer à la musique suivante
-
-      - ${prefix}**musiquedirect** *[lien YouTube]*
-      Passer directement à la musique du lien
-
-      - ${prefix}**musiquedirect** *[numéro]*
-      Passer directement à la musique du numéro de la file d'attente
-
-      - ${prefix}**musiquehelp**
-      Afficher cette liste de commandes
-
-    `);
-
-  message.channel.send({ embeds: [helpEmbed] });
-}
+});
