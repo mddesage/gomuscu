@@ -1167,6 +1167,9 @@ client.on('messageCreate', async (message) => {
   const warningCount = getWarnings(member);
 
   if (command === 'avertissement') {
+    if (!message.member.permissions.has('MANAGE_ROLES')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
     let roleId;
     switch (warningCount) {
       case 0:
@@ -1185,6 +1188,9 @@ client.on('messageCreate', async (message) => {
     await member.roles.add(roleId);
     message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant ${warningCount + 1}.`);
   } else if (command === 'avertissementretirer') {
+    if (!message.member.permissions.has('MANAGE_ROLES')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
     let roleId;
     switch (warningCount - 1) {
       case 0:
