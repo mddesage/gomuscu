@@ -1257,15 +1257,13 @@ async function play(guild, song) {
 
 
 
-const { MessageEmbed } = require('discord.js');
-
 client.on('messageCreate', async (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  if (command === 'aide') {
+  if (command === 'musiqueaide') {
     const embed = new MessageEmbed()
       .setTitle('Commandes du bot musique')
       .setColor('#0099ff')
