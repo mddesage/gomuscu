@@ -156,7 +156,7 @@ client.on("messageCreate", async message => {
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-                        .setDescription("\nLe prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> *[le salon que vous cherchez]*\n\n<@994859660727291985> **exerciceaide**\n<@994859660727291985> **exercice**\n<@994859660727291985> **exercice+**\n\n<@994859660727291985> **chatgpt**\n\n<@994859660727291985> **musique** *[lien YouTube]*")
+                        .setDescription("\nLe prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> *[le salon que vous cherchez]*\n\n<@994859660727291985> **exerciceaide**\n<@994859660727291985> **exercice**\n<@994859660727291985> **exercice+**\n\n<@994859660727291985> **chatgpt**\n\n<@994859660727291985> **musique** *[lien YouTube]\n**(ACCTUELLEMENT INDISPONIBLE)**")
                         .setTitle("Liste des commandes GLOBALES");
                     message.reply({ embeds: [embed] });
                     break;
@@ -1159,7 +1159,7 @@ client.on('messageCreate', async (message) => {
 
   const user = message.mentions.users.filter(user => user.id !== client.user.id).first();
   if (!user) {
-    message.channel.send('Veuillez mentionner un utilisateur.');
+    message.channel.send('Veuillez mentionner un **utilisateur**.');
     return;
   }
 
@@ -1186,7 +1186,7 @@ client.on('messageCreate', async (message) => {
     }
 
     await member.roles.add(roleId);
-    message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant ${warningCount + 1}.`);
+    message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant **${warningCount + 1}**.`);
   } else if (command === 'avertissementretirer') {
     if (!message.member.permissions.has('MANAGE_ROLES')) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
@@ -1208,11 +1208,11 @@ client.on('messageCreate', async (message) => {
 
     if (warningCount > 0) {
       await member.roles.remove(roleId);
-      message.channel.send(`Un avertissement a été retiré pour ${user}. Il/elle en a maintenant ${warningCount - 1}.`);
+      message.channel.send(`Un avertissement a été retiré pour ${user}. Il/elle en a maintenant **${warningCount - 1}**.`);
     } else {
       message.channel.send(`${user} n'a pas d'avertissement à retirer.`);
     }
   } else if (command === 'avertissementinfo') {
-    message.channel.send(`${user} a ${warningCount} avertissement(s).`);
+    message.channel.send(`${user} a **${warningCount}** avertissement(s).`);
   }
 });
