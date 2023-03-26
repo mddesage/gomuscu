@@ -1047,10 +1047,9 @@ client.on('interactionCreate', async (interaction) => {
                 allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
             },
             {
-                id: '987820202198712449', // Ajout du rôle avec accès au salon
+                id: '987820202198712449', 
                 allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
             },
-            // Ajoutez les permissions pour les administrateurs ou d'autres rôles ici
         ];
 
         guild.channels.create(ticketName, {
@@ -1128,143 +1127,237 @@ client.on('interactionCreate', async (interaction) => {
 //        o8o        o888o    `YbodP'    8""88888P'  o888o  `Y8bood8P'Ybd'    `YbodP'    o888ooooood8 
 
 
-const ytdl = require('ytdl-core-discord');
-let dispatcher;
-let connection;
-let queue = [];
+const { Client, Intents, MessageEmbed } = require("discord.js");
+const ytdl = require("ytdl-core");
+const ytSearch = require("yt-search");
+const queue = new Map();
 
-client.on('messageCreate', async message => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+client.once("ready", () => {
+  console.log("Bot connecté");
+});
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
+client.on("messageCreate", async (message) => {
+  if (!message.guild || message.author.bot || !message.content.startsWith(prefix)) return;
+
+  const args = message.content.slice(prefix.length).split(/ +/);
   const command = args.shift().toLowerCase();
+  const serverQueue = queue.get(message.guild.id);
 
-  if (command === 'musiquestart') {
-    if (!message.member.voice.channel) return message.reply('Vous devez être dans un salon vocal pour lancer une musique !');
+  switch (command) {
+    case "musiquestart":
+      await execute(message, args, serverQueue);
+      break;
+    case "musiquepause":
+      pause(serverQueue);
+      break;
+    case "musiquestop":
+      stop(serverQueue);
+      break;
+    case "musiquereprend":
+      resume(serverQueue);
+      break;
+    case "musiquerredémarrer":
+    case "musiquerredemarrer":
+      restart(serverQueue);
+      break;
+    case "musiqueajoute":
+      await addToQueue(message, args, serverQueue);
+      break;
+    case "musiqueattente":
+      showQueue(serverQueue);
+      break;
+    case "musiquesuppr":
+    case "musiquesupprime":
+      removeFromQueue(args, serverQueue);
+      break;
+    case "musiquesuivante":
+      skip(serverQueue);
+      break;
+    case "musiquedirect":
+      playDirect(message, args, serverQueue);
+      break;
+    case "musiqueaide":
+    case "musiquehelp":
+      showHelp(message);
+      break;
+    default:
+      message.channel.send("Commande non reconnue.");
+  }
+});
 
-    const link = args[0];
+async function execute(message, args, serverQueue) {
+  const voiceChannel = message.member.voice.channel;
 
-    if (!link) return message.reply('Veuillez fournir un lien YouTube pour lancer une musique !');
+  if (!voiceChannel) {
+    return message.channel.send("Vous devez être dans un salon vocal pour jouer de la musique.");
+  }
+
+  const permissions = voiceChannel.permissionsFor(message.client.user);
+
+  if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+    return message.channel.send("J'ai besoin des permissions pour rejoindre et parler dans le salon vocal.");
+  }
+
+  const songInfo = await ytdl.getInfo(args[0]);
+  const song = {
+    title: songInfo.videoDetails.title,
+    url: songInfo.videoDetails.video_url,
+  };
+
+  if (!serverQueue) {
+    const queueConstruct = {
+      textChannel: message.channel,
+      voiceChannel: voiceChannel,
+      connection: null,
+      songs: [],
+      volume: 5,
+      playing: true,
+    };
+
+    queue.set(message.guild.id, queueConstruct);
+    queueConstruct.songs.push(song);
 
     try {
-      connection = await message.member.voice.channel.join();
-      playMusic(link, message);
-    } catch (error) {
-      console.error(error);
-      message.reply('Une erreur est survenue lors de la connexion au salon vocal !');
+      const connection = await voiceChannel.join();
+      queueConstruct.connection = connection;
+      play(message.guild, queueConstruct.songs[0]);
+    } catch (err) {
+      console.log(err);
+      queue.delete(message.guild.id);
+      return message.channel.send(err);
     }
+  } else {
+    serverQueue.songs.push(song);
+    return message.channel.send(`**${song.title}** a été ajouté à la file d'attente.`);
+  }
+}
+
+function play(guild, song) {
+  const serverQueue = queue.get(guild.id);
+  if (!song) {
+    serverQueue.voiceChannel.leave();
+    queue.delete(guild.id);
+    return;
   }
 
-  if (command === 'musiquepause') {
-    if (dispatcher) dispatcher.pause();
+  const dispatcher = serverQueue.connection
+    .play(ytdl(song.url, { filter: "audioonly", quality: "highestaudio", highWaterMark: 1 << 25 }))
+    .on("finish", () => {
+      serverQueue.songs.shift();
+      play(guild, serverQueue.songs[0]);
+    })
+    .on("error", (error) => console.error(error));
+
+  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+  serverQueue.textChannel.send(`En train de jouer: **${song.title}**`);
+}
+
+function pause(serverQueue) {
+  if (!serverQueue || !serverQueue.playing) {
+    return;
+  }
+  serverQueue.connection.dispatcher.pause();
+  serverQueue.playing = false;
+}
+
+function resume(serverQueue) {
+  if (!serverQueue || serverQueue.playing) {
+    return;
+  }
+  serverQueue.connection.dispatcher.resume();
+  serverQueue.playing = true;
+}
+
+function stop(serverQueue) {
+  if (!serverQueue) {
+    return;
+  }
+  serverQueue.songs = [];
+  serverQueue.connection.dispatcher.end();
+}
+
+function restart(serverQueue) {
+  if (!serverQueue || !serverQueue.playing) {
+    return;
+  }
+  serverQueue.connection.dispatcher.end();
+  play(serverQueue.textChannel.guild, serverQueue.songs[0]);
+}
+
+async function addToQueue(message, args, serverQueue) {
+  if (!serverQueue) {
+    return message.channel.send("Aucune musique n'est en cours de lecture.");
   }
 
-  if (command === 'musiquestop') {
-    if (dispatcher) {
-      dispatcher.destroy();
-      message.member.voice.channel.leave();
-      queue = [];
-    }
+  const songInfo = await ytdl.getInfo(args[0]);
+  const song = {
+    title: songInfo.videoDetails.title,
+    url: songInfo.videoDetails.video_url,
+  };
+
+  serverQueue.songs.push(song);
+  message.channel.send(`**${song.title}** a été ajouté à la file d'attente.`);
+}
+
+function showQueue(serverQueue) {
+  if (!serverQueue || serverQueue.songs.length === 0) {
+    return message.channel.send("Aucune musique dans la file d'attente.");
   }
 
-  if (command === 'musiquereprend') {
-    if (dispatcher) dispatcher.resume();
+  let queueMessage = "File d'attente:\n";
+  serverQueue.songs.forEach((song, index) => {
+    queueMessage += `${index + 1}. ${song.title}\n`;
+  });
+
+  message.channel.send(queueMessage);
+}
+
+function removeFromQueue(args, serverQueue) {
+  if (!serverQueue || serverQueue.songs.length === 0) {
+    return;
   }
 
-  if (command === 'musiquerredémarrer' || command === 'musiquerrestart') {
-    if (dispatcher) {
-      dispatcher.seek(0);
-      dispatcher.resume();
-    }
+  const indexToRemove = parseInt(args[0]) - 1;
+  if (indexToRemove < 0 || indexToRemove >= serverQueue.songs.length) {
+    return;
   }
 
-  if (command === 'musiqueajoute') {
-    const link = args[0];
+  const removedSong = serverQueue.songs.splice(indexToRemove, 1)[0];
+  message.channel.send(`**${removedSong.title}** a été supprimé de la file d'attente.`);
+}
 
-    if (!link) return message.reply('Veuillez fournir un lien YouTube pour ajouter une musique à la file d\'attente !');
-
-    queue.push(link);
-    message.reply(`La musique ${link} a été ajoutée à la file d'attente !`);
-
-    if (!dispatcher) playNext(message);
+function skip(serverQueue) {
+  if (!serverQueue) {
+    return;
   }
+  serverQueue.connection.dispatcher.end();
+}
 
-  if (command === 'musiqueattente') {
-    if (queue.length === 0) return message.reply('Il n\'y a pas de musiques en attente !');
+async function playDirect(message, args, serverQueue) {
+  // À compléter avec la logique pour passer directement à la musique du lien ou du numéro dans la file d'attente
+}
 
-    const embed = new MessageEmbed()
-      .setColor("RED")
-      .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
-      .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
-      .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-      .setDescription(`Liste d'attente :\n\n${queue.map((link, index) => `${index + 1}. ${link}`).join('\n')}`);
+function showHelp(message) {
+  const helpEmbed = new MessageEmbed()
+    .setColor("RED")
+    .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
+    .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+    .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
+    .setTitle("Liste des commandes MUSIQUE")
+    .setDescription(`
+      - ${prefix}musiquestart [lien YouTube]: Jouer une musique
+      - ${prefix}musiquepause: Mettre en pause la musique
+      - ${prefix}musiquestop: Arrêter la musique et déconnecter le bot du salon vocal
+      - ${prefix}musiquereprend: Reprendre la musique
+      - ${prefix}musiquerredémarrer / ${prefix}musiquerredemarrer: Redémarrer la musique depuis le début
+      - ${prefix}musiqueajoute [lien YouTube]: Ajouter une musique à la file d'attente
+      - ${prefix}musiqueattente: Afficher la liste d'attente
+      - ${prefix}musiquesuppr [numéro] / ${prefix}musiquesupprime [numéro]: Supprimer de la file d'attente
+      - ${prefix}musiquesuivante: Passer à la musique suivante
+      - ${prefix}musiquedirect [lien YouTube]: Passer directement à la musique du lien
+      - ${prefix}musiquedirect [numéro]: Passer directement à la musique du numéro de la file d'attente
+      - ${prefix}musiqueaide / ${prefix}musiquehelp: Afficher cette liste de commandes
+    `);
 
-      message.channel.send({ embeds: [embed] });
-    }
-  
-    if (command === 'musiquesuppr' || command === 'musiquesupprime') {
-      const index = parseInt(args[0]) - 1;
-  
-      if (isNaN(index)) return message.reply('Veuillez fournir un numéro valide pour supprimer une musique de la file d\'attente !');
-  
-      if (index < 0 || index >= queue.length) return message.reply('Le numéro fourni ne correspond à aucune musique de la file d\'attente !');
-  
-      const removed = queue.splice(index, 1);
-  
-      message.reply(`La musique ${removed} a été supprimée de la file d'attente !`);
-    }
-  
-    if (command === 'musiquesuivante') {
-      if (dispatcher) dispatcher.destroy();
-    }
-  
-    if (command === 'musiquedirect') {
-      const linkOrIndex = args[0];
-  
-      if (!linkOrIndex) return message.reply('Veuillez fournir un lien YouTube ou un numéro de la file d\'attente pour passer directement à une musique !');
-  
-      if (!isNaN(linkOrIndex)) {
-        const index = parseInt(linkOrIndex) - 1;
-  
-        if (index < 0 || index >= queue.length) return message.reply('Le numéro fourni ne correspond à aucune musique de la file d\'attente !');
-  
-        if (dispatcher) dispatcher.destroy();
-  
-        playMusic(queue[index], message);
-      } else {
-        if (dispatcher) dispatcher.destroy();
-  
-        playMusic(linkOrIndex, message);
-      }
-    }
-  
-    if (command === 'musiqueaide' || command === 'musiquehelp') {
-      const embed = new MessageEmbed()
-        .setColor("RED")
-        .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
-        .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
-        .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-        .setDescription(`Liste des commandes MUSIQUE :\n\n${prefix}musiquestart [lien YouTube] : pour que le bot se connecte au salon vocal où est l'utilisateur et joue la musique.\n${prefix}musiquepause : pour mettre en pause la musique.\n${prefix}musiquestop : pour arrêter la musique et déconnecter le bot du salon vocal.\n${prefix}musiquereprend : pour reprendre la musique.\n${prefix}musiquerredémarrer ou ${prefix}musiquerrestart : pour redémarrer la musique depuis le début.\n${prefix}musiqueajoute [lien YouTube] : pour ajouter une musique à la file d'attente.\n${prefix}musiqueattente : pour afficher la liste d'attente.\n${prefix}musiquesuppr [numéro] ou ${prefix}musiquesupprime [numéro] : pour supprimer une musique de la file d'attente.\n${prefix}musiquesuivante : pour passer directement à la musique suivante.\n${prefix}musiquedirect [lien YouTube] : pour passer directement à une musique sans prendre en compte la file d'attente.\n${prefix}musiquedirect [numéro] : pour passer directement à une musique de la file d'attente.\n`);
-
-        message.channel.send({ embeds: [embed] });
-      }
-    });
-    
-    async function playMusic(link, message) {
-      dispatcher = connection.play(await ytdl(link), { type: 'opus' });
-    
-      dispatcher.on('finish', () => {
-        if (queue.length === 0) {
-          dispatcher = null;
-          connection.disconnect();
-        } else {
-          playNext(message);
-        }
-      });
-    }
-    
-    function playNext(message) {
-      const link = queue.shift();
-    
-      playMusic(link, message);
-    }
+  message.channel.send({ embeds: [helpEmbed] });
+}
