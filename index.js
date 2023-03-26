@@ -1176,8 +1176,7 @@ client.on("messageCreate", async (message) => {
       showHelp(message);
       break;
     default:
-      message.channel.send("Commande non reconnue.");
-  }
+        }
 });
 
 async function execute(message, args, serverQueue) {
@@ -1213,7 +1212,7 @@ async function execute(message, args, serverQueue) {
     queueConstruct.songs.push(song);
 
     try {
-      const connection = await voiceChannel.connect();
+      const connection = await voiceChannel.join();
       queueConstruct.connection = connection;
       play(message.guild, queueConstruct.songs[0]);
     } catch (err) {
