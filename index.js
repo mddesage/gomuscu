@@ -1257,65 +1257,46 @@ async function play(guild, song) {
 
 
 
+const { MessageEmbed } = require('discord.js');
 
+client.on('messageCreate', async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-client.on("messageCreate", async message => {
-  if (message.author.bot) return;
-
-  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  if (message.content.startsWith(prefix)) {
-    switch (command) {
-      case 'musiqueaide':
-        const embed = new Discord.MessageEmbed()
-        .setColor("BLUE")
-        .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
-        .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
-        .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-        .setDescription("\nLe prefix de <@994859660727291985> est **sa mention**.\n\n<@994859660727291985> *[le salon que vous cherchez]*\n\n<@994859660727291985> **exerciceaide**\n<@994859660727291985> **exercice**\n<@994859660727291985> **exercice+**\n\n<@994859660727291985> **chatgpt**\n\n<@994859660727291985> **musique** *[lien YouTube]*")
-        .setTitle("Liste des commandes GLOBALES");
-          message.reply({ embeds: [embed] });
-        break;
-    }
+  if (command === 'aide') {
+    const embed = new MessageEmbed()
+      .setTitle('Commandes du bot musique')
+      .setColor('#0099ff')
+      .addFields(
+        {
+          name: 'musique [lien YouTube]',
+          value: 'Ajoute une musique à la file d\'attente et la joue si aucune musique n\'est en cours de lecture.',
+        },
+        {
+          name: 'musiquesuivante',
+          value: 'Passe à la musique suivante dans la file d\'attente.',
+        },
+        {
+          name: 'musiqueattente',
+          value: 'Affiche la liste des musiques en file d\'attente.',
+        },
+        {
+          name: 'musiquesuppr [numéro]',
+          value: 'Supprime la musique correspondant au numéro donné dans la file d\'attente.',
+        },
+        {
+          name: 'musiquemaintenant [numéro]',
+          value: 'Passe directement à la musique correspondant au numéro donné dans la file d\'attente.',
+        },
+        {
+          name: 'musiquemaintenant [lien YouTube]',
+          value: 'Passe directement à la musique du lien YouTube fourni.',
+        }
+      )
+      .setFooter('Utilisez ces commandes pour contrôler le bot musique.');
+
+    message.channel.send({ embeds: [embed] });
   }
-}); 
+});
