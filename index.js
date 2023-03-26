@@ -157,17 +157,27 @@ client.on("messageCreate", async message => {
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription(`
+
                         Le prefix de <@994859660727291985> est **sa mention**.
                         
                         
                         ${prefix}*[le salon que vous cherchez]*
-                        Vous envoie bouton cliquable du salon demandé
+                        Vous envoie bouton cliquable du salon demandé.
                         
                         ${prefix}**exerciceaide**
-                        ${prefix}**exercice**
-                        ${prefix}**exercice+**
+                        Vous envoie comment utiliser les commandes sur *exercice*.
                         
-                        ${prefix}**chatgpt**
+                        ${prefix}**exercice** 
+                        Vous envoie un exercice au hasard parmi tous.
+
+                        ${prefix}**exercice** *[groupe musculaire]*
+                        Vous envoie un exercice au hasard parmi le groupe demandé (liste de groupe : ${prefix}**exerciceaide**).
+
+                        ${prefix}**exercice+**
+                        Vous envoie 11 boutons pour afficher des exercice de manière totalement aléatoire ou au choix du groupe musculaire.
+                        
+                        ${prefix}**chatgpt** *[message]*
+                        Vous répond à partir de chat GPT
                         
                         ${prefix}**musique** *[lien YouTube]*
                         **(ACCTUELLEMENT INDISPONIBLE)**`)
