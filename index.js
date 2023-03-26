@@ -1213,7 +1213,7 @@ async function execute(message, args, serverQueue) {
     queueConstruct.songs.push(song);
 
     try {
-      const connection = await voiceChannel.join();
+      const connection = await voiceChannel.connect();
       queueConstruct.connection = connection;
       play(message.guild, queueConstruct.songs[0]);
     } catch (err) {
@@ -1329,7 +1329,6 @@ function skip(serverQueue) {
 }
 
 async function playDirect(message, args, serverQueue) {
-  // À compléter avec la logique pour passer directement à la musique du lien ou du numéro dans la file d'attente
 }
 
 function showHelp(message) {
