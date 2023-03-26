@@ -278,6 +278,36 @@ switch (command) {
                 message.reply("Une erreur s'est produite lors de la suppression des messages.");
             });
         break;
+        case 'supprid':
+    if (!message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+        return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
+    const firstMessageId = args[0];
+    const secondMessageId = args[1];
+
+    if (!firstMessageId || !secondMessageId) {
+        return message.reply("Veuillez fournir deux ID de messages valides.");
+    }
+
+    message.channel.messages.fetch({ after: firstMessageId, before: secondMessageId })
+        .then(messages => {
+            message.channel.bulkDelete(messages, true)
+                .then(deletedMessages => {
+                    message.channel.send(`J'ai supprimé ${deletedMessages.size} message(s).`).then(msg => {
+                        setTimeout(() => msg.delete(), 3000);
+                    });
+                })
+                .catch(error => {
+                    console.error(`Impossible de supprimer les messages en raison de: ${error}`);
+                    message.reply("Une erreur s'est produite lors de la suppression des messages.");
+                });
+        })
+        .catch(error => {
+            console.error(`Impossible de récupérer les messages en raison de: ${error}`);
+            message.reply("Une erreur s'est produite lors de la récupération des messages.");
+        });
+    break;
 }
 });
 
