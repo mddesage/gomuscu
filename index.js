@@ -1131,56 +1131,118 @@ client.on('interactionCreate', async (interaction) => {
 const { joinVoiceChannel, createAudioResource, StreamType, AudioPlayerStatus, createAudioPlayer, getVoiceConnection } = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
 
+// Créer une file d'attente pour stocker les liens YouTube
+const queue = [];
+
 client.on('messageCreate', async (message) => {
-if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-const args = message.content.slice(prefix.length).trim().split(/ +/);
-const command = args.shift().toLowerCase();
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
 
-if (command === 'musique') {
-if (!args[0]) {
-message.reply('Veuillez fournir un lien YouTube.');
-return;
-}const youtubeLink = args[0];
+  if (command === 'musique') {
+    if (!args[0]) {
+      message.reply('Veuillez fournir un lien YouTube.');
+      return;
+    }
 
-if (!ytdl.validateURL(youtubeLink)) {
-  message.reply('Veuillez fournir un lien YouTube valide.');
-  return;
+    const youtubeLink = args[0];
+
+    if (!ytdl.validateURL(youtubeLink)) {
+      message.reply('Veuillez fournir un lien YouTube valide.');
+      return;
+    }
+
+    const voiceChannel = message.member.voice.channel;
+
+    if (!voiceChannel) {
+      message.reply('Veuillez rejoindre un salon vocal pour utiliser cette commande.');
+      return;
+    }
+
+    // Ajouter le lien YouTube à la file d'attente
+    queue.push(youtubeLink);
+
+    // Vérifier si la musique est en train de jouer
+    const connection = getVoiceConnection(voiceChannel.guild.id);
+    if (connection && connection.state.status !== AudioPlayerStatus.Idle) {
+      message.channel.send('La musique a été ajoutée à la file d\'attente.');
+      return;
+    }
+
+    // Jouer la première musique dans la file d'attente
+    playMusic(voiceChannel);
+  }
+
+  if (command === 'musiquesuivante') {
+    if (!args[0]) {
+      message.reply('Veuillez fournir un lien YouTube.');
+      return;
+    }
+
+    const youtubeLink = args[0];
+
+    if (!ytdl.validateURL(youtubeLink)) {
+      message.reply('Veuillez fournir un lien YouTube valide.');
+      return;
+    }
+
+    const voiceChannel = message.member.voice.channel;
+
+    if (!voiceChannel) {
+      message.reply('Veuillez rejoindre un salon vocal pour utiliser cette commande.');
+      return;
+    }
+
+    // Ajouter le lien YouTube à la file d'attente
+    queue.push(youtubeLink);
+    message.channel.send('La musique a été ajoutée à la file d\'attente.');
+  }
+
+  if (command === 'musiqueattente') {
+    if (queue.length === 0) {
+      message.channel.send('La file d\'attente est vide.');
+      return;
+    }
+
+    message.channel.send('Voici la file d\'attente : \n' + queue.join('\n'));
+  }
+});
+
+function playMusic(voiceChannel) {
+  const youtubeLink = queue.shift();
+
+  const connection = joinVoiceChannel({
+    channelId: voiceChannel.id,
+    guildId: voiceChannel.guild.id,
+    adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+  });
+
+  const stream = ytdl(youtubeLink, { filter: 'audioonly' });
+  const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
+
+  const player = createAudioPlayer();
+  player.play(resource);
+
+  connection.subscribe(player);
+
+  player.on(AudioPlayerStatus.Playing, () => {
+    console.log('La musique se lance !');
+    message.channel.send('La musique se lance !');
+  });
+
+  player.on(AudioPlayerStatus.Idle, () => {
+    connection.destroy();
+
+    // Jouer la prochaine musique dans la file d'attente, s'il y en a une
+    if (queue.length > 0) {
+      playMusic(voiceChannel);
+    }
+  });
+
+  player.on('error', (error) => {
+    console.error(error);
+    message.reply('Il y a eu une erreur lors de la lecture de la vidéo.');
+  });
 }
 
-const voiceChannel = message.member.voice.channel;
-
-if (!voiceChannel) {
-  message.reply('Veuillez rejoindre un salon vocal pour utiliser cette commande.');
-  return;
-}
-
-const connection = joinVoiceChannel({
-  channelId: voiceChannel.id,
-  guildId: voiceChannel.guild.id,
-  adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-});
-
-const stream = ytdl(youtubeLink, { filter: 'audioonly' });
-const resource = createAudioResource(stream, { inputType: StreamType.Arbitrary });
-
-const player = createAudioPlayer();
-player.play(resource);
-
-connection.subscribe(player);
-
-player.on(AudioPlayerStatus.Playing, () => {
-  console.log('La musique se lance !');
-  message.channel.send('La musique se lance !');
-});
-
-player.on(AudioPlayerStatus.Idle, () => {
-  connection.destroy();
-});
-
-player.on('error', (error) => {
-  console.error(error);
-  message.reply('Il y a eu une erreur lors de la lecture de la vidéo.');
-});
-}
-});
