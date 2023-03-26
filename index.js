@@ -1201,8 +1201,8 @@ client.on('messageCreate', async (message) => {
       }
     
       if (serverQueue.songs.length > 1) {
-        serverQueue.songs.shift(); // Retire la chanson actuelle de la file d'attente
-        play(message.guild, serverQueue.songs[0]); // Joue la chanson suivante
+        serverQueue.songs.shift(); 
+        play(message.guild, serverQueue.songs[0]); 
       } else {
         message.channel.send('Il n\'y a pas de chanson suivante dans la file d\'attente.');
       }
@@ -1218,6 +1218,25 @@ client.on('messageCreate', async (message) => {
       queueMessage += `${index + 1}. ${song.title} (${song.url})\n`;
     });
     message.channel.send(queueMessage);
+  }
+  if (command === 'musiquemaintenant') {
+    const serverQueue = queue.get(message.guild.id);
+    if (!serverQueue) {
+      return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
+    }
+    const currentSong = serverQueue.songs[0];
+    message.channel.send(`La musique actuelle est "${currentSong.title}".`);
+  } else if (command === 'musiquesuppr') {
+    const serverQueue = queue.get(message.guild.id);
+    if (!serverQueue) {
+      return message.channel.send('Il n\'y a pas de musique en file d\'attente.');
+    }
+    const songIndex = parseInt(args[0]) - 1;
+    if (isNaN(songIndex) || songIndex < 1 || songIndex >= serverQueue.songs.length) {
+      return message.channel.send('Veuillez fournir un numéro de musique valide dans la file d\'attente.');
+    }
+    const removedSong = serverQueue.songs.splice(songIndex, 1)[0];
+    message.channel.send(`La musique "${removedSong.title}" a été supprimée de la file d'attente.`);
   }
 });
 
