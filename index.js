@@ -1131,7 +1131,6 @@ client.on('interactionCreate', async (interaction) => {
 const { joinVoiceChannel, createAudioResource, StreamType, AudioPlayerStatus, createAudioPlayer, getVoiceConnection } = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
 
-// Ajout d'une file d'attente
 const queue = new Map();
 
 client.on('messageCreate', async (message) => {
@@ -1200,7 +1199,12 @@ client.on('messageCreate', async (message) => {
       if (!serverQueue) {
         return message.channel.send('Il n\'y a pas de musique en cours de lecture.');
       }
-      serverQueue.connection.dispatcher.end();
+      if (serverQueue.connection) {
+        const audioPlayer = serverQueue.connection.subscribe(player);
+        if (audioPlayer) {
+          player.stop();
+        }
+      }
     }
   } else if (command === 'musiqueattente') {
     const serverQueue = queue.get(message.guild.id);
