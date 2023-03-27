@@ -477,24 +477,35 @@ client.on("interactionCreate", async interaction => {
 //         `Y8bood8P'   `Y8bood8P'  o888bood8P'   o888ooooood8 
                                                                                                                            
                                                                                                                            
-                                                                                                                           
-client.on('message', async message => {
-  if (message.author.bot) return;
-  if (message.content === prefix + 'code') {
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
-      return message.reply("Désolé, cette commande est réservée aux employés.");
+    client.once('ready', () => {
+    console.log('Bot is ready!');
+
+    client.guilds.cache.get('YOUR_GUILD_ID').commands.create({
+        name: 'code',
+        description: 'Envoie le lien du code source en message privé',
+    });
+});
+
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const { commandName } = interaction;
+
+    if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+        return interaction.reply({ content: "Désolé, cette commande est réservée aux employés.", ephemeral: true });
     }
 
-    const url = 'https://github.com/mddesage/gomuscu';
+    if (commandName === 'code') {
+        const url = 'https://github.com/mddesage/gomuscu';
 
-    try {
-      await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
-      await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
-    } catch (error) {
-      console.error(error);
-      message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
+        try {
+            await interaction.user.send(`Voici le lien que vous avez demandé: ${url}`);
+            await interaction.reply('Je vous ai envoyé un message privé avec le lien demandé.');
+        } catch (error) {
+            console.error(error);
+            interaction.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
+        }
     }
-  }
 });
  
 
