@@ -268,7 +268,7 @@ client.once('ready', () => {
         description: 'Supprime un certain nombre de messages',
         options: [
             {
-                name: 'count',
+                name: 'nombre',
                 type: 'INTEGER',
                 description: 'Le nombre de messages à supprimer',
                 required: true,
@@ -281,13 +281,13 @@ client.once('ready', () => {
         description: 'Supprime les messages entre deux ID spécifiques',
         options: [
             {
-                name: 'ID du premier message',
+                name: 'first_message_id',
                 type: 'STRING',
                 description: 'ID du premier message',
                 required: true,
             },
             {
-                name: 'ID du second message',
+                name: 'second_message_id',
                 type: 'STRING',
                 description: 'ID du second message',
                 required: true,
@@ -308,7 +308,7 @@ client.on('interactionCreate', async interaction => {
     }
 
     if (commandName === 'suppr') {
-        const deleteCount = interaction.options.getInteger('count');
+        const deleteCount = interaction.options.getInteger('nombre');
 
         if (!deleteCount || deleteCount < 1 || deleteCount > 100) {
             return interaction.reply({ content: "Veuillez fournir un nombre entre 1 et 100 pour le nombre de messages à supprimer.", ephemeral: true });
@@ -323,8 +323,8 @@ client.on('interactionCreate', async interaction => {
                 interaction.reply({ content: "Une erreur s'est produite lors de la suppression des messages.", ephemeral: true });
             });
     } else if (commandName === 'supprid') {
-        const firstMessageId = interaction.options.getString('ID du premier message');
-        const secondMessageId = interaction.options.getString('ID du second message');
+        const firstMessageId = interaction.options.getString('first_message_id');
+        const secondMessageId = interaction.options.getString('second_message_id');
 
         if (!firstMessageId || !secondMessageId) {
             return interaction.reply({ content: "Veuillez fournir deux ID de messages valides.", ephemeral: true });
