@@ -481,7 +481,7 @@ client.on('messageCreate', async (message) => {
     const command = args.shift().toLowerCase();
   
     if (command === 'repete') {
-      if (!message.member.permissions.has('ADMINISTRATOR')) {
+      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
       }
   
@@ -514,7 +514,7 @@ client.on('messageCreate', async (message) => {
     const command = args.shift().toLowerCase();
   
     if (command === 'repete' || command === 'repete&suppr') {
-      if (!message.member.permissions.has('ADMINISTRATOR')) {
+      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
       }
   
@@ -785,7 +785,7 @@ client.on('messageCreate', async message => {
   const command = args.shift().toLowerCase();
 
   if (['invit', 'invite', 'invitation'].includes(command)) {
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
@@ -844,7 +844,7 @@ client.on('messageCreate', async message => {
   const command = args.shift().toLowerCase();
 
   if (['reinvit', 'reinvite', 'réinvite'].includes(command)) {
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
@@ -906,7 +906,7 @@ client.on('messageCreate', async (message) => {
   const command = args.shift().toLowerCase();
 
   if (command === 'mute') {
-    if (!message.member.permissions.has('MANAGE_ROLES')) {
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
@@ -949,7 +949,6 @@ client.on('messageCreate', async (message) => {
 
     if (muteTime) {
       setTimeout(async () => {
-        // Vérifiez si l'utilisateur est toujours muté avant de le démuter.
         if (target.roles.cache.has(muteRoleID)) {
           await target.roles.remove(muteRole);
           message.channel.send(`${target} a été démuté.`);
@@ -957,7 +956,7 @@ client.on('messageCreate', async (message) => {
       }, muteTime);
     }
   } else if (command === 'demute') {
-    if (!message.member.permissions.has('MANAGE_ROLES')) {
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
   
@@ -1004,7 +1003,7 @@ client.on('messageCreate', async (message) => {
   const command = args.shift().toLowerCase();
 
   if (command === 'embed') {
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
       return message.reply('Désolé, cette commande est réservée aux employés.');
     }
 
@@ -1283,7 +1282,7 @@ client.on('messageCreate', async (message) => {
     const warningCount = getWarnings(member);
 
     if (command === 'avertissement') {
-      if (!message.member.permissions.has('MANAGE_ROLES')) {
+      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
       }
       let roleId;
@@ -1304,7 +1303,7 @@ client.on('messageCreate', async (message) => {
       await member.roles.add(roleId);
       message.channel.send(`Un avertissement a été ajouté pour ${user}. Il/elle en a maintenant **${warningCount + 1}**.`);
     } else if (command === 'avertissementretirer') {
-      if (!message.member.permissions.has('MANAGE_ROLES')) {
+      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
       }
       let roleId;
