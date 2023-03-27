@@ -478,9 +478,8 @@ client.on("interactionCreate", async interaction => {
                                                                                                                            
                                                                                                                            
     client.once('ready', () => {
-    console.log('Bot is ready!');
 
-    client.guilds.cache.get('YOUR_GUILD_ID').commands.create({
+    client.guilds.cache.get('987820202177749082').commands.create({
         name: 'code',
         description: 'Envoie le lien du code source en message privé',
     });
