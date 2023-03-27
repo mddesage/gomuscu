@@ -231,7 +231,7 @@ client.on("messageCreate", async message => {
                         ${prefix}**avertissement** *[user_mention]*
                         Ajoute un avertissement à la personné mentionnée.
 
-                        ${prefix}**avertissementretire** *[user_mention]*
+                        ${prefix}**avertissementretirer** *[user_mention]*
                         Retire un avertissement à la personné mentionnée.
 
 
@@ -513,7 +513,7 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
   
-    if (command === 'repete' || command === 'repete&suppr') {
+    if (command === 'repete&suppr') {
       if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
       }
