@@ -15,7 +15,7 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
-const requiredEmployedRoleId = '987820202198712449';
+
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
@@ -151,6 +151,7 @@ client.on("messageCreate", async message => {
 
             case 'aide':
             case 'help':
+              
                     const embed = new Discord.MessageEmbed()
                         .setColor("BLUE")
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
@@ -186,8 +187,8 @@ client.on("messageCreate", async message => {
                     break;
             case 'aide+':
             case 'help+':
-      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
-                    const embed = new Discord.MessageEmbed()
+    if (message.member.roles.cache.has(requiredRoleId)) {
+        const embed = new Discord.MessageEmbed()
                         .setColor("RED")
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
                         .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
@@ -239,9 +240,10 @@ client.on("messageCreate", async message => {
                         `)
                         .setTitle("Liste des commandes EMPLOYÉS");
                     message.reply({ embeds: [embed] });
-                    } else {
-                    message.reply("Désolé, cette commande est réservée aux employés.");
-                    } break;
+    } else {
+        message.reply("Désolé, cette commande est réservée aux employés.");
+    } break;
+
                     
                 };
         }
@@ -261,7 +263,7 @@ client.on("messageCreate", async message => {
 switch (command) {
 
     case 'suppr':
-      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
+if (!message.member.roles.cache.has(requiredRoleId)) {
             return message.reply("Désolé, cette commande est réservée aux employés.");
         }
 
@@ -283,7 +285,7 @@ switch (command) {
         break;
 
         case 'supprid':
-    if (!message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+if (!message.member.roles.cache.has(requiredRoleId)) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
@@ -398,8 +400,8 @@ const handleInteraction = async (interaction) => {
 
 client.on("messageCreate", async message => {
     if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
-      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
-           const menu1 = createMenu('departement_menu1', 1, 25);
+        if (message.member.permissions.has("ADMINISTRATOR")) {
+            const menu1 = createMenu('departement_menu1', 1, 25);
             const menu2 = createMenu('departement_menu2', 26, 50);
             const menu3 = createMenu('departement_menu3', 51, 75);
             const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
