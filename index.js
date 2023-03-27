@@ -281,13 +281,13 @@ client.once('ready', () => {
         description: 'Supprime les messages entre deux ID spécifiques',
         options: [
             {
-                name: 'first_message_id',
+                name: 'ID du premier message',
                 type: 'STRING',
                 description: 'ID du premier message',
                 required: true,
             },
             {
-                name: 'second_message_id',
+                name: 'ID du second message',
                 type: 'STRING',
                 description: 'ID du second message',
                 required: true,
