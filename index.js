@@ -187,7 +187,7 @@ client.on("messageCreate", async message => {
                     break;
             case 'aide+':
             case 'help+':
-    if (message.member.roles.cache.has(requiredRoleId)) {
+    if (message.member.roles.cache.has(requiredEmployedRoleId)) {
         const embed = new Discord.MessageEmbed()
                         .setColor("RED")
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
