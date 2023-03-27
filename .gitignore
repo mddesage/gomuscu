@@ -1,4 +1,5 @@
 config.json
 package-lock.json
 .env
-./BACKUPS
+./BACKUPS/musique.js 
+./BACKUPS/slash-suppr(id).js
