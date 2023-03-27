@@ -204,7 +204,7 @@ client.on("messageCreate", async message => {
                         ${prefix}**suppr** *[nombre de messages]*
                         Supprime le nombre de derniers messages demandé.
 
-                        ${prefix}**supprid** *[ID *premier* message]* *[ID *dernier* message]*
+                        ${prefix}**supprid** *[ID **premier** message]* *[ID **dernier** message]*
                         Supprime tous les messages entre les deux messages envoyés.
                         
                         ${prefix}**repete** *[message]*
