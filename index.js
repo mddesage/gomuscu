@@ -260,62 +260,98 @@ client.on("messageCreate", async message => {
                                                                          
                                                                          
                                                                          
+client.once('ready', () => {
+
+    // Création de la commande slash
+    client.guilds.cache.get('YOUR_GUILD_ID').commands.create({
+        name: 'suppr',
+        description: 'Supprime un certain nombre de messages',
+        options: [
+            {
+                name: 'count',
+                type: 'INTEGER',
+                description: 'Le nombre de messages à supprimer',
+                required: true,
+            },
+        ],
+    });
+
+    client.guilds.cache.get('YOUR_GUILD_ID').commands.create({
+        name: 'supprid',
+        description: 'Supprime les messages entre deux ID spécifiques',
+        options: [
+            {
+                name: 'first_message_id',
+                type: 'STRING',
+                description: 'ID du premier message',
+                required: true,
+            },
+            {
+                name: 'second_message_id',
+                type: 'STRING',
+                description: 'ID du second message',
+                required: true,
+            },
+        ],
+    });
+});
+
 client.on('interactionCreate', async interaction => {
-  if (!interaction.isCommand()) return;
+    if (!interaction.isCommand()) return;
 
-  const { commandName, options, user } = interaction;
-  
-  if (commandName === 'suppr') {
-      if (!user.roles.cache.has('987820202198712449')) {
-          return interaction.reply("Désolé, cette commande est réservée aux employés.");
-      }
+    const { commandName } = interaction;
 
-      const deleteCount = parseInt(options.get('nombre').value, 10);
-      if (!deleteCount || deleteCount < 1 || deleteCount > 100) {
-          return interaction.reply("Veuillez fournir un nombre entre 1 et 100 pour le nombre de messages à supprimer.");
-      }
+    // Vérifier si l'utilisateur a le rôle requis
+    const requiredRoleId = '987820202198712449';
+    if (!interaction.member.roles.cache.has(requiredRoleId)) {
+        return interaction.reply({ content: "Désolé, cette commande est réservée aux employés.", ephemeral: true });
+    }
 
-      interaction.channel.bulkDelete(deleteCount + 1)
-          .then(() => {
-              interaction.reply(`J'ai supprimé ${deleteCount} message(s).`).then(msg => {
-                  setTimeout(() => msg.delete(), 3000);
-              });
-          })
-          .catch(error => {
-              console.error(`Impossible de supprimer les messages en raison de: ${error}`);
-              interaction.reply("Une erreur s'est produite lors de la suppression des messages.");
-          });
-  } else if (commandName === 'supprid') {
-      if (!user.roles.cache.has('987820202198712449')) {
-          return interaction.reply("Désolé, cette commande est réservée aux employés.");
-      }
+    if (commandName === 'suppr') {
+        const deleteCount = interaction.options.getInteger('count');
 
-      const firstMessageId = options.get('premier-message').value;
-      const secondMessageId = options.get('deuxieme-message').value;
+        if (!deleteCount || deleteCount < 1 || deleteCount > 100) {
+            return interaction.reply({ content: "Veuillez fournir un nombre entre 1 et 100 pour le nombre de messages à supprimer.", ephemeral: true });
+        }
 
-      if (!firstMessageId || !secondMessageId) {
-          return interaction.reply("Veuillez fournir deux ID de messages valides.");
-      }
+        interaction.channel.bulkDelete(deleteCount + 1)
+            .then(() => {
+                interaction.reply({ content: `J'ai supprimé ${deleteCount} message(s).`, ephemeral: true });
+            })
+            .catch(error => {
+                console.error(`Impossible de supprimer les messages en raison de: ${error}`);
+                interaction.reply({ content: "Une erreur s'est produite lors de la suppression des messages.", ephemeral: true });
+            });
+    } else if (commandName === 'supprid') {
+        const firstMessageId = interaction.options.getString('first_message_id');
+        const secondMessageId = interaction.options.getString('second_message_id');
 
-      interaction.channel.messages.fetch({ after: firstMessageId, before: secondMessageId })
-          .then(messages => {
-              interaction.channel.bulkDelete(messages, true)
-                  .then(deletedMessages => {
-                      interaction.reply(`J'ai supprimé ${deletedMessages.size} message(s).`).then(msg => {
-                          setTimeout(() => msg.delete(), 3000);
-                      });
-                  })
-                  .catch(error => {
-                      console.error(`Impossible de supprimer les messages en raison de: ${error}`);
-                      interaction.reply("Une erreur s'est produite lors de la suppression des messages.");
-                  });
-          })
-          .catch(error => {
+        if (!firstMessageId || !secondMessageId) {
+            return interaction.reply({ content: "Veuillez fournir deux ID de messages valides.", ephemeral: true });
+        }
+
+        interaction.channel.messages.fetch({ after: firstMessageId, before: secondMessageId })
+            .then(messages => {
+                interaction.channel.bulkDelete(messages, true)
+                    .then(deletedMessages => {
+                        interaction.reply({ content: `J'ai supprimé ${deletedMessages.size} message(s).`, ephemeral: true });
+                    })
+                    .catch(error => {
+                        console.error(`Impossible de supprimer les messages en raison de: ${error}`);
+                        interaction.reply({ content: "Une erreur s'est produite lors de la suppression des messages.", ephemeral: true });
+                    });
+            })
+            .catch(error => {
               console.error(`Impossible de récupérer les messages en raison de: ${error}`);
-              interaction.reply("Une erreur s'est produite lors de la récupération des messages.");
+              interaction.reply({ content: "Une erreur s'est produite lors de la récupération des messages.", ephemeral: true });
           });
   }
 });
+
+  
+               
+
+
 
 
 
