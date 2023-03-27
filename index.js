@@ -186,7 +186,7 @@ client.on("messageCreate", async message => {
                     break;
             case 'aide+':
             case 'help+':
-                if (message.member.permissions.has("ADMINISTRATOR")) {
+      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
                     const embed = new Discord.MessageEmbed()
                         .setColor("RED")
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
@@ -398,8 +398,8 @@ const handleInteraction = async (interaction) => {
 
 client.on("messageCreate", async message => {
     if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
-        if (message.member.permissions.has("ADMINISTRATOR")) {
-            const menu1 = createMenu('departement_menu1', 1, 25);
+      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
+           const menu1 = createMenu('departement_menu1', 1, 25);
             const menu2 = createMenu('departement_menu2', 26, 50);
             const menu3 = createMenu('departement_menu3', 51, 75);
             const menu4 = createMenu('departement_menu4', 76, 95, [971, 972, 973, 974, 976].map(num => ({
