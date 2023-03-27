@@ -263,7 +263,7 @@ client.on("messageCreate", async message => {
 client.once('ready', () => {
 
     // Création de la commande slash
-    client.guilds.cache.get('YOUR_GUILD_ID').commands.create({
+    client.guilds.cache.get('987820202177749082').commands.create({
         name: 'suppr',
         description: 'Supprime un certain nombre de messages',
         options: [
@@ -276,7 +276,7 @@ client.once('ready', () => {
         ],
     });
 
-    client.guilds.cache.get('YOUR_GUILD_ID').commands.create({
+    client.guilds.cache.get('987820202177749082').commands.create({
         name: 'supprid',
         description: 'Supprime les messages entre deux ID spécifiques',
         options: [
