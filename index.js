@@ -281,7 +281,7 @@ client.once('ready', () => {
         description: 'Supprime les messages entre deux ID spécifiques',
         options: [
             {
-                name: 'first_message_id',
+                name: 'premier_message_id',
                 type: 'STRING',
                 description: 'ID du premier message',
                 required: true,
@@ -301,7 +301,6 @@ client.on('interactionCreate', async interaction => {
 
     const { commandName } = interaction;
 
-    // Vérifier si l'utilisateur a le rôle requis
     const requiredRoleId = '987820202198712449';
     if (!interaction.member.roles.cache.has(requiredRoleId)) {
         return interaction.reply({ content: "Désolé, cette commande est réservée aux employés.", ephemeral: true });
@@ -323,7 +322,7 @@ client.on('interactionCreate', async interaction => {
                 interaction.reply({ content: "Une erreur s'est produite lors de la suppression des messages.", ephemeral: true });
             });
     } else if (commandName === 'supprid') {
-        const firstMessageId = interaction.options.getString('first_message_id');
+        const firstMessageId = interaction.options.getString('premier_message_id');
         const secondMessageId = interaction.options.getString('second_message_id');
 
         if (!firstMessageId || !secondMessageId) {
