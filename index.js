@@ -1274,7 +1274,7 @@ client.on('messageCreate', async (message) => {
   if (command === 'avertissement' || command === 'avertissementretirer' || command === 'avertissementinfo') {
     const user = message.mentions.users.filter(user => user.id !== client.user.id).first();
     if (!user) {
-      message.channel.send('Veuillez mentionner un **utilisateur**.');
+      message.reply('Veuillez mentionner un **utilisateur**.');
       return;
     }
 
