@@ -15,6 +15,7 @@ const client = new Discord.Client({
 
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
+const requiredEmployedRoleId = ("987820202198712449");
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
@@ -263,7 +264,7 @@ client.on("messageCreate", async message => {
 switch (command) {
 
     case 'suppr':
-if (!message.member.roles.cache.has(requiredRoleId)) {
+if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
             return message.reply("Désolé, cette commande est réservée aux employés.");
         }
 
