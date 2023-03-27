@@ -323,8 +323,8 @@ client.on('interactionCreate', async interaction => {
                 interaction.reply({ content: "Une erreur s'est produite lors de la suppression des messages.", ephemeral: true });
             });
     } else if (commandName === 'supprid') {
-        const firstMessageId = interaction.options.getString('first_message_id');
-        const secondMessageId = interaction.options.getString('second_message_id');
+        const firstMessageId = interaction.options.getString('ID du premier message');
+        const secondMessageId = interaction.options.getString('ID du second message');
 
         if (!firstMessageId || !secondMessageId) {
             return interaction.reply({ content: "Veuillez fournir deux ID de messages valides.", ephemeral: true });
