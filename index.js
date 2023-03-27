@@ -446,7 +446,7 @@ client.on("interactionCreate", async interaction => {
 client.on('message', async message => {
   if (message.author.bot) return;
   if (message.content === prefix + 'code') {
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
+    if (message.member.roles.cache.has(requiredEmployedRoleId)) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
