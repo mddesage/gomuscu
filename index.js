@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { SlashCommandBuilder } = require("@discordjs/builders")
 const client = new Discord.Client({
     intents: [
         Discord.Intents.FLAGS.GUILDS,
@@ -246,10 +245,9 @@ client.on("messageCreate", async message => {
                     
                 };
         }
-      });       
+        
 
 
-      
 //        .oooooo..o ooooo     ooo ooooooooo.   ooooooooo.   ooooooooo.   
 //        d8P'    `Y8 `888'     `8' `888   `Y88. `888   `Y88. `888   `Y88. 
 //        Y88bo.       888       8   888   .d88'  888   .d88'  888   .d88' 
@@ -260,98 +258,62 @@ client.on("messageCreate", async message => {
                                                                          
                                                                          
                                                                          
-client.once('ready', () => {
+switch (command) {
 
-    // Création de la commande slash
-    client.guilds.cache.get('987820202177749082').commands.create({
-        name: 'suppr',
-        description: 'Supprime un certain nombre de messages',
-        options: [
-            {
-                name: 'nombre',
-                type: 'INTEGER',
-                description: 'Le nombre de messages à supprimer',
-                required: true,
-            },
-        ],
-    });
-
-    client.guilds.cache.get('987820202177749082').commands.create({
-        name: 'supprid',
-        description: 'Supprime les messages entre deux ID spécifiques',
-        options: [
-            {
-                name: 'premier_message_id',
-                type: 'STRING',
-                description: 'ID du premier message',
-                required: true,
-            },
-            {
-                name: 'second_message_id',
-                type: 'STRING',
-                description: 'ID du second message',
-                required: true,
-            },
-        ],
-    });
-});
-
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand()) return;
-
-    const { commandName } = interaction;
-
-    const requiredRoleId = '987820202198712449';
-    if (!interaction.member.roles.cache.has(requiredRoleId)) {
-        return interaction.reply({ content: "Désolé, cette commande est réservée aux employés.", ephemeral: true });
-    }
-
-    if (commandName === 'suppr') {
-        const deleteCount = interaction.options.getInteger('nombre');
-
-        if (!deleteCount || deleteCount < 1 || deleteCount > 100) {
-            return interaction.reply({ content: "Veuillez fournir un nombre entre 1 et 100 pour le nombre de messages à supprimer.", ephemeral: true });
+    case 'suppr':
+        if (!message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+            return message.reply("Désolé, cette commande est réservée aux employés.");
         }
 
-        interaction.channel.bulkDelete(deleteCount + 1)
+        const deleteCount = parseInt(args[0], 10);
+        if (!deleteCount || deleteCount < 1 || deleteCount > 100) {
+            return message.reply("Veuillez fournir un nombre entre 1 et 100 pour le nombre de messages à supprimer.");
+        }
+
+        message.channel.bulkDelete(deleteCount + 1)
             .then(() => {
-                interaction.reply({ content: `J'ai supprimé ${deleteCount} message(s).`, ephemeral: true });
+                message.channel.send(`J'ai supprimé ${deleteCount} message(s).`).then(msg => {
+                    setTimeout(() => msg.delete(), 3000);
+                });
             })
             .catch(error => {
                 console.error(`Impossible de supprimer les messages en raison de: ${error}`);
-                interaction.reply({ content: "Une erreur s'est produite lors de la suppression des messages.", ephemeral: true });
+                message.reply("Une erreur s'est produite lors de la suppression des messages.");
             });
-    } else if (commandName === 'supprid') {
-        const firstMessageId = interaction.options.getString('premier_message_id');
-        const secondMessageId = interaction.options.getString('second_message_id');
+        break;
 
-        if (!firstMessageId || !secondMessageId) {
-            return interaction.reply({ content: "Veuillez fournir deux ID de messages valides.", ephemeral: true });
-        }
+        case 'supprid':
+    if (!message.member.permissions.has(Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+        return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
 
-        interaction.channel.messages.fetch({ after: firstMessageId, before: secondMessageId })
-            .then(messages => {
-                interaction.channel.bulkDelete(messages, true)
-                    .then(deletedMessages => {
-                        interaction.reply({ content: `J'ai supprimé ${deletedMessages.size} message(s).`, ephemeral: true });
-                    })
-                    .catch(error => {
-                        console.error(`Impossible de supprimer les messages en raison de: ${error}`);
-                        interaction.reply({ content: "Une erreur s'est produite lors de la suppression des messages.", ephemeral: true });
+    const firstMessageId = args[0];
+    const secondMessageId = args[1];
+
+    if (!firstMessageId || !secondMessageId) {
+        return message.reply("Veuillez fournir deux ID de messages valides.");
+    }
+
+    message.channel.messages.fetch({ after: firstMessageId, before: secondMessageId })
+        .then(messages => {
+            message.channel.bulkDelete(messages, true)
+                .then(deletedMessages => {
+                    message.channel.send(`J'ai supprimé ${deletedMessages.size} message(s).`).then(msg => {
+                        setTimeout(() => msg.delete(), 3000);
                     });
-            })
-            .catch(error => {
-              console.error(`Impossible de récupérer les messages en raison de: ${error}`);
-              interaction.reply({ content: "Une erreur s'est produite lors de la récupération des messages.", ephemeral: true });
-          });
-  }
+                })
+                .catch(error => {
+                    console.error(`Impossible de supprimer les messages en raison de: ${error}`);
+                    message.reply("Une erreur s'est produite lors de la suppression des messages.");
+                });
+        })
+        .catch(error => {
+            console.error(`Impossible de récupérer les messages en raison de: ${error}`);
+            message.reply("Une erreur s'est produite lors de la récupération des messages.");
+        });
+    break;
+}
 });
-
-  
-               
-
-
-
 
 
 
@@ -477,34 +439,24 @@ client.on("interactionCreate", async interaction => {
 //         `Y8bood8P'   `Y8bood8P'  o888bood8P'   o888ooooood8 
                                                                                                                            
                                                                                                                            
-    client.once('ready', () => {
-
-    client.guilds.cache.get('987820202177749082').commands.create({
-        name: 'code',
-        description: 'Envoie le lien du code source en message privé',
-    });
-});
-
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isCommand()) return;
-
-    const { commandName } = interaction;
-
-    if (!interaction.member.permissions.has('ADMINISTRATOR')) {
-        return interaction.reply({ content: "Désolé, cette commande est réservée aux employés.", ephemeral: true });
+                                                                                                                           
+client.on('message', async message => {
+  if (message.author.bot) return;
+  if (message.content === prefix + 'code') {
+    if (!message.member.permissions.has('ADMINISTRATOR')) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
-    if (commandName === 'code') {
-        const url = 'https://github.com/mddesage/gomuscu';
+    const url = 'https://github.com/mddesage/gomuscu';
 
-        try {
-            await interaction.user.send(`Voici le lien que vous avez demandé: ${url}`);
-            await interaction.reply('Je vous ai envoyé un message privé avec le lien demandé.');
-        } catch (error) {
-            console.error(error);
-            interaction.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
-        }
+    try {
+      await message.author.send(`Voici le lien que vous avez demandé: ${url}`);
+      await message.reply('Je vous ai envoyé un message privé avec le lien demandé.');
+    } catch (error) {
+      console.error(error);
+      message.reply("Je n'ai pas pu vous envoyer un message privé. Veuillez vérifier vos paramètres de confidentialité.");
     }
+  }
 });
  
 
