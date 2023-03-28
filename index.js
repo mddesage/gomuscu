@@ -218,7 +218,7 @@ client.on("messageCreate", async message => {
 
                         ${prefix}**reinvite** *[user_id]*
                         Envoie un message de ré-invitation à la personne demandée.
-                        
+
                         ${prefix}**messageprive** *[user_id] [message]*
                         Envoie le message à la personne mentionnée.
  
@@ -236,7 +236,6 @@ client.on("messageCreate", async message => {
 
                         ${prefix}**avertissementretirer** *[user_mention]*
                         Retire un avertissement à la personné mentionnée.
-
 
                         ${prefix}**avertissementinfo** *[user_mention]*
                         Envoie le nombre d'avertissement(s) de la personné mentionnée.
