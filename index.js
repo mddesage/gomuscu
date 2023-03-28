@@ -983,6 +983,56 @@ client.on('messageCreate', async (message) => {
 
 
 
+//        ooo        ooooo oooooooooooo  .oooooo..o  .oooooo..o       .o.         .oooooo.    oooooooooooo      ooooooooo.   ooooooooo.   ooooo oooooo     oooo oooooooooooo 
+//        `88.       .888' `888'     `8 d8P'    `Y8 d8P'    `Y8      .888.       d8P'  `Y8b   `888'     `8      `888   `Y88. `888   `Y88. `888'  `888.     .8'  `888'     `8 
+//         888b     d'888   888         Y88bo.      Y88bo.          .8"888.     888            888               888   .d88'  888   .d88'  888    `888.   .8'    888         
+//         8 Y88. .P  888   888oooo8     `"Y8888o.   `"Y8888o.     .8' `888.    888            888oooo8          888ooo88P'   888ooo88P'   888     `888. .8'     888oooo8    
+//         8  `888'   888   888    "         `"Y88b      `"Y88b   .88ooo8888.   888     ooooo  888    "          888          888`88b.     888      `888.8'      888    "    
+//         8    Y     888   888       o oo     .d8P oo     .d8P  .8'     `888.  `88.    .88'   888       o       888          888  `88b.   888       `888'       888       o 
+//        o8o        o888o o888ooooood8 8""88888P'  8""88888P'  o88o     o8888o  `Y8bood8P'   o888ooooood8      o888o        o888o  o888o o888o       `8'       o888ooooood8 
+
+
+
+client.on("messageCreate", async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === "messageprive") {
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
+    const memberId = args.shift();
+    const member = message.guild.members.cache.get(memberId);
+
+    if (!member) {
+      return message.reply("Veuillez fournir un ID de membre valide.");
+    }
+
+    const privateMessage = args.join(" ");
+
+    if (!privateMessage) {
+      return message.reply("Veuillez inclure un message à envoyer.");
+    }
+
+    const senderName = message.member.displayName;
+
+    try {
+      const dm = await member.createDM();
+      await dm.send(`${privateMessage}\n\nCe message est envoyé par ${senderName}.`);
+
+      message.reply("Message envoyé avec succès.");
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du message privé:", error);
+      message.reply("Impossible d'envoyer un message privé à ce membre.");
+    }
+  }
+});
+
+
+
 //        oooooooooooo ooo        ooooo oooooooooo.  oooooooooooo oooooooooo.   
 //        `888'     `8 `88.       .888' `888'   `Y8b `888'     `8 `888'   `Y8b  
 //         888          888b     d'888   888     888  888          888      888 
