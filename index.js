@@ -1017,11 +1017,11 @@ client.on("messageCreate", async (message) => {
       return message.reply("Veuillez inclure un message à envoyer.");
     }
 
-    const senderName = message.member.displayName;
+    const senderMention = message.member.toString();
 
     try {
       const dm = await member.createDM();
-      await dm.send(`${privateMessage}\n\nCe message est envoyé par ${senderName}.`);
+      await dm.send(`${privateMessage}\n\nCe message est envoyé par ${senderMention}.`);
 
       message.reply("Message envoyé avec succès.");
     } catch (error) {
