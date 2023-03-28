@@ -238,6 +238,9 @@ client.on("messageCreate", async message => {
                         ${prefix}**avertissementinfo** *[user_mention]*
                         Envoie le nombre d'avertissement(s) de la personné mentionnée.
 
+                        ${prefix}**messageprive** *[userid] [message]*
+                        Envoie le message à la personne mentionnée.
+
                         `)
                         .setTitle("Liste des commandes EMPLOYÉS");
                     message.reply({ embeds: [embed] });
