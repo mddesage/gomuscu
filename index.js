@@ -1028,8 +1028,8 @@ client.on("messageCreate", async (message) => {
       ${privateMessage}
       
 
-      ***Ce message est envoyé par ${senderMention}.***
-      ***ne pas répondre à ce message***
+      ***Ce message est envoyé par ${senderMention},
+      ne pas répondre à ce message.***
             *Cordialement,  
             Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
       
