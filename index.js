@@ -1023,6 +1023,8 @@ client.on("messageCreate", async (message) => {
       const dm = await member.createDM();
       await dm.send(`${privateMessage}\n\n***
       Ce message est envoyé par ${senderMention}.***
+
+      ***ne pas répondre à ce message***
             *Cordialement,  
             Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
       
