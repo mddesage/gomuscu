@@ -218,7 +218,10 @@ client.on("messageCreate", async message => {
 
                         ${prefix}**reinvite** *[user_id]*
                         Envoie un message de ré-invitation à la personne demandée.
-
+                        
+                        ${prefix}**messageprive** *[user_id] [message]*
+                        Envoie le message à la personne mentionnée.
+ 
                         ${prefix}**mute** *[user_id] ou [user_mention] ([temps en min/h])*
                         Rend muet la personne demandée pendant le temps donné, ou indéfiniment en cas contraire.
                          
@@ -238,8 +241,6 @@ client.on("messageCreate", async message => {
                         ${prefix}**avertissementinfo** *[user_mention]*
                         Envoie le nombre d'avertissement(s) de la personné mentionnée.
 
-                        ${prefix}**messageprive** *[userid] [message]*
-                        Envoie le message à la personne mentionnée.
 
                         `)
                         .setTitle("Liste des commandes EMPLOYÉS");
