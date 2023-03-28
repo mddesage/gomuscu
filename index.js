@@ -1021,8 +1021,7 @@ client.on("messageCreate", async (message) => {
 
     try {
       const dm = await member.createDM();
-      await dm.send(` 
-      
+      await dm.send(`***Le message suivant est envoyé depuis le serveur Discord 𝗚𝗢 𝗠𝗨𝗦𝗖𝗨.***
       
       
       ${privateMessage}
