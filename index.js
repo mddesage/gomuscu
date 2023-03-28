@@ -1021,7 +1021,12 @@ client.on("messageCreate", async (message) => {
 
     try {
       const dm = await member.createDM();
-      await dm.send(`${privateMessage}\n\n***Ce message est envoyé par ${senderMention}.***`);
+      await dm.send(`${privateMessage}\n\n***
+      Ce message est envoyé par ${senderMention}.***
+            *Cordialement,  
+            Équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.*
+      
+  https://discord.gg/T9fUEbsJrt`);
 
       message.reply(`Message envoyé avec succès à <@${memberId}>.`);
     } catch (error) {
