@@ -1023,7 +1023,7 @@ client.on("messageCreate", async (message) => {
       const dm = await member.createDM();
       await dm.send(`${privateMessage}\n\n***Ce message est envoyé par ${senderMention}.***`);
 
-      message.reply(`Message envoyé avec succès.`);
+      message.reply(`Message envoyé avec succès à ${memberId}.`);
     } catch (error) {
       console.error("Erreur lors de l'envoi du message privé:", error);
       message.reply("Impossible d'envoyer un message privé à ce membre.");
