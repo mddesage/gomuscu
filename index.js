@@ -1423,13 +1423,14 @@ const Progress = sequelize.define('Progress', {
   pr: DataTypes.FLOAT,
 });
 
+
 client.once('ready', () => {
   console.log('Le bot est prêt!');
 });
 
 client.on('messageCreate', async message => {
-  if (message.content.startsWith('progress')) {
-    const args = message.content.slice('progress'.length).trim().split(/ +/);
+  if (message.content.startsWith(`${prefix}progression`)) {
+    const args = message.content.slice(`${prefix}progression`.length).trim().split(/ +/);
     const weight = parseFloat(args[0]);
     const measurements = args[1];
     const pr = parseFloat(args[2]);
@@ -1457,7 +1458,7 @@ client.on('messageCreate', async message => {
     }
   }
 
-  if (message.content.startsWith('!progression')) {
+  if (message.content.startsWith(`${prefix}progression`)) {
     try {
       const progress = await Progress.findOne({ where: { userId: message.author.id } });
 
@@ -1473,3 +1474,11 @@ client.on('messageCreate', async message => {
     }
   }
 });
+
+sequelize.sync()
+  .then(() => {
+    console.log('La base de données a été synchronisée.');
+    })
+    .catch(error => {
+    console.error('Erreur lors de la synchronisation de la base de données :', error);
+    });
