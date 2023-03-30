@@ -1396,3 +1396,80 @@ client.on('messageCreate', async (message) => {
     }
   }
 });
+
+
+
+//        ooooooooo.   ooooooooo.     .oooooo.     .oooooo.    ooooooooo.   oooooooooooo  .oooooo..o  .oooooo..o ooooo   .oooooo.   ooooo      ooo 
+//        `888   `Y88. `888   `Y88.  d8P'  `Y8b   d8P'  `Y8b   `888   `Y88. `888'     `8 d8P'    `Y8 d8P'    `Y8 `888'  d8P'  `Y8b  `888b.     `8' 
+//         888   .d88'  888   .d88' 888      888 888            888   .d88'  888         Y88bo.      Y88bo.       888  888      888  8 `88b.    8  
+//         888ooo88P'   888ooo88P'  888      888 888            888ooo88P'   888oooo8     `"Y8888o.   `"Y8888o.   888  888      888  8   `88b.  8  
+//         888          888`88b.    888      888 888     ooooo  888`88b.     888    "         `"Y88b      `"Y88b  888  888      888  8     `88b.8  
+//         888          888  `88b.  `88b    d88' `88.    .88'   888  `88b.   888       o oo     .d8P oo     .d8P  888  `88b    d88'  8       `888  
+//        o888o        o888o  o888o  `Y8bood8P'   `Y8bood8P'   o888o  o888o o888ooooood8 8""88888P'  8""88888P'  o888o  `Y8bood8P'  o8o        `8  
+
+
+
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = new Sequelize('database', 'username', 'password', {
+  host: 'localhost',
+  dialect: 'sqlite',
+  logging: false,
+  storage: 'database.sqlite',
+});
+
+const Progress = sequelize.define('Progress', {
+  weight: DataTypes.FLOAT,
+  measurements: DataTypes.STRING,
+  pr: DataTypes.FLOAT,
+});
+
+client.once('ready', () => {
+  console.log('Le bot est prêt!');
+});
+
+client.on('messageCreate', async message => {
+  if (message.content.startsWith('progress')) {
+    const args = message.content.slice('progress'.length).trim().split(/ +/);
+    const weight = parseFloat(args[0]);
+    const measurements = args[1];
+    const pr = parseFloat(args[2]);
+
+    if (isNaN(weight) || isNaN(pr) || measurements.length < 1) {
+      return message.reply('Arguments invalides.');
+    }
+
+    try {
+      let progress = await Progress.findOne({ where: { userId: message.author.id } });
+
+      if (!progress) {
+        progress = await Progress.create({ userId: message.author.id });
+      }
+
+      progress.weight = weight;
+      progress.measurements = measurements;
+      progress.pr = pr;
+      await progress.save();
+
+      message.reply('Informations de progression mises à jour.');
+    } catch (error) {
+      console.error(error);
+      message.reply('Une erreur est survenue lors de la mise à jour des informations de progression.');
+    }
+  }
+
+  if (message.content.startsWith('!progression')) {
+    try {
+      const progress = await Progress.findOne({ where: { userId: message.author.id } });
+
+      if (!progress) {
+        return message.reply('Aucune information de progression trouvée.');
+      }
+
+      const response = `Votre poids : ${progress.weight} kg\nVos mesures : ${progress.measurements}\nVotre PR : ${progress.pr}`;
+      message.channel.send(response);
+    } catch (error) {
+      console.error(error);
+      message.reply('Une erreur est survenue lors de la récupération des informations de progression.');
+    }
+  }
+});
