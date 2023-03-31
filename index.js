@@ -1424,10 +1424,19 @@ client.on('ready', () => {
   }, 1000 * 60 * 60 * 24);
 });
 
-client.on('message', msg => {
+client.on('messageCreate', msg => {
   if (msg.content === `${prefix}motivationnow`) {
+
+    if (!msg.member.roles.cache.has(requiredEmployedRoleId)) {
+      return msg.reply("Désolé, cette commande est réservée aux employés.");
+    }
+
     const channel = client.channels.cache.get('1091411626617479210');
     const randomMessage = motivationMessages[Math.floor(Math.random() * motivationMessages.length)];
-    channel.send(randomMessage);
+    if (channel) {
+      channel.send(randomMessage);
+    } else {
+      console.error('Channel not found.');
+    }
   }
 });
