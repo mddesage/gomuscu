@@ -1439,8 +1439,10 @@ Bonjour à tous!
 Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
     Voici la phrase du jour :
       
+
            ***${randomMessage}***
       
+           
 ||<@&1091411059648241684>||
       `);
     } else {
