@@ -1423,8 +1423,8 @@ client.on('messageCreate', async (message) => {
           .setTitle('Appuyer sur le bouton pour ajouter')
           .setDescription(`<@&${roleToAddId}> \n\n Ceci enverra dans un salon spécifique un message de motivation tout les matins !`)
           .setColor('#774466')
-          .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
-          .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png");
+          .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
+          
 
       const button = new MessageButton()
           .setCustomId('add_motivation_role')
