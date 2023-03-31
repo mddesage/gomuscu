@@ -287,5 +287,5 @@ const motivationMessages = [
 
 
   module.exports = {
-    motivations
+    motivationMessages
   };
