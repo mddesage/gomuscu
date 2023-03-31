@@ -1399,86 +1399,64 @@ client.on('messageCreate', async (message) => {
 
 
 
-//        ooooooooo.   ooooooooo.     .oooooo.     .oooooo.    ooooooooo.   oooooooooooo  .oooooo..o  .oooooo..o ooooo   .oooooo.   ooooo      ooo 
-//        `888   `Y88. `888   `Y88.  d8P'  `Y8b   d8P'  `Y8b   `888   `Y88. `888'     `8 d8P'    `Y8 d8P'    `Y8 `888'  d8P'  `Y8b  `888b.     `8' 
-//         888   .d88'  888   .d88' 888      888 888            888   .d88'  888         Y88bo.      Y88bo.       888  888      888  8 `88b.    8  
-//         888ooo88P'   888ooo88P'  888      888 888            888ooo88P'   888oooo8     `"Y8888o.   `"Y8888o.   888  888      888  8   `88b.  8  
-//         888          888`88b.    888      888 888     ooooo  888`88b.     888    "         `"Y88b      `"Y88b  888  888      888  8     `88b.8  
-//         888          888  `88b.  `88b    d88' `88.    .88'   888  `88b.   888       o oo     .d8P oo     .d8P  888  `88b    d88'  8       `888  
-//        o888o        o888o  o888o  `Y8bood8P'   `Y8bood8P'   o888o  o888o o888ooooood8 8""88888P'  8""88888P'  o888o  `Y8bood8P'  o8o        `8  
+//        ooo        ooooo   .oooooo.   ooooooooooooo ooooo oooooo     oooo       .o.       ooooooooooooo ooooo   .oooooo.   ooooo      ooo 
+//        `88.       .888'  d8P'  `Y8b  8'   888   `8 `888'  `888.     .8'       .888.      8'   888   `8 `888'  d8P'  `Y8b  `888b.     `8' 
+//         888b     d'888  888      888      888       888    `888.   .8'       .8"888.          888       888  888      888  8 `88b.    8  
+//         8 Y88. .P  888  888      888      888       888     `888. .8'       .8' `888.         888       888  888      888  8   `88b.  8  
+//         8  `888'   888  888      888      888       888      `888.8'       .88ooo8888.        888       888  888      888  8     `88b.8  
+//         8    Y     888  `88b    d88'      888       888       `888'       .8'     `888.       888       888  `88b    d88'  8       `888  
+//        o8o        o888o  `Y8bood8P'      o888o     o888o       `8'       o88o     o8888o     o888o     o888o  `Y8bood8P'  o8o        `8  
 
 
 
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: 'localhost',
-  dialect: 'sqlite',
-  logging: false,
-  storage: 'database.sqlite',
-});
+require('dotenv').config();
+const Discord = require('discord.js');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database(process.env.DATABASE_PATH);
 
-const Progress = sequelize.define('Progress', {
-  weight: DataTypes.FLOAT,
-  measurements: DataTypes.STRING,
-  pr: DataTypes.FLOAT,
-});
-
-
-client.once('ready', () => {
-  console.log('Le bot est prêt!');
-});
-
-client.on('messageCreate', async message => {
-  if (message.content.startsWith(`${prefix}progression`)) {
-    const args = message.content.slice(`${prefix}progression`.length).trim().split(/ +/);
-    const weight = parseFloat(args[0]);
-    const measurements = args[1];
-    const pr = parseFloat(args[2]);
-
-    if (isNaN(weight) || isNaN(pr) || measurements.length < 1) {
-      return message.reply('Arguments invalides.');
-    }
-
-    try {
-      let progress = await Progress.findOne({ where: { userId: message.author.id } });
-
-      if (!progress) {
-        progress = await Progress.create({ userId: message.author.id });
+client.on('message', async message => {
+  if (message.content === `${prefix}subscribe_motivation_alerts`) {
+    const userId = message.author.id;
+    db.run('INSERT INTO motivation_alerts (user_id) VALUES (?)', userId, (err) => {
+      if (err) {
+        console.error(err.message);
+        return message.channel.send("Une erreur s'est produite lors de l'abonnement aux alertes de motivation.");
       }
-
-      progress.weight = weight;
-      progress.measurements = measurements;
-      progress.pr = pr;
-      await progress.save();
-
-      message.reply('Informations de progression mises à jour.');
-    } catch (error) {
-      console.error(error);
-      message.reply('Une erreur est survenue lors de la mise à jour des informations de progression.');
-    }
-  }
-
-  if (message.content.startsWith(`${prefix}progression`)) {
-    try {
-      const progress = await Progress.findOne({ where: { userId: message.author.id } });
-
-      if (!progress) {
-        return message.reply('Aucune information de progression trouvée.');
-      }
-
-      const response = `Votre poids : ${progress.weight} kg\nVos mesures : ${progress.measurements}\nVotre PR : ${progress.pr}`;
-      message.channel.send(response);
-    } catch (error) {
-      console.error(error);
-      message.reply('Une erreur est survenue lors de la récupération des informations de progression.');
-    }
-  }
-});
-
-sequelize.sync()
-  .then(() => {
-    console.log('La base de données a été synchronisée.');
-    })
-    .catch(error => {
-    console.error('Erreur lors de la synchronisation de la base de données :', error);
+      message.channel.send(`${message.author}, vous êtes maintenant abonné aux alertes de motivation quotidiennes !`);
     });
+  } else if (message.content === `${prefix}unsubscribe_motivation_alerts`) {
+    const userId = message.author.id;
+    db.run('DELETE FROM motivation_alerts WHERE user_id = ?', userId, (err) => {
+      if (err) {
+        console.error(err.message);
+        return message.channel.send("Une erreur s'est produite lors de la désinscription des alertes de motivation.");
+      }
+      message.channel.send(`${message.author}, vous avez été désinscrit des alertes de motivation.`);
+    });
+  } else if (message.content === `${prefix}send_motivation_alerts`) {
+    db.all('SELECT user_id FROM motivation_alerts', (err, rows) => {
+      if (err) {
+        console.error(err.message);
+        return message.channel.send("Une erreur s'est produite lors de l'envoi des alertes de motivation.");
+      }
+      const motivationMessages = [
+        'Vous pouvez accomplir tout ce que vous voulez si vous y mettez suffisamment d\'efforts.',
+        'N\'oubliez jamais pourquoi vous avez commencé.',
+        'Chaque petit pas vous rapproche de votre objectif.',
+        'Les obstacles ne peuvent pas vous arrêter si vous êtes déterminé(e) à réussir.',
+        'Soyez fier(e) de vos progrès, même s\'ils sont petits.',
+        'Votre succès ne dépend que de vous et de votre travail acharné.'
+      ];
+      rows.forEach(row => {
+        const user = client.users.cache.get(row.user_id);
+        if (user) {
+          const randomMessage = motivationMessages[Math.floor(Math.random() * motivationMessages.length)];
+          user.send(randomMessage).catch(console.error);
+        }
+      });
+      message.channel.send("Les alertes de motivation ont été envoyées !");
+    });
+  }
+});
+
+db.run('CREATE TABLE IF NOT EXISTS motivation_alerts (user_id TEXT PRIMARY KEY)');
