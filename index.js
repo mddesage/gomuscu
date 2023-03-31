@@ -1435,13 +1435,13 @@ client.on('messageCreate', msg => {
     const randomMessage = motivationMessages[Math.floor(Math.random() * motivationMessages.length)];
     if (channel) {
       channel.send(`
-    Bonjour à tous! 
-    Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
-      Voici la phrase du jour :
+Bonjour à tous! 
+Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
+    Voici la phrase du jour :
       
            ***${randomMessage}***
       
-    ||<@&1091411059648241684>||
+||<@&1091411059648241684>||
       `);
     } else {
       console.error('Channel not found.');
