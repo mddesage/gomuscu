@@ -1410,9 +1410,9 @@ client.on('messageCreate', async (message) => {
 
 
 require('dotenv').config();
-const Discord = require('discord.js');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database(process.env.DATABASE_PATH);
+
 
 client.on('message', async message => {
   if (message.content === `${prefix}subscribe_motivation_alerts`) {
