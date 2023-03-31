@@ -1434,7 +1434,7 @@ client.on('messageCreate', msg => {
     const channel = client.channels.cache.get('1091411626617479210');
     const randomMessage = motivationMessages[Math.floor(Math.random() * motivationMessages.length)];
     if (channel) {
-      channel.send(randomMessage);
+      channel.send(motivationMessages);
     } else {
       console.error('Channel not found.');
     }
