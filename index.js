@@ -1412,7 +1412,7 @@ client.on('messageCreate', async (message) => {
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
   
-  if (message.content === 'ENVOIE_LE_BOUTON_POUR_AHOUTER_MOTIVATION') {
+  if (message.content === 'ENVOIE_LE_BOUTON_POUR_AJOUTER_MOTIVATION') {
       if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
           return message.reply("Désolé, cette commande est réservée aux employés.");
       }
