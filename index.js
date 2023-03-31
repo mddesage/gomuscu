@@ -1409,7 +1409,7 @@ client.on('messageCreate', async (message) => {
 
 
 
-const { motivations } = require('./commands/liste_motivations.js');
+const { motivationMessages } = require('./commands/liste_motivations.js');
 client.on('ready', () => {
   setInterval(() => {
     const channel = client.channels.cache.get('1091411626617479210');
@@ -1417,7 +1417,7 @@ client.on('ready', () => {
     Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
     Voici la phrase du jour :
     
-       *${motivations}*
+       *${motivationMessages}*
     
     ||<@&1091411059648241684>||
     `);
