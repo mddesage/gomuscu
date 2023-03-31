@@ -1409,7 +1409,45 @@ client.on('messageCreate', async (message) => {
 
 
 
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+  
+  if (message.content === 'ENVOIE_LE_BOUTON_POUR_AHOUTER_MOTIVATION') {
+      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
+          return message.reply("Désolé, cette commande est réservée aux employés.");
+      }
+
+      const roleToAddId = '1091411059648241684';
+
+      const embed = new MessageEmbed()
+          .setTitle('Appuyer sur le bouton pour ajouter')
+          .setDescription(`<@&${roleToAddId}> \n\n Ceci enverra dans un salon spécifique un message de motivation tout les matins !`)
+          .setColor('#774466');
+
+      const button = new MessageButton()
+          .setCustomId('add_motivation_role')
+          .setLabel('💪Motivation')
+          .setStyle('PRIMARY');
+
+      const row = new MessageActionRow()
+          .addComponents(button);
+
+      message.channel.send({ embeds: [embed], components: [row] });
+  }
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isButton()) return;
+  if (interaction.customId === 'add_motivation_role') {
+      const roleToAddId = '1091411059648241684';
+
+      await interaction.member.roles.add(roleToAddId);
+      await interaction.reply({ content: 'Le rôle a été ajouté avec succès !', ephemeral: true });
+  }
+});
+
 const { motivationMessages } = require('./commands/liste_motivations.js');
+
 client.on('ready', () => {
   setInterval(() => {
     const channel = client.channels.cache.get('1091411626617479210');
