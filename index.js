@@ -1409,54 +1409,25 @@ client.on('messageCreate', async (message) => {
 
 
 
-require('dotenv').config();
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(process.env.DATABASE_PATH);
-
-
-client.on('message', async message => {
-  if (message.content === `${prefix}subscribe_motivation_alerts`) {
-    const userId = message.author.id;
-    db.run('INSERT INTO motivation_alerts (user_id) VALUES (?)', userId, (err) => {
-      if (err) {
-        console.error(err.message);
-        return message.channel.send("Une erreur s'est produite lors de l'abonnement aux alertes de motivation.");
-      }
-      message.channel.send(`${message.author}, vous êtes maintenant abonné aux alertes de motivation quotidiennes !`);
-    });
-  } else if (message.content === `${prefix}unsubscribe_motivation_alerts`) {
-    const userId = message.author.id;
-    db.run('DELETE FROM motivation_alerts WHERE user_id = ?', userId, (err) => {
-      if (err) {
-        console.error(err.message);
-        return message.channel.send("Une erreur s'est produite lors de la désinscription des alertes de motivation.");
-      }
-      message.channel.send(`${message.author}, vous avez été désinscrit des alertes de motivation.`);
-    });
-  } else if (message.content === `${prefix}send_motivation_alerts`) {
-    db.all('SELECT user_id FROM motivation_alerts', (err, rows) => {
-      if (err) {
-        console.error(err.message);
-        return message.channel.send("Une erreur s'est produite lors de l'envoi des alertes de motivation.");
-      }
-      const motivationMessages = [
-        'Vous pouvez accomplir tout ce que vous voulez si vous y mettez suffisamment d\'efforts.',
-        'N\'oubliez jamais pourquoi vous avez commencé.',
-        'Chaque petit pas vous rapproche de votre objectif.',
-        'Les obstacles ne peuvent pas vous arrêter si vous êtes déterminé(e) à réussir.',
-        'Soyez fier(e) de vos progrès, même s\'ils sont petits.',
-        'Votre succès ne dépend que de vous et de votre travail acharné.'
-      ];
-      rows.forEach(row => {
-        const user = client.users.cache.get(row.user_id);
-        if (user) {
-          const randomMessage = motivationMessages[Math.floor(Math.random() * motivationMessages.length)];
-          user.send(randomMessage).catch(console.error);
-        }
-      });
-      message.channel.send("Les alertes de motivation ont été envoyées !");
-    });
-  }
+const { motivations } = require('./commands/liste_motivations.js');
+client.on('ready', () => {
+  setInterval(() => {
+    const channel = client.channels.cache.get('1091411626617479210');
+    channel.send(`Bonjour! 
+    Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
+    Voici la phrase du jour :
+    
+       *${motivations}*
+    
+    ||<@&1091411059648241684>||
+    `);
+  }, 1000 * 60 * 60 * 24);
 });
 
-db.run('CREATE TABLE IF NOT EXISTS motivation_alerts (user_id TEXT PRIMARY KEY)');
+client.on('message', msg => {
+  if (msg.content === `${prefix}motivationnow`) {
+    const channel = client.channels.cache.get('1091411626617479210');
+    const randomMessage = motivationMessages[Math.floor(Math.random() * motivationMessages.length)];
+    channel.send(randomMessage);
+  }
+});

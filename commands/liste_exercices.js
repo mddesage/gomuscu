@@ -379,7 +379,6 @@ const exercices = [
       description: "Un exercice pour renforcer les quadriceps, en réalisant une flexion des genoux en position debout et en gardant le dos droit.",
       groupeMusculaire: 'quadriceps'
       },
-    // Ajoutez ici les autres exercices pour chaque groupe musculaire
   ];
 
 
