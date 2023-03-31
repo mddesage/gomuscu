@@ -289,7 +289,7 @@ if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
         break;
 
         case 'supprid':
-if (!message.member.roles.cache.has(requiredRoleId)) {
+if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
         return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
