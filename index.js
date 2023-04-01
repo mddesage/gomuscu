@@ -1508,9 +1508,9 @@ const MOVEMENTS = [
   'squat',
   'bench',
   'deadlift',
-  'dips_leste',
-  'traction_leste',
-  'muscle_up_leste',
+  'dips',
+  'traction',
+  'muscleup',
 ];
 
 db.serialize(() => {
@@ -1530,18 +1530,18 @@ client.on('messageCreate', async (message) => {
 
   if (command === 'ajouter') {
     if (args.length !== 4) {
-      message.reply('Utilisation incorrecte. Utilisez: !ajouter <mouvement> <poids soulevé> <âge> <poids>');
+      message.reply(`Utilisation incorrecte. Utilisez: ${prefix}**ajouter** *[mouvement] [poids soulevé] [âge] [poids]*`);
       return;
     }
 
     const [movement, liftedWeight, age, userWeight] = args;
     if (!MOVEMENTS.includes(movement)) {
-      message.reply(`Mouvement inconnu. Les mouvements valides sont: ${MOVEMENTS.join(', ')}`);
+      message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', **')}`);
       return;
     }
 
     if (isNaN(liftedWeight) || isNaN(age) || isNaN(userWeight)) {
-      message.reply('Le poids soulevé, l\'âge et le poids doivent être des nombres.');
+      message.reply('Le poids soulevé, l\'âge et le poids doivent être des **nombres**.');
       return;
     }
 
@@ -1553,14 +1553,14 @@ client.on('messageCreate', async (message) => {
           console.error(err);
           message.reply('Une erreur est survenue lors de la mise à jour du score.');
         } else {
-          message.reply(`Score mis à jour pour ${movement}: 1 rep et ${liftedWeight} kg. Âge: ${age} ans. Poids: ${userWeight} kg.`);
+          message.reply(`Score mis à jour pour **${movement}**: 1 rep et **${liftedWeight} kg**. Âge: **${age} ans**. Poids: **${userWeight} kg**.`);
         }
       }
     );
   } else if (command === 'classement') {
     const movement = args[0];
     if (!MOVEMENTS.includes(movement)) {
-      message.reply(`Mouvement inconnu. Les mouvements valides sont: ${MOVEMENTS.join(', ')}`);
+      message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', **')}`);
       return;
     }
 
@@ -1589,7 +1589,7 @@ client.on('messageCreate', async (message) => {
           message.channel.send({ embeds: [embed] });
         }
       });
-    } else if (command === 'ajoutmouvement') {
+    } else if (command === 'ajoutermouvement') {
       const movement = args[0];
       if (!movement) {
         message.reply('Veuillez indiquer le nom du nouveau mouvement.');
