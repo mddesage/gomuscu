@@ -1501,7 +1501,6 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 });
 
 
-const { Client, Intents, MessageEmbed } = require('discord.js');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./scores.db');
 
