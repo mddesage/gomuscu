@@ -1510,7 +1510,11 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 const Enmap = require('enmap');
-const markdownTable = require('markdown-table');
+let markdownTable;
+
+(async () => {
+  markdownTable = await import('markdown-table');
+})();
 
 
 const mouvements = [
