@@ -1540,7 +1540,7 @@ client.on('messageCreate', async (message) => {
 
     const [movement, liftedWeight, age, userWeight] = args;
     if (!MOVEMENTS.includes(movement)) {
-      message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', **')}`);
+      message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join('**, ')}`);
       return;
     }
 
@@ -1613,7 +1613,7 @@ client.on('messageCreate', async (message) => {
       message.channel.send({ embeds: [embed] });
     } else {
       if (!MOVEMENTS.includes(movement)) {
-        message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', **')}`);
+        message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join('**, ')}`);
         return;
       }
 
