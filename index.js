@@ -1553,7 +1553,7 @@ client.on('messageCreate', async (message) => {
           console.error(err);
           message.reply('Une erreur est survenue lors de la mise à jour du score.');
         } else {
-          message.reply(`Score mis à jour pour \n**${movement}**: 1 rep et **${liftedWeight} kg**. \nÂge: **${age} ans**. \nPoids: **${userWeight} kg**.`);
+          message.reply(`Score mis à jour pour **${movement}**. \nPerformance: 1 rep et **${liftedWeight} kg**. \nÂge: **${age} ans**. \nPoids: **${userWeight} kg**.`);
         }
       }
     );
