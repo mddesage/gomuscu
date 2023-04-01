@@ -1510,7 +1510,7 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 const Enmap = require('enmap');
-const AsciiTable = require('ascii-table');
+const { table } = require('table');
 
 const mouvements = [
   'squat',
@@ -1576,14 +1576,16 @@ client.on('messageCreate', async (message) => {
 
     scoreArray.sort((a, b) => b.poids - a.poids || b.reps - a.reps);
 
-    const table = new AsciiTable(`Tableau des meilleurs scores - ${mouvement}`);
-    table.setHeading('Position', 'Pseudo', 'Répétitions', 'Poids (kg)', 'Âge', 'Poids de la personne (kg)');
+    const scoreTable = [
+      ['Position', 'Pseudo', 'Répétitions', 'Poids (kg)', 'Âge', 'Poids de la personne (kg)'],
+    ];
 
     scoreArray.slice(0, 10).forEach(({ username, reps, poids, age, poids_personne }, index) => {
-      table.addRow(index + 1, username, reps, poids, age, poids_personne);
+      scoreTable.push([index + 1, username, reps, poids, age, poids_personne]);
     });
 
-    message.channel.send(`\`\`\`${table.toString()}\`\`\``);
+    message.channel.send(`\`\`\`${table(scoreTable)}\`\`\``);
   }
 });
+
 
