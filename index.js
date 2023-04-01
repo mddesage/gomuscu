@@ -1475,7 +1475,17 @@ client.on('messageCreate', (message) => {
       const channel = client.channels.cache.get('1091411626617479210');
       if (channel) {
           const motivationMessagesAleatoire = Math.floor(Math.random() * motivationMessages.length);
-          channel.send(motivationMessages[motivationMessagesAleatoire]);
+          channel.send(`
+          Bonjour à tous! 
+          Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
+              Voici la phrase du jour :
+                
+          
+                     ***${motivationMessagesAleatoire}***
+                
+                     
+          ||<@&1091411059648241684>||
+                `);
       }
   }
 });
