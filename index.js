@@ -1518,23 +1518,15 @@ const CUMULATIVE_RANKINGS = {
   streetlifting: ['squat', 'dips', 'traction', 'muscleup'],
 };
 
-async function initDatabase() {
-  return new Promise((resolve, reject) => {
-    const createTablesQuery = MOVEMENTS.map((movement) => {
-      return `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL);`;
-    }).join('\n');
+db.serialize(() => {
+  db.run('CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY)');
 
-    console.log('Creating tables with query:\n', createTablesQuery); // Ajoutez cette ligne
-
-    db.exec(createTablesQuery, (err) => {
-      if (err) reject(err);
-      else resolve();
-    });
+  MOVEMENTS.forEach((movement) => {
+    db.run(
+      `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL)`
+    );
   });
-}
-
-
-  
+});
 client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.content.startsWith(prefix)) return;
 
