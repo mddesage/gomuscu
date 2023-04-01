@@ -1481,7 +1481,7 @@ client.on('messageCreate', (message) => {
               Voici la phrase du jour :
                 
           
-                     ***${motivationMessagesAleatoire}***
+                     ***${motivationMessages[motivationMessagesAleatoire]}***
                 
                      
           ||<@&1091411059648241684>||
