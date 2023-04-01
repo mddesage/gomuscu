@@ -1599,7 +1599,7 @@ client.on('messageCreate', async (message) => {
       poids_personne,
     ]);
 
-    const table = markdownTable([header, ...rows]);
+    const table = markdownTable.default([header, ...rows]);
     message.channel.send(`Tableau des meilleurs scores - ${mouvement}\n\`\`\`${table}\`\`\``);
   }
 });
