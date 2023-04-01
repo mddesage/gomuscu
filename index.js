@@ -1645,7 +1645,6 @@ client.on('messageCreate', async (message) => {
 
 
 
-const fs = require("fs");
 
 // Créez un fichier JSON pour stocker les records des membres s'il n'existe pas déjà
 if (!fs.existsSync("records.json")) {
