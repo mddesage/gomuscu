@@ -1502,7 +1502,9 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./scores.db');
+const path = require('path');
+const dbPath = path.resolve(__dirname, 'scores.db');
+const db = new sqlite3.Database(dbPath);
 
 const MOVEMENTS = [
   'squat',
