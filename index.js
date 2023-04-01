@@ -1508,8 +1508,6 @@ db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY)');
 });
 
-db.close();
-
 const MOVEMENTS = [
   'squat',
   'bench',
