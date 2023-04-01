@@ -1506,7 +1506,14 @@ const db = new sqlite3.Database('./scores.db');
 
 db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY)');
+
+  MOVEMENTS.forEach((movement) => {
+    db.run(
+      `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL)`
+    );
+  });
 });
+
 
 const MOVEMENTS = [
   'squat',
