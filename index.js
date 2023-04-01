@@ -1501,9 +1501,16 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 });
 
 
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./scores.db');
 
+
+
+
+
+
+
+
+const fs = require('fs');
+const FILENAME = './scores.json';
 const MOVEMENTS = [
   'squat',
   'bench',
@@ -1518,15 +1525,26 @@ const CUMULATIVE_RANKINGS = {
   streetlifting: ['squat', 'dips', 'traction', 'muscleup'],
 };
 
-db.serialize(() => {
-  db.run('CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY)');
+const readJson = () => {
+  try {
+    const data = fs.readFileSync(FILENAME, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      return {};
+    } else {
+      console.error('Error reading JSON file:', err);
+      throw err;
+    }
+  }
+};
 
-  MOVEMENTS.forEach((movement) => {
-    db.run(
-      `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL)`
-    );
-  });
-});
+const writeJson = (data) => {
+  fs.writeFileSync(FILENAME, JSON.stringify(data, null, 2), 'utf8');
+};
+
+writeJson(readJson());
+
 client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.content.startsWith(prefix)) return;
 
@@ -1550,48 +1568,33 @@ client.on('messageCreate', async (message) => {
       return;
     }
 
-    db.run(
-      `INSERT OR REPLACE INTO ${movement} (user_id, weight, age, user_weight) VALUES (?, ?, ?, ?)`,
-      [message.author.id, liftedWeight, age, userWeight],
-      (err) => {
-        if (err) {
-          console.error(err);
-          message.reply('Une erreur est survenue lors de la mise à jour du score.');
-        } else {
-          message.reply(`Score mis à jour pour **${movement}**. \nPerformance: **${liftedWeight} kg**. \nÂge: **${age} ans**. \nPoids: **${userWeight} kg**.`);
-        }
-      }
-    );
+    const scores = readJson();
+    if (!scores[movement]) {
+      scores[movement] = {};
+    }
+
+    scores[movement][message.author.id] = {
+      weight: parseFloat(liftedWeight),
+      age: parseInt(age, 10),
+      user_weight: parseFloat(userWeight),
+    };
+
+    writeJson(scores);
+
+    message.reply(`Score mis à jour pour **${movement}**. \nPerformance: **${liftedWeight} kg**. \nÂge: **${age} ans**. \nPoids: **${userWeight} kg**.`);
   } else if (command === 'classement') {
     const movement = args[0];
+    const scores = readJson();
+
     if (CUMULATIVE_RANKINGS[movement]) {
-      const rankings = CUMULATIVE_RANKINGS[movement];
-      const userData = {};
-
-      for (const rankMovement of rankings) {
-        const rows = await new Promise((resolve, reject) => {
-          db.all(`SELECT * FROM ${rankMovement}`, (err, rows) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(rows);
-            }
-          });
-        });
-
-        for (const row of rows) {
-          if (!userData[row.user_id]) {
-            userData[row.user_id] = {
-              totalWeight: 0,
-              age: row.age,
-              userWeight: row.user_weight,
-            };
-          }
-          userData[row.user_id].totalWeight += row.weight;
-        }
+    } else {
+      if (!MOVEMENTS.includes(movement)) {
+        message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', ')}**`);
+        return;
       }
 
-      const sortedUsers = Object.entries(userData).sort(([, a], [, b]) => b.totalWeight - a.totalWeight);
+      const userData = scores[movement] || {};
+      const sortedUsers = Object.entries(userData).sort(([, a], [, b]) => b.weight - a.weight);
 
       const embed = new MessageEmbed()
         .setTitle(`Classement des meilleurs scores pour ${movement}`)
@@ -1602,47 +1605,16 @@ client.on('messageCreate', async (message) => {
         const user = await client.users.fetch(userId);
         const rank = i + 1;
         const username = user.username;
-        const weight = data.totalWeight;
+        const weight = data.weight;
         const age = data.age;
         const userWeight = data.user_weight;
         embed.addField(
           `#${rank} ${username}`,
-          `Poids total: ${weight} kg\nÂge: ${age} ans\nPoids: ${userWeight} kg`
+          `1 rep - ${weight} kg\nÂge: ${age} ans\nPoids: ${userWeight} kg`
         );
       }
 
       message.channel.send({ embeds: [embed] });
-    } else {
-      if (!MOVEMENTS.includes(movement)) {
-        message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', ')}**`);
-        return;
-      }
-
-      db.all(`SELECT * FROM ${movement} ORDER BY weight DESC`, async (err, rows) => {
-        if (err) {
-          console.error(err);
-          message.reply('Une erreur est survenue lors de la récupération des scores.');
-        } else {
-          const embed = new MessageEmbed()
-            .setTitle(`Classement des meilleurs scores pour ${movement}`)
-            .setColor(0x00AE86);
-
-          for (let i = 0; i < rows.length && i < 10; i++) {
-            const user = await client.users.fetch(rows[i].user_id);
-            const rank = i + 1;
-            const username = user.username;
-            const weight = rows[i].weight;
-            const age = rows[i].age;
-            const userWeight = rows[i].user_weight;
-            embed.addField(
-              `#${rank} ${username}`,
-              `1 rep - ${weight} kg\nÂge: ${age} ans\nPoids: ${userWeight} kg`
-            );
-          }
-  
-          message.channel.send({ embeds: [embed] });
-        }
-      });
     }
   } else if (command === 'helpscore') {
     const embed = new MessageEmbed()
@@ -1665,50 +1637,5 @@ client.on('messageCreate', async (message) => {
       );
 
     message.channel.send({ embeds: [embed] });
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const exercicesworkout = {
-  jambes: ["Squat", "Fentes", "Presse à jambes", "Soulevé de terre jambes tendues", "Mollets debout"],
-  dos: ["Tirage poitrine", "Rowing haltère", "Soulevé de terre", "Rowing assis", "Pull-ups"],
-  poitrine: ["Développé couché", "Développé incliné", "Développé décliné", "Pectoraux à la machine", "Pompes"],
-  épaules: ["Élévations latérales", "Développé militaire", "Oiseau", "Arnold press", "Face pull"],
-  bras: ["Curl haltères", "Curl barre", "Extension triceps poulie", "Dips", "Curl marteau"]
-};
-
-client.on("messageCreate", async (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
-
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
-
-  if (command === "workout") {
-    const workoutEmbed = new MessageEmbed()
-      .setColor("#0099ff")
-      .setTitle("Programme d'entraînement aléatoire")
-      .setDescription("Voici un programme d'entraînement généré aléatoirement pour aujourd'hui!")
-      .setThumbnail("https://yourimageurl.com/workout-icon.png") 
-      .setTimestamp();
-
-    for (const categorie in exercicesworkout) {
-      const exerciceworkout = exercicesworkout[categorie][Math.floor(Math.random() * exercicesworkout[categorie].length)];
-      workoutEmbed.addField(categorie.toUpperCase(), exerciceworkout, true);
-    }
-
-    message.channel.send({ embeds: [workoutEmbed] });
   }
 });
