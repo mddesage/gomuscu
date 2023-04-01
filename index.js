@@ -1461,15 +1461,15 @@ client.on('ready', () => {
           if (channel) {
               const motivationMessagesAleatoire = Math.floor(Math.random() * motivationMessages.length);
               channel.send(`
-              Bonjour à tous! 
-              Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
-                  Voici la phrase du jour :
+ Bonjour à tous! 
+Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
+             Voici la phrase du jour :
                     
               
                          ***${motivationMessages[motivationMessagesAleatoire]}***
                     
                          
-              ||<@&1091411059648241684>||
+      ||<@&1091411059648241684>||
                     `);
           }
       }
@@ -1486,16 +1486,16 @@ client.on('messageCreate', (message) => {
       if (channel) {
           const motivationMessagesAleatoire = Math.floor(Math.random() * motivationMessages.length);
           channel.send(`
-          Bonjour à tous! 
-          Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
-              Voici la phrase du jour :
-                
-          
-                     ***${motivationMessages[motivationMessagesAleatoire]}***
-                
-                     
-          ||<@&1091411059648241684>||
-                `);
+ Bonjour à tous! 
+Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
+             Voici la phrase du jour :
+                    
+              
+                         ***${motivationMessages[motivationMessagesAleatoire]}***
+                    
+                         
+      ||<@&1091411059648241684>||
+                    `);
       }
   }
 });
