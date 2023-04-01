@@ -3,4 +3,3 @@ package-lock.json
 .env
 musique.js
 slash-suppr(id).js
-node_modules
