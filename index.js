@@ -1667,3 +1667,48 @@ client.on('messageCreate', async (message) => {
     message.channel.send({ embeds: [embed] });
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const exercicesworkout = {
+  jambes: ["Squat", "Fentes", "Presse à jambes", "Soulevé de terre jambes tendues", "Mollets debout"],
+  dos: ["Tirage poitrine", "Rowing haltère", "Soulevé de terre", "Rowing assis", "Pull-ups"],
+  poitrine: ["Développé couché", "Développé incliné", "Développé décliné", "Pectoraux à la machine", "Pompes"],
+  épaules: ["Élévations latérales", "Développé militaire", "Oiseau", "Arnold press", "Face pull"],
+  bras: ["Curl haltères", "Curl barre", "Extension triceps poulie", "Dips", "Curl marteau"]
+};
+
+client.on("messageCreate", async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === "workout") {
+    const workoutEmbed = new MessageEmbed()
+      .setColor("#0099ff")
+      .setTitle("Programme d'entraînement aléatoire")
+      .setDescription("Voici un programme d'entraînement généré aléatoirement pour aujourd'hui!")
+      .setThumbnail("https://yourimageurl.com/workout-icon.png") 
+      .setTimestamp();
+
+    for (const categorie in exercicesworkout) {
+      const exerciceworkout = exercicesworkout[categorie][Math.floor(Math.random() * exercicesworkout[categorie].length)];
+      workoutEmbed.addField(categorie.toUpperCase(), exerciceworkout, true);
+    }
+
+    message.channel.send({ embeds: [workoutEmbed] });
+  }
+});
