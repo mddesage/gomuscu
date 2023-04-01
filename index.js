@@ -1513,6 +1513,11 @@ const MOVEMENTS = [
   'muscleup',
 ];
 
+const CUMULATIVE_RANKINGS = {
+  SBD: ['squat', 'bench', 'deadlift'],
+  streetlifting: ['squat', 'dips', 'traction', 'muscleup'],
+};
+
 db.serialize(() => {
   MOVEMENTS.forEach((movement) => {
     db.run(
@@ -1520,7 +1525,6 @@ db.serialize(() => {
     );
   });
 });
-
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.content.startsWith(prefix)) return;
@@ -1553,25 +1557,74 @@ client.on('messageCreate', async (message) => {
           console.error(err);
           message.reply('Une erreur est survenue lors de la mise à jour du score.');
         } else {
-          message.reply(`Score mis à jour pour **${movement}**. \nPerformance: 1 rep et **${liftedWeight} kg**. \nÂge: **${age} ans**. \nPoids: **${userWeight} kg**.`);
+          message.reply(`Score mis à jour pour **${movement}**. \nPerformance: **${liftedWeight} kg**. \nÂge: **${age} ans**. \nPoids: **${userWeight} kg**.`);
         }
       }
     );
   } else if (command === 'classement') {
     const movement = args[0];
-    if (!MOVEMENTS.includes(movement)) {
-      message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', **')}`);
-      return;
-    }
+    if (CUMULATIVE_RANKINGS[movement]) {
+      const rankings = CUMULATIVE_RANKINGS[movement];
+      const userData = {};
 
-    db.all(`SELECT * FROM ${movement} ORDER BY weight DESC`, async (err, rows) => {
-      if (err) {
-        console.error(err);
-        message.reply('Une erreur est survenue lors de la récupération des scores.');
-      } else {
-        const embed = new MessageEmbed()
-          .setTitle(`Classement des meilleurs scores pour ${movement}`)
-          .setColor(0x00AE86);
+      for (const rankMovement of rankings) {
+        const rows = await new Promise((resolve, reject) => {
+          db.all(`SELECT * FROM ${rankMovement}`, (err, rows) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(rows);
+            }
+          });
+        });
+
+        for (const row of rows) {
+          if (!userData[row.user_id]) {
+            userData[row.user_id] = {
+              totalWeight: 0,
+              age: row.age,
+              userWeight: row.user_weight,
+            };
+          }
+          userData[row.user_id].totalWeight += row.weight;
+        }
+      }
+
+      const sortedUsers = Object.entries(userData).sort(([, a], [, b]) => b.totalWeight - a.totalWeight);
+
+      const embed = new MessageEmbed()
+        .setTitle(`Classement des meilleurs scores pour ${movement}`)
+        .setColor(0x00AE86);
+
+      for (let i = 0; i < sortedUsers.length && i < 10; i++) {
+        const [userId, data] = sortedUsers[i];
+        const user = await client.users.fetch(userId);
+        const rank = i + 1;
+        const username = user.username;
+        const weight = data.totalWeight;
+        const age = data.age;
+        const userWeight = data.user_weight;
+        embed.addField(
+          `#${rank} ${username}`,
+          `Poids total: ${weight} kg\nÂge: ${age} ans\nPoids: ${userWeight} kg`
+        );
+      }
+
+      message.channel.send({ embeds: [embed] });
+    } else {
+      if (!MOVEMENTS.includes(movement)) {
+        message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', **')}`);
+        return;
+      }
+
+      db.all(`SELECT * FROM ${movement} ORDER BY weight DESC`, async (err, rows) => {
+        if (err) {
+          console.error(err);
+          message.reply('Une erreur est survenue lors de la récupération des scores.');
+        } else {
+          const embed = new MessageEmbed()
+            .setTitle(`Classement des meilleurs scores pour ${movement}`)
+            .setColor(0x00AE86);
 
           for (let i = 0; i < rows.length && i < 10; i++) {
             const user = await client.users.fetch(rows[i].user_id);
@@ -1589,29 +1642,27 @@ client.on('messageCreate', async (message) => {
           message.channel.send({ embeds: [embed] });
         }
       });
-    } else if (command === 'ajoutermouvement') {
-      const movement = args[0];
-      if (!movement) {
-        message.reply('Veuillez indiquer le nom du nouveau mouvement.');
-        return;
-      }
-  
-      if (MOVEMENTS.includes(movement)) {
-        message.reply('Ce mouvement existe déjà.');
-        return;
-      }
-  
-      db.run(
-        `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL)`,
-        (err) => {
-          if (err) {
-            console.error(err);
-            message.reply('Une erreur est survenue lors de la création du nouveau mouvement.');
-          } else {
-            MOVEMENTS.push(movement);
-            message.reply(`Mouvement "${movement}" ajouté avec succès.`);
-          }
-        }
-      );
     }
-  });
+  } else if (command === 'helpscore') {
+    const embed = new MessageEmbed()
+      .setTitle('Aide pour le système de scores')
+      .setColor(0x00AE86)
+      .setDescription(
+        "Ce bot permet d'ajouter et de consulter les scores des membres pour différents mouvements. Voici comment l'utiliser :"
+      )
+      .addField(
+        `${prefix}ajouter`,
+        `Pour ajouter un score : ${prefix}ajouter [mouvement] [poids soulevé] [âge] [poids]`
+      )
+      .addField(
+        `${prefix}classement`,
+        `Pour consulter le classement d'un mouvement : ${prefix}classement [mouvement]`
+      )
+      .addField(
+        `${prefix}classementtotal`,
+        `Pour consulter tous les classements et/ou un classement général : ${prefix}classementtotal`
+      );
+
+    message.channel.send({ embeds: [embed] });
+  }
+});
