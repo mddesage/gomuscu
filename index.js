@@ -1500,3 +1500,82 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
   }
 });
 
+
+
+
+
+
+
+
+
+
+const db = require('quick.db');
+const AsciiTable = require('ascii-table');
+const mouvementsclassement = [
+  'squat',
+  'bench',
+  'deadlift',
+  'dips_lesté',
+  'traction_lesté',
+  'muscle_up_lesté',
+];
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix)) return;
+
+  const [command, ...args] = message.content
+    .trim()
+    .substring(prefix.length)
+    .split(/\s+/);
+
+  if (command === 'ajouter') {
+    const user = message.author;
+    const mouvement = args[0];
+    const reps = parseInt(args[1]);
+    const poids = parseInt(args[2]);
+    const age = parseInt(args[3]);
+    const poids_personne = parseInt(args[4]);
+
+    if (!mouvementsclassement.includes(mouvementsclassement)) {
+      return message.reply(`Veuillez entrer un mouvement valide. Exemple : ${mouvementsclassement.join(', ')}`);
+    }
+
+    if (isNaN(reps) || isNaN(poids) || isNaN(age) || isNaN(poids_personne)) {
+      return message.reply('Veuillez entrer des valeurs valides pour les répétitions, le poids, l\'âge et le poids de la personne.');
+    }
+
+    db.set(`score_${message.guild.id}_${user.id}_${mouvement}`, { reps, poids, age, poids_personne });
+    message.channel.send(`Le score de ${user.username} pour ${mouvement} a été mis à jour avec succès.`);
+  } else if (command === 'classement') {
+    const mouvement = args[0];
+
+    if (!mouvementsclassement.includes(mouvement)) {
+      return message.reply(`Veuillez entrer un mouvement valide pour afficher le classement. Exemple : ${mouvementsclassement.join(', ')}`);
+    }
+
+    const scores = [];
+    const members = await message.guild.members.fetch();
+
+    members.forEach((member) => {
+      const userId = member.user.id;
+      const userScore = db.get(`score_${message.guild.id}_${userId}_${mouvement}`) || { reps: 0, poids: 0, age: 0, poids_personne: 0 };
+
+      scores.push({
+        username: member.user.username,
+        ...userScore,
+      });
+    });
+
+    scores.sort((a, b) => b.poids - a.poids || b.reps - a.reps);
+
+    const table = new AsciiTable(`Tableau des meilleurs scores - ${mouvement}`);
+    table.setHeading('Position', 'Pseudo', 'Répétitions', 'Poids (kg)', 'Âge', 'Poids de la personne (kg)');
+
+    scores.slice(0, 10).forEach(({ username, reps, poids, age, poids_personne }, index) => {
+      table.addRow(index + 1, username, reps, poids, age, poids_personne);
+    });
+
+    message.channel.send(`\`\`\`${table.toString()}\`\`\``);
+  }
+});
