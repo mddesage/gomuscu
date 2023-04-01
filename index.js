@@ -1509,8 +1509,9 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
+const { Client, Intents } = require('discord.js');
 const Enmap = require('enmap');
-const { table } = require('table');
+const AsciiTable = require('ascii-table');
 
 const mouvements = [
   'squat',
@@ -1576,16 +1577,14 @@ client.on('messageCreate', async (message) => {
 
     scoreArray.sort((a, b) => b.poids - a.poids || b.reps - a.reps);
 
-    const scoreTable = [
-      ['Position', 'Pseudo', 'Répétitions', 'Poids (kg)', 'Âge', 'Poids de la personne (kg)'],
-    ];
+    const table = new AsciiTable(`Tableau des meilleurs scores - ${mouvement}`);
+    table.setHeading('Position', 'Pseudo', 'Répétitions', 'Poids (kg)', 'Âge', 'Poids de la personne (kg)');
 
     scoreArray.slice(0, 10).forEach(({ username, reps, poids, age, poids_personne }, index) => {
-      scoreTable.push([index + 1, username, reps, poids, age, poids_personne]);
+      table.addRow(index + 1, username, reps, poids, age, poids_personne);
     });
 
-    message.channel.send(`\`\`\`${table(scoreTable)}\`\`\``);
+    message.channel.send(`\`\`\`${table.toString()}\`\`\``);
   }
 });
-
 
