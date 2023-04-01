@@ -1518,15 +1518,39 @@ const CUMULATIVE_RANKINGS = {
   streetlifting: ['squat', 'dips', 'traction', 'muscleup'],
 };
 
-db.serialize(() => {
-  db.run('CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY)');
+async function initDatabase() {
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run('CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY)', (err) => {
+        if (err) reject(err);
+      });
 
-  MOVEMENTS.forEach((movement) => {
-    db.run(
-      `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL)`
-    );
+      const movementPromises = MOVEMENTS.map((movement) => {
+        return new Promise((resolve, reject) => {
+          db.run(
+            `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL)`,
+            (err) => {
+              if (err) reject(err);
+              else resolve();
+            }
+          );
+        });
+      });
+
+      Promise.all(movementPromises)
+        .then(() => resolve())
+        .catch((err) => reject(err));
+    });
   });
-});
+}
+
+initDatabase()
+  .then(() => {
+    console.log('Database initialized.');
+  })
+  .catch((err) => {
+    console.error('Failed to initialize database:', err);
+  });
 client.on('messageCreate', async (message) => {
   if (message.author.bot || !message.content.startsWith(prefix)) return;
 
