@@ -1481,7 +1481,7 @@ client.on('messageCreate', (message) => {
   if (!message.content.startsWith(prefix)) return;
 
   const command = message.content.slice(prefix.length).trim().toLowerCase();
-  if (command === 'moticationnow') {
+  if (command === 'motivationnow') {
       const channel = client.channels.cache.get('1091411626617479210');
       if (channel) {
           const motivationMessagesAleatoire = Math.floor(Math.random() * motivationMessages.length);
