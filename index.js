@@ -1524,12 +1524,15 @@ async function initDatabase() {
       return `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL);`;
     }).join('\n');
 
+    console.log('Creating tables with query:\n', createTablesQuery); // Ajoutez cette ligne
+
     db.exec(createTablesQuery, (err) => {
       if (err) reject(err);
       else resolve();
     });
   });
 }
+
 
   
 client.on('messageCreate', async (message) => {
