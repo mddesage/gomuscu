@@ -1500,3 +1500,115 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
   }
 });
 
+
+const { Client, Intents, MessageEmbed } = require('discord.js');
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./scores.db');
+
+// Création des tables pour chaque mouvement
+const MOVEMENTS = [
+  'squat',
+  'bench',
+  'deadlift',
+  'dips_leste',
+  'traction_leste',
+  'muscle_up_leste',
+];
+
+db.serialize(() => {
+  MOVEMENTS.forEach((movement) => {
+    db.run(
+      `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, reps INTEGER, weight REAL)`
+    );
+  });
+});
+
+client.on('messageCreate', async (message) => {
+  if (message.author.bot || !message.content.startsWith(prefix)) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'ajouter') {
+    if (args.length !== 4) {
+      message.reply('Utilisation incorrecte. Utilisez: !ajouter <mouvement> <reps> <poids>');
+      return;
+    }
+
+    const [movement, reps, weight] = args;
+    if (!MOVEMENTS.includes(movement)) {
+      message.reply(`Mouvement inconnu. Les mouvements valides sont: ${MOVEMENTS.join(', ')}`);
+      return;
+    }
+
+    if (isNaN(reps) || isNaN(weight)) {
+      message.reply('Reps et poids doivent être des nombres.');
+      return;
+    }
+
+    db.run(
+      `INSERT OR REPLACE INTO ${movement} (user_id, reps, weight) VALUES (?, ?, ?)`,
+      [message.author.id, reps, weight],
+      (err) => {
+        if (err) {
+          console.error(err);
+          message.reply('Une erreur est survenue lors de la mise à jour du score.');
+        } else {
+          message.reply(`Score mis à jour pour ${movement}: ${reps} reps et ${weight} kg.`);
+        }
+      }
+    );
+  } else if (command === 'classement') {
+    const movement = args[0];
+    if (!MOVEMENTS.includes(movement)) {
+      message.reply(`Mouvement inconnu. Les mouvements valides sont: ${MOVEMENTS.join(', ')}`);
+      return;
+    }
+
+    db.all(`SELECT * FROM ${movement} ORDER BY weight DESC, reps DESC`, async (err, rows) => {
+      if (err) {
+        console.error(err);
+        message.reply('Une erreur est survenue lors de la récupération des scores.');
+      } else {
+        const embed = new MessageEmbed()
+        .setTitle(`Classement des meilleurs scores pour ${movement}`)
+        .setColor(0x00AE86);
+
+      for (let i = 0; i < rows.length && i < 10; i++) {
+        const user = await client.users.fetch(rows[i].user_id);
+        const rank = i + 1;
+        const username = user.username;
+        const reps = rows[i].reps;
+        const weight = rows[i].weight;
+        embed.addField(`#${rank} ${username}`, `${reps} reps - ${weight} kg`);
+      }
+
+      message.channel.send({ embeds: [embed] });
+    }
+  });
+} else if (command === 'ajoutmouvement') {
+  const movement = args[0];
+  if (!movement) {
+    message.reply('Veuillez indiquer le nom du nouveau mouvement.');
+    return;
+  }
+
+  if (MOVEMENTS.includes(movement)) {
+    message.reply('Ce mouvement existe déjà.');
+    return;
+  }
+
+  db.run(
+    `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, reps INTEGER, weight REAL)`,
+    (err) => {
+      if (err) {
+        console.error(err);
+        message.reply('Une erreur est survenue lors de la création du nouveau mouvement.');
+      } else {
+        MOVEMENTS.push(movement);
+        message.reply(`Mouvement "${movement}" ajouté avec succès.`);
+      }
+    }
+  );
+}
+});
