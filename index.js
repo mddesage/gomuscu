@@ -1448,48 +1448,35 @@ client.on('interactionCreate', async (interaction) => {
   }
 });
 
+
+
 const { motivationMessages } = require('./commands/liste_motivations.js');
 
 client.on('ready', () => {
+
   setInterval(() => {
-    const channel = client.channels.cache.get('1091411626617479210');
-    channel.send(`
-    Bonjour à tous! 
-    Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
-        Voici la phrase du jour :
-          
-    
-               ***${randomMessage}***
-          
-               
-    ||<@&1091411059648241684>||
-          `);
-  }, 1000 * 60 * 60 * 24);
+      const now = new Date();
+      if (now.getHours() === 6 && now.getMinutes() === 0) {
+          const channel = client.channels.cache.get('1091411626617479210');
+          if (channel) {
+              const motivationMessagesAleatoire = Math.floor(Math.random() * motivationMessages.length);
+              channel.send(motivationMessages[motivationMessagesAleatoire]);
+          }
+      }
+  }, 60 * 1000); 
 });
 
-client.on('messageCreate', msg => {
-  if (msg.content === `${prefix}motivationnow`) {
+client.on('messageCreate', (message) => {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix)) return;
 
-    if (!msg.member.roles.cache.has(requiredEmployedRoleId)) {
-      return msg.reply("Désolé, cette commande est réservée aux employés.");
-    }
-
-    const channel = client.channels.cache.get('1091411626617479210');
-    const randomMessage = motivationMessages[Math.floor(Math.random() * motivationMessages.length)];
-    if (channel) {
-      channel.send(`
-Bonjour à tous! 
-Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
-    Voici la phrase du jour :
-      
-
-           ***${randomMessage}***
-      
-           
-||<@&1091411059648241684>||
-      `);
-    } else {
-      console.error('Channel not found.');
-    }
+  const command = message.content.slice(prefix.length).trim().toLowerCase();
+  if (command === 'moticationnow') {
+      const channel = client.channels.cache.get('1091411626617479210');
+      if (channel) {
+          const motivationMessagesAleatoire = Math.floor(Math.random() * motivationMessages.length);
+          channel.send(motivationMessages[motivationMessagesAleatoire]);
+      }
   }
 });
+
