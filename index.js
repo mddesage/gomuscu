@@ -1639,3 +1639,77 @@ client.on('messageCreate', async (message) => {
     message.channel.send({ embeds: [embed] });
   }
 });
+
+
+
+
+
+
+const fs = require("fs");
+
+// Créez un fichier JSON pour stocker les records des membres s'il n'existe pas déjà
+if (!fs.existsSync("records.json")) {
+  fs.writeFileSync("records.json", JSON.stringify({}));
+}
+
+client.on("messageCreate", async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  // Commande pour ajouter un record personnel
+  if (command === "ajouterecord") {
+    if (args.length !== 3) {
+      return message.reply("Utilisation : `!ajouterecord <exercice> <poids> <unité>`");
+    }
+
+    const exercice = args[0];
+    const poids = parseFloat(args[1]);
+    const unite = args[2];
+
+    if (isNaN(poids)) {
+      return message.reply("Le poids doit être un nombre.");
+    }
+
+    const records = JSON.parse(fs.readFileSync("records.json", "utf-8"));
+    const userId = message.author.id;
+
+    if (!records[exercice]) {
+      records[exercice] = {};
+    }
+
+    records[exercice][userId] = { poids, unite, username: message.author.username };
+    fs.writeFileSync("records.json", JSON.stringify(records));
+
+    message.reply(`Ton record pour ${exercice} a été ajouté avec succès : ${poids} ${unite}.`);
+  }
+
+  // Commande pour afficher le classement par exercice
+  if (command === "classement") {
+    if (args.length !== 1) {
+      return message.reply("Utilisation : `!classement <exercice>`");
+    }
+
+    const exercice = args[0];
+    const records = JSON.parse(fs.readFileSync("records.json", "utf-8"));
+
+    if (!records[exercice]) {
+      return message.reply(`Aucun record trouvé pour ${exercice}.`);
+    }
+
+    const classement = Object.values(records[exercice])
+      .sort((a, b) => b.poids - a.poids)
+      .slice(0, 10)
+      .map((record, index) => `${index + 1}. ${record.username}: ${record.poids} ${record.unite}`)
+      .join("\n");
+
+    const classementEmbed = new MessageEmbed()
+      .setColor("#0099ff")
+      .setTitle(`Classement pour ${exercice}`)
+      .setDescription(classement)
+      .setTimestamp();
+
+    message.channel.send({ embeds: [classementEmbed] });
+  }
+});
