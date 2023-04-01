@@ -1456,7 +1456,7 @@ client.on('ready', () => {
 
   setInterval(() => {
       const now = new Date();
-      if (now.getHours() === 9 && now.getMinutes() === 3) {
+      if (now.getHours() === 5 && now.getMinutes() === 0) {
           const channel = client.channels.cache.get('1091411626617479210');
           if (channel) {
               const motivationMessagesAleatoire = Math.floor(Math.random() * motivationMessages.length);
