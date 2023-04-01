@@ -1456,11 +1456,21 @@ client.on('ready', () => {
 
   setInterval(() => {
       const now = new Date();
-      if (now.getHours() === 6 && now.getMinutes() === 0) {
+      if (now.getHours() === 11 && now.getMinutes() === 0) {
           const channel = client.channels.cache.get('1091411626617479210');
           if (channel) {
               const motivationMessagesAleatoire = Math.floor(Math.random() * motivationMessages.length);
-              channel.send(motivationMessages[motivationMessagesAleatoire]);
+              channel.send(`
+              Bonjour à tous! 
+              Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivation !
+                  Voici la phrase du jour :
+                    
+              
+                         ***${motivationMessages[motivationMessagesAleatoire]}***
+                    
+                         
+              ||<@&1091411059648241684>||
+                    `);
           }
       }
   }, 60 * 1000); 
