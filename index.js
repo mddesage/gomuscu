@@ -1503,13 +1503,7 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./scores.db');
-db.serialize(() => {
-  MOVEMENTS.forEach((movement) => {
-    db.run(
-      `CREATE TABLE IF NOT EXISTS ${movement} (user_id TEXT PRIMARY KEY, weight REAL, age INTEGER, user_weight REAL)`
-    );
-  });
-});
+
 const MOVEMENTS = [
   'squat',
   'bench',
