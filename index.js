@@ -1509,7 +1509,6 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
-const { Client, Intents } = require('discord.js');
 const Enmap = require('enmap');
 const AsciiTable = require('ascii-table');
 
