@@ -16,8 +16,6 @@ const client = new Discord.Client({
 client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
 const requiredEmployedRoleId = ("987820202198712449");
-const { EventEmitter } = require('events');
-EventEmitter.defaultMaxListeners = 15;
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
