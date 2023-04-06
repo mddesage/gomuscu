@@ -1322,7 +1322,7 @@ client.on('interactionCreate', async (interaction) => {
   
           const button = new MessageButton()
               .setCustomId('create_ticket_coach')
-              .setLabel('📩 Créer un ticket_coach')
+              .setLabel('📩 Créer un ticket')
               .setStyle('SECONDARY');
   
           const row = new MessageActionRow()
