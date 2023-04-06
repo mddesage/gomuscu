@@ -1196,7 +1196,7 @@ client.on('messageCreate', async (message) => {
 
       const button = new MessageButton()
           .setCustomId('create_ticket_support')
-          .setLabel('📩 Créer un ticket_support')
+          .setLabel('📩 Créer un ticket')
           .setStyle('SECONDARY');
 
       const row = new MessageActionRow()
@@ -1213,7 +1213,9 @@ client.on('interactionCreate', async (interaction) => {
   const guild = interaction.guild;
 
   if (interaction.customId === 'create_ticket_support') {
-      const ticketSupportName = `『✉』𝑇𝑖𝑐𝑘𝑒𝑡_𝑆𝑢𝑝𝑝𝑜𝑟𝑡-${user.username}`;
+    await interaction.reply({ content: 'Création du ticket_support en cours...', ephemeral: true });
+
+    const ticketSupportName = `『✉』𝑇𝑖𝑐𝑘𝑒𝑡_𝑆𝑢𝑝𝑝𝑜𝑟𝑡-${user.username}`;
 
       const overwrites = [
           {
