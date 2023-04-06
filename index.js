@@ -1195,7 +1195,7 @@ client.on('messageCreate', async (message) => {
           .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
 
       const button = new MessageButton()
-          .setCustomId('create_ticket_support')
+          .setCustomId('create_ticket')
           .setLabel('📩 Créer un ticket')
           .setStyle('SECONDARY');
 
