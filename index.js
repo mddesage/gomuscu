@@ -1181,119 +1181,113 @@ client.on('ready', () => {
 
 
 client.on('messageCreate', async (message) => {
-    if (message.author.bot) return;
-    if (!message.content.startsWith(prefix)) return;
+  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix)) return;
 
-    const args = message.content.slice(prefix.length).trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
+  const args = message.content.slice(prefix.length).trim().split(/ +/g);
+  const command = args.shift().toLowerCase();
 
-    if (command === 'tickettoolsupport') {
-        const embed = new MessageEmbed()
-            .setColor('GREEN')
-            .setTitle('Pour créer un ticket, réagissez avec 📩')
-            .setDescription('Mise en relation avec un <@&987820202198712449>.\n ')
-            .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
+  if (command === 'tickettoolsupport') {
+      const embed = new MessageEmbed()
+          .setColor('GREEN')
+          .setTitle('Pour créer un ticket, réagissez avec 📩')
+          .setDescription('Mise en relation avec un <@&987820202198712449>.\n ')
+          .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
 
-        const button = new MessageButton()
-            .setCustomId('create_ticket_support')
-            .setLabel('📩 Créer un ticket')
-            .setStyle('SECONDARY');
+      const button = new MessageButton()
+          .setCustomId('create_ticket_support')
+          .setLabel('📩 Créer un ticket')
+          .setStyle('SECONDARY');
 
-        const row = new MessageActionRow()
-            .addComponents(button);
+      const row = new MessageActionRow()
+          .addComponents(button);
 
-        await message.channel.send({ embeds: [embed], components: [row] });
-    }
+      await message.channel.send({ embeds: [embed], components: [row] });
+  }
 });
 
 client.on('interactionCreate', async (interaction) => {
-    if (!interaction.isButton()) return;
+  if (!interaction.isButton()) return;
 
-    const user = interaction.user;
-    const guild = interaction.guild;
+  const user = interaction.user;
+  const guild = interaction.guild;
 
-    if (interaction.customId === 'create_ticket_support') {
-        const ticketName = `『✉』𝑇𝑖𝑐𝑘𝑒𝑡-${user.username}`;
+  if (interaction.customId === 'create_ticket_support') {
+      const ticketName = `『✉』𝑇𝑖𝑐𝑘𝑒𝑡_𝑠𝑢𝑝𝑝𝑜𝑟𝑡-${user.username}`;
 
-        const overwrites = [
-            {
-                id: guild.id,
-                deny: ['VIEW_CHANNEL'],
-            },
-            {
-                id: user.id,
-                allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
-            },
-            {
-                id: '987820202198712449', 
-                allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
-            },
-        ];
+      const overwrites = [
+          {
+              id: guild.id,
+              deny: ['VIEW_CHANNEL'],
+          },
+          {
+              id: user.id,
+              allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
+          },
+          {
+              id: '987820202198712449', 
+              allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
+          },
+      ];
 
-        guild.channels.create(ticketName, {
-            type: 'GUILD_TEXT',
-            permissionOverwrites: overwrites,
-        }).then(async (channel) => {
-            const ticketEmbed = new MessageEmbed()
-                .setColor('GREEN')
-                .setTitle('Pour fermer le ticket, réagissez avec l\'émote 🔒')
-                .setDescription('Le support technique vous contactera sous peu.\n ')
-                .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
+      guild.channels.create(ticketName, {
+          type: 'GUILD_TEXT',
+          permissionOverwrites: overwrites,
+      }).then(async (channel) => {
+          const ticketEmbed = new MessageEmbed()
+              .setColor('GREEN')
+              .setTitle('Pour fermer le ticket, réagissez avec l\'émote 🔒')
+              .setDescription('Le support technique vous contactera sous peu.\n ')
+              .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
 
-            const closeButton = new MessageButton()
-                .setCustomId('close_ticket_support')
-                .setLabel('🔒 Fermer')
-                .setStyle('SECONDARY');
+          const closeButton = new MessageButton()
+              .setCustomId('close_ticket_support')
+              .setLabel('🔒 Fermer')
+              .setStyle('SECONDARY');
 
-            const ticketRow = new MessageActionRow()
-                .addComponents(closeButton);
+          const ticketRow = new MessageActionRow()
+              .addComponents(closeButton);
 
-                await channel.send({ content: `<@${user.id}> Que pouvons-nous faire pour vous ?`, embeds: [ticketEmbed], components: [ticketRow] });
-              });
-          }
-      
-          if (interaction.customId === 'close_ticket_support') {
-              const continueButton = new MessageButton()
-                  .setCustomId('continue_ticket_support')
-                  .setLabel('Continuer')
-                  .setStyle('SUCCESS');
-      
-              const cancelButton = new MessageButton()
-                  .setCustomId('cancel_ticket_support')
-                  .setLabel('Annuler')
-                  .setStyle('DANGER');
-      
-              const decisionRow = new MessageActionRow()
-                  .addComponents(continueButton, cancelButton);
-      
-              await interaction.reply({ content: 'Êtes-vous sûr de vouloir fermer ce ticket ?', components: [decisionRow] });
-          }
-      
-          if (interaction.customId === 'continue_ticket_support') {
-              const channel = interaction.channel;
-              await interaction.reply({ content: 'Le ticket sera fermé.', ephemeral: true });
-              setTimeout(() => {
-                  channel.delete();
-              }, 2000);
-          }
-      
-          if (interaction.customId === 'cancel_ticket_support') {
-              await interaction.reply({ content: 'Annulation de la fermeture du ticket.', ephemeral: true });
-              setTimeout(async () => {
-                  const fetchedMessage = await interaction.channel.messages.fetch(interaction.message.id);
-                  const updatedRow = new MessageActionRow()
-                      .addComponents(
-                          new MessageButton()
-                              .setCustomId('close_ticket_support')
-                              .setLabel('🔒 Fermer')
-                              .setStyle('SECONDARY')
-                      );
-      
-                  await fetchedMessage.edit({ components: [updatedRow] });
-              }, 2000);
-          }
-      });
+              await channel.send({ content: `<@${user.id}> Que pouvons-nous faire pour vous ?`, embeds: [ticketEmbed], components: [ticketRow] });
+            });
+        }
+    
+        if (interaction.customId === 'close_ticket_support') {
+          const cancelButton = new MessageButton()
+          .setCustomId('cancel_ticket_support')
+          .setLabel('Annuler')
+          .setStyle('DANGER');
 
+      const decisionRow = new MessageActionRow()
+          .addComponents(continueButton, cancelButton);
+
+      await interaction.reply({ content: 'Êtes-vous sûr de vouloir fermer ce ticket ?', components: [decisionRow] });
+  }
+
+  if (interaction.customId === 'continue_ticket_support') {
+      const channel = interaction.channel;
+      await interaction.reply({ content: 'Le ticket sera fermé.', ephemeral: true });
+      setTimeout(() => {
+          channel.delete();
+      }, 2000);
+  }
+
+  if (interaction.customId === 'cancel_ticket_support') {
+      await interaction.reply({ content: 'Annulation de la fermeture du ticket.', ephemeral: true });
+      setTimeout(async () => {
+          const fetchedMessage = await interaction.channel.messages.fetch(interaction.message.id);
+          const updatedRow = new MessageActionRow()
+              .addComponents(
+                  new MessageButton()
+                      .setCustomId('close_ticket_support')
+                      .setLabel('🔒 Fermer')
+                      .setStyle('SECONDARY')
+              );
+
+          await fetchedMessage.edit({ components: [updatedRow] });
+      }, 2000);
+  }
+});
 
 
 
