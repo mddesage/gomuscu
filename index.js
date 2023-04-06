@@ -1195,7 +1195,7 @@ client.on('messageCreate', async (message) => {
             .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
 
         const button = new MessageButton()
-            .setCustomId('create_ticket')
+            .setCustomId('create_ticket_support')
             .setLabel('📩 Créer un ticket')
             .setStyle('SECONDARY');
 
@@ -1212,7 +1212,7 @@ client.on('interactionCreate', async (interaction) => {
     const user = interaction.user;
     const guild = interaction.guild;
 
-    if (interaction.customId === 'create_ticket') {
+    if (interaction.customId === 'create_ticket_support') {
         const ticketName = `『✉』𝑇𝑖𝑐𝑘𝑒𝑡-${user.username}`;
 
         const overwrites = [
@@ -1241,7 +1241,7 @@ client.on('interactionCreate', async (interaction) => {
                 .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
 
             const closeButton = new MessageButton()
-                .setCustomId('close_ticket')
+                .setCustomId('close_ticket_support')
                 .setLabel('🔒 Fermer')
                 .setStyle('SECONDARY');
 
@@ -1252,14 +1252,14 @@ client.on('interactionCreate', async (interaction) => {
               });
           }
       
-          if (interaction.customId === 'close_ticket') {
+          if (interaction.customId === 'close_ticket_support') {
               const continueButton = new MessageButton()
-                  .setCustomId('continue_ticket')
+                  .setCustomId('continue_ticket_support')
                   .setLabel('Continuer')
                   .setStyle('SUCCESS');
       
               const cancelButton = new MessageButton()
-                  .setCustomId('cancel_ticket')
+                  .setCustomId('cancel_ticket_support')
                   .setLabel('Annuler')
                   .setStyle('DANGER');
       
@@ -1269,7 +1269,7 @@ client.on('interactionCreate', async (interaction) => {
               await interaction.reply({ content: 'Êtes-vous sûr de vouloir fermer ce ticket ?', components: [decisionRow] });
           }
       
-          if (interaction.customId === 'continue_ticket') {
+          if (interaction.customId === 'continue_ticket_support') {
               const channel = interaction.channel;
               await interaction.reply({ content: 'Le ticket sera fermé.', ephemeral: true });
               setTimeout(() => {
@@ -1277,14 +1277,14 @@ client.on('interactionCreate', async (interaction) => {
               }, 2000);
           }
       
-          if (interaction.customId === 'cancel_ticket') {
+          if (interaction.customId === 'cancel_ticket_support') {
               await interaction.reply({ content: 'Annulation de la fermeture du ticket.', ephemeral: true });
               setTimeout(async () => {
                   const fetchedMessage = await interaction.channel.messages.fetch(interaction.message.id);
                   const updatedRow = new MessageActionRow()
                       .addComponents(
                           new MessageButton()
-                              .setCustomId('close_ticket')
+                              .setCustomId('close_ticket_support')
                               .setLabel('🔒 Fermer')
                               .setStyle('SECONDARY')
                       );
