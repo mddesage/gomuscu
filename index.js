@@ -1213,7 +1213,7 @@ client.on('interactionCreate', async (interaction) => {
   const guild = interaction.guild;
 
   if (interaction.customId === 'create_ticket_support') {
-    await interaction.reply({ content: 'Votre ticket support a bien été créé', ephemeral: true });
+    await interaction.reply({ content: 'Votre ticket_support a bien été créé', ephemeral: true });
 
     const ticketSupportName = `『✉』𝑇𝑖𝑐𝑘𝑒𝑡_𝑆𝑢𝑝𝑝𝑜𝑟𝑡-${user.username}`;
 
