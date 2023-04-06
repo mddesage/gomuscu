@@ -26,7 +26,7 @@ client.on("ready", () => {
           {
             name: '𝐺𝑂𝑀𝑈𝑆𝐶𝑈',
             type: 'STREAMING', //'PLAYING', 'STREAMING', 'LISTENING', 'WATCHING' ou 'COMPETING'
-            url: 'https://discord.gg/T9fUEbsJrt', // URL facultative pour le type 'STREAMING'
+            url: 'https://discord.gg/T9fUEbsJrt', 
           },
         ],
       });
@@ -1187,7 +1187,7 @@ client.on('messageCreate', async (message) => {
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
-    if (command === 'tickettool') {
+    if (command === 'tickettoolsupport') {
         const embed = new MessageEmbed()
             .setColor('GREEN')
             .setTitle('Pour créer un ticket, réagissez avec 📩')
@@ -1293,6 +1293,133 @@ client.on('interactionCreate', async (interaction) => {
               }, 2000);
           }
       });
+
+
+
+
+
+
+
+
+
+      client.on('messageCreate', async (message) => {
+        if (message.author.bot) return;
+        if (!message.content.startsWith(prefix)) return;
+    
+        const args = message.content.slice(prefix.length).trim().split(/ +/g);
+        const command = args.shift().toLowerCase();
+    
+        if (command === 'tickettoolcoach') {
+            const embed = new MessageEmbed()
+                .setColor('GREEN')
+                .setTitle('Pour créer un ticket, réagissez avec 📩')
+                .setDescription('Mise en relation avec un <@&987820202198712447>.\n ')
+                .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
+    
+            const button = new MessageButton()
+                .setCustomId('create_ticket')
+                .setLabel('📩 Créer un ticket')
+                .setStyle('SECONDARY');
+    
+            const row = new MessageActionRow()
+                .addComponents(button);
+    
+            await message.channel.send({ embeds: [embed], components: [row] });
+        }
+    });
+    
+    client.on('interactionCreate', async (interaction) => {
+        if (!interaction.isButton()) return;
+    
+        const user = interaction.user;
+        const guild = interaction.guild;
+    
+        if (interaction.customId === 'create_ticket') {
+            const ticketName = `『✉』𝑇𝑖𝑐𝑘𝑒𝑡-𝑐𝑜𝑎𝑐ℎ-${user.username}`;
+    
+            const overwrites = [
+                {
+                    id: guild.id,
+                    deny: ['VIEW_CHANNEL'],
+                },
+                {
+                    id: user.id,
+                    allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
+                },
+                {
+                    id: '987820202198712449', 
+                    allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
+                },
+                {
+                  id: '987820202198712447',
+                  allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
+                },
+              
+            ];
+    
+            guild.channels.create(ticketName, {
+                type: 'GUILD_TEXT',
+                permissionOverwrites: overwrites,
+            }).then(async (channel) => {
+                const ticketEmbed = new MessageEmbed()
+                    .setColor('GREEN')
+                    .setTitle('Pour fermer le ticket, réagissez avec l\'émote 🔒')
+                    .setDescription('Un coach vous contactera sous peu.\n ')
+                    .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
+    
+                const closeButton = new MessageButton()
+                    .setCustomId('close_ticket')
+                    .setLabel('🔒 Fermer')
+                    .setStyle('SECONDARY');
+    
+                const ticketRow = new MessageActionRow()
+                    .addComponents(closeButton);
+    
+                    await channel.send({ content: `<@${user.id}> Que pouvons-nous faire pour vous ?`, embeds: [ticketEmbed], components: [ticketRow] });
+                  });
+              }
+          
+              if (interaction.customId === 'close_ticket') {
+                  const continueButton = new MessageButton()
+                      .setCustomId('continue_ticket')
+                      .setLabel('Continuer')
+                      .setStyle('SUCCESS');
+          
+                  const cancelButton = new MessageButton()
+                      .setCustomId('cancel_ticket')
+                      .setLabel('Annuler')
+                      .setStyle('DANGER');
+          
+                  const decisionRow = new MessageActionRow()
+                      .addComponents(continueButton, cancelButton);
+          
+                  await interaction.reply({ content: 'Êtes-vous sûr de vouloir fermer ce ticket ?', components: [decisionRow] });
+              }
+          
+              if (interaction.customId === 'continue_ticket') {
+                  const channel = interaction.channel;
+                  await interaction.reply({ content: 'Le ticket sera fermé.', ephemeral: true });
+                  setTimeout(() => {
+                      channel.delete();
+                  }, 2000);
+              }
+          
+              if (interaction.customId === 'cancel_ticket') {
+                  await interaction.reply({ content: 'Annulation de la fermeture du ticket.', ephemeral: true });
+                  setTimeout(async () => {
+                      const fetchedMessage = await interaction.channel.messages.fetch(interaction.message.id);
+                      const updatedRow = new MessageActionRow()
+                          .addComponents(
+                              new MessageButton()
+                                  .setCustomId('close_ticket')
+                                  .setLabel('🔒 Fermer')
+                                  .setStyle('SECONDARY')
+                          );
+          
+                      await fetchedMessage.edit({ components: [updatedRow] });
+                  }, 2000);
+              }
+          });
 
 
 
@@ -1646,7 +1773,6 @@ client.on('messageCreate', async (message) => {
 
 
 
-// Créez un fichier JSON pour stocker les records des membres s'il n'existe pas déjà
 if (!fs.existsSync("records.json")) {
   fs.writeFileSync("records.json", JSON.stringify({}));
 }
@@ -1657,7 +1783,6 @@ client.on("messageCreate", async (message) => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  // Commande pour ajouter un record personnel
   if (command === "ajouterecord") {
     if (args.length !== 3) {
       return message.reply("Utilisation : `!ajouterecord <exercice> <poids> <unité>`");
@@ -1684,7 +1809,6 @@ client.on("messageCreate", async (message) => {
     message.reply(`Ton record pour ${exercice} a été ajouté avec succès : ${poids} ${unite}.`);
   }
 
-  // Commande pour afficher le classement par exercice
   if (command === "classement") {
     if (args.length !== 1) {
       return message.reply("Utilisation : `!classement <exercice>`");
