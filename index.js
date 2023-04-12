@@ -367,40 +367,43 @@ const createRemoveButton = () => {
 };
 
 const handleInteraction = async (interaction) => {
-    if (interaction.isSelectMenu() && interaction.customId.startsWith('departement_menu')) {
-        const choice = interaction.values[0];
-        const departementNumber = choice.split('_')[1];
-        const roleName = `🧭┃Département ${departementNumber}`;
-        const role = interaction.guild.roles.cache.find(r => r.name === roleName);
+  if (interaction.isSelectMenu() && interaction.customId.startsWith('departement_menu')) {
+      const choice = interaction.values[0];
+      const departementNumber = choice.split('_')[1];
+      const roleName = `🧭┃Département ${departementNumber}`;
+      const role = interaction.guild.roles.cache.find(r => r.name === roleName);
 
-        if (!role) {
-            await interaction.reply({ content: `Le rôle **${roleName}** n'a pas été trouvé.`, ephemeral: true });
-            return;
-        }
+      if (!role) {
+          await interaction.reply({ content: `Le rôle **${roleName}** n'a pas été trouvé.`, ephemeral: true });
+          return;
+      }
 
-        try {
-            await interaction.member.roles.add(role);
-            await interaction.reply({ content: `Le rôle **${roleName}** vous a été attribué.`, ephemeral: true });
-        } catch (error) {
-            console.error(`Impossible d'attribuer le rôle en raison de: **${error}**`);
-            await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
-        }
-    } else if (interaction.isButton() && interaction.customId === 'departement_remove_departements') {
-        const departementRoles = interaction.member.roles.cache.filter(role => role.name.startsWith('🧭┃Département'));
-        const removedRoles = [];
+      try {
+          await interaction.member.roles.add(role);
+          const membersWithRole = interaction.guild.members.cache.filter(member => member.roles.cache.has(role.id));
+          const memberNames = membersWithRole.map(member => member.user.username);
+          await interaction.reply({ content: `Le rôle **${roleName}** vous a été attribué. Les membres suivants ont également ce rôle : ${memberNames.join(', ')}`, ephemeral: true });
+      } catch (error) {
+          console.error(`Impossible d'attribuer le rôle en raison de: **${error}**`);
+          await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
+      }
+  } else if (interaction.isButton() && interaction.customId === 'departement_remove_departements') {
+      const departementRoles = interaction.member.roles.cache.filter(role => role.name.startsWith('🧭┃Département'));
+      const removedRoles = [];
 
-        for (const role of departementRoles.values()) {
-            try {
-                await interaction.member.roles.remove(role);
-                removedRoles.push(role.name);
-            } catch (error) {
-                console.error(`Impossible de retirer le rôle en raison de: **${error}**`);
-            }
-        }
+      for (const role of departementRoles.values()) {
+          try {
+              await interaction.member.roles.remove(role);
+              removedRoles.push(role.name);
+          } catch (error) {
+              console.error(`Impossible de retirer le rôle en raison de: **${error}**`);
+          }
+      }
 
-            await interaction.reply({ content: `Le(s) rôle(s) suivant(s) vous ont été retiré(s) : **${removedRoles.join('**, **')}**`, ephemeral: true });
-    }
+      await interaction.reply({ content: `Le(s) rôle(s) suivant(s) vous ont été retiré(s) : **${removedRoles.join('**, **')}**`, ephemeral: true });
+  }
 };
+
 
 client.on("messageCreate", async message => {
     if (message.content === "ENVOIE_LES_MENUS_POUR_CHOISIR_SON_DÉPARTEMENT") {
