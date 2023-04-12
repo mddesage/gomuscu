@@ -182,7 +182,7 @@ client.on("messageCreate", async message => {
                         Vous répond à partir de chat GPT.
                         
                         ${prefix}**musique** *[lien YouTube]*
-                        **(ACCTUELLEMENT INDISPONIBLE)**`)
+                        **(ACTUELLEMENT INDISPONIBLE)**`)
                         .setTitle("Liste des commandes GLOBALES");
                     message.reply({ embeds: [embed] });
                     break;
