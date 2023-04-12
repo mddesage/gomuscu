@@ -1847,3 +1847,44 @@ client.on("messageCreate", async (message) => {
     message.channel.send({ embeds: [classementEmbed] });
   }
 });
+
+
+
+
+const performances = new Map();
+
+client.on('message', async message => {
+  if (message.author.bot) return;
+  if (!message.content.startsWith(prefix)) return;
+
+  const [command, ...args] = message.content
+    .trim()
+    .substring(prefix.length)
+    .split(/\s+/);
+
+  if (command === 'ajouter-performance') {
+    const mouvement = args[0];
+    const poids = args[1];
+
+    if (!mouvement || !poids) {
+      return message.reply('Veuillez fournir le mouvement et le poids maximal. Exemple : `!ajouter-performance squat 100`');
+    }
+
+    performances.set(`${message.author.id}-${mouvement}`, poids);
+    message.reply(`Performance pour ${mouvement} mise à jour avec succès : ${poids} kg`);
+  } else if (command === 'performance') {
+    const mouvement = args[0];
+
+    if (!mouvement) {
+      return message.reply('Veuillez fournir le mouvement. Exemple : `!performance squat`');
+    }
+
+    const performance = performances.get(`${message.author.id}-${mouvement}`);
+
+    if (!performance) {
+      message.reply(`Aucune performance trouvée pour ${mouvement}. Utilisez la commande \`!ajouter-performance\` pour en ajouter une.`);
+    } else {
+      message.reply(`Votre performance maximale pour ${mouvement} est de ${performance} kg.`);
+    }
+  }
+});
