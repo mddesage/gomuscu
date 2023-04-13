@@ -1847,3 +1847,258 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 //    message.channel.send({ embeds: [classementEmbed] });
 //  }
 //});
+
+
+
+const ytdl = require("ytdl-core");
+const ytSearch = require("yt-search");
+const queue = new Map();
+
+client.on("messageCreate", async (message) => {
+  if (!message.guild || message.author.bot || !message.content.startsWith(prefix)) return;
+
+  const args = message.content.slice(prefix.length).split(/ +/);
+  const command = args.shift().toLowerCase();
+  const serverQueue = queue.get(message.guild.id);
+
+  switch (command) {
+    case "musiquestart":
+      await execute(message, args, serverQueue);
+      break;
+    case "musiquepause":
+      pause(serverQueue);
+      break;
+    case "musiquestop":
+      stop(serverQueue);
+      break;
+    case "musiquereprend":
+      resume(serverQueue);
+      break;
+    case "musiquerredémarrer":
+    case "musiquerredemarrer":
+      restart(serverQueue);
+      break;
+    case "musiqueajoute":
+      await addToQueue(message, args, serverQueue);
+      break;
+    case "musiqueattente":
+      showQueue(message, serverQueue);
+      break;
+    case "musiquesuppr":
+    case "musiquesupprime":
+      removeFromQueue(args, serverQueue, message);
+      break;
+    case "musiquesuivante":
+      skip(serverQueue);
+      break;
+    case "musiquedirect":
+      playDirect(message, args, serverQueue);
+      break;
+    case "musiqueaide":
+    case "musiquehelp":
+      showHelp(message);
+      break;
+    default:
+      message.channel.send("Commande non reconnue.");
+  }
+});
+
+async function execute(message, args, serverQueue) {
+  const voiceChannel = message.member.voice.channel;
+
+  if (!voiceChannel) {
+    return message.channel.send("Vous devez être dans un salon vocal pour jouer de la musique.");
+  }
+
+  const permissions = voiceChannel.permissionsFor(message.client.user);
+
+  if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
+    return message.channel.send("J'ai besoin des permissions pour rejoindre et parler dans le salon vocal.");
+  }
+
+  const songInfo = await ytdl.getInfo(args[0]);
+  const song = {
+    title: songInfo.videoDetails.title,
+    url: songInfo.videoDetails.video_url,
+  };
+
+  if (!serverQueue) {
+    const queueConstruct = {
+      textChannel: message.channel,
+      voiceChannel: voiceChannel,
+      connection: null,
+      songs: [],
+      volume: 5,
+      playing: true,
+    };
+
+    queue.set(message.guild.id, queueConstruct);
+    queueConstruct.songs.push(song);
+
+    try {
+      const connection = await voiceChannel.join();
+      queueConstruct.connection = connection;
+      play(message.guild, queueConstruct.songs[0]);
+    } catch (err) {
+      console.log(err);
+      queue.delete(message.guild.id);
+      return message.channel.send(err.message || "Une erreur est survenue.");
+    }
+  } else {
+    serverQueue.songs.push(song);
+    return message.channel.send(`**${song.title}** a été ajouté à la file d'attente.`);
+  }
+}
+
+function play(guild, song) {
+  const serverQueue = queue.get(guild.id);
+  if (!song) {
+    serverQueue.voiceChannel.leave();
+    queue.delete(guild.id);
+    return;
+  }
+
+  const dispatcher = serverQueue.connection
+    .play(ytdl(song.url, { filter: "audioonly", quality: "highestaudio", highWaterMark: 1 << 25 }))
+    .on("finish", () => {
+      serverQueue.songs.shift();
+      play(guild, serverQueue.songs[0]);
+    })
+    .on("error", (error) => console.error(error));
+
+  dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+  serverQueue.textChannel.send(`En train de jouer : **${song.title}**`);
+}
+
+function pause(serverQueue) {
+  if (!serverQueue || !serverQueue.playing) {
+    return;
+  }
+  serverQueue.connection.dispatcher.pause();
+  serverQueue.playing = false;
+}
+
+function resume(serverQueue) {
+  if (!serverQueue || serverQueue.playing) {
+    return;
+  }
+  serverQueue.connection.dispatcher.resume();
+  serverQueue.playing = true;
+}
+
+function stop(serverQueue) {
+  if (!serverQueue) {
+    return;
+  }
+  serverQueue.songs = [];
+  serverQueue.connection.dispatcher.end();
+}
+
+function restart(serverQueue) {
+  if (!serverQueue || !serverQueue.playing) {
+    return;
+  }
+  serverQueue.connection.dispatcher.end();
+  play(serverQueue.textChannel.guild, serverQueue.songs[0]);
+}
+
+async function addToQueue(message, args, serverQueue) {
+  if (!serverQueue) {
+    return message.channel.send("Aucune musique n'est en cours de lecture.");
+  }
+
+  const songInfo = await ytdl.getInfo(args[0]);
+  const song = {
+    title: songInfo.videoDetails.title,
+    url: songInfo.videoDetails.video_url,
+  };
+
+  serverQueue.songs.push(song);
+  message.channel.send(`**${song.title}** a été ajouté à la file d'attente.`);
+}
+
+function showQueue(message, serverQueue) {
+  if (!serverQueue || serverQueue.songs.length === 0) {
+    return message.channel.send("Aucune musique dans la file d'attente.");
+  }
+
+  let queueMessage = "File d'attente :\n";
+  serverQueue.songs.forEach((song, index) => {
+    queueMessage += `${index + 1}. ${song.title}\n`;
+  });
+
+  message.channel.send(queueMessage);
+}
+
+function removeFromQueue(args, serverQueue, message) {
+  if (!serverQueue || serverQueue.songs.length === 0) {
+    return;
+  }
+
+  const indexToRemove = parseInt(args[0]) - 1;
+  if (indexToRemove < 0 || indexToRemove >= serverQueue.songs.length) {
+    return;
+  }
+
+  const removedSong = serverQueue.songs.splice(indexToRemove, 1)[0];
+  message.channel.send(`**${removedSong.title}** a été supprimé de la file d'attente.`);
+}
+
+function skip(serverQueue) {
+  if (!serverQueue) {
+    return;
+  }
+  serverQueue.connection.dispatcher.end();
+}
+
+async function playDirect(message, args, serverQueue) {
+}
+
+function showHelp(message) {
+  const helpEmbed = new MessageEmbed()
+    .setColor("RED")
+    .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
+    .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+    .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
+    setTitle("Liste des commandes MUSIQUE")
+    .setDescription(`
+      - ${prefix}**musiquestart** *[lien YouTube]*
+      Jouer une musique
+
+      - ${prefix}**musiquepause**
+      Mettre en pause la musique
+
+      - ${prefix}**musiquestop**
+      Arrêter la musique et déconnecter le bot du salon vocal
+
+      - ${prefix}**musiquereprend**
+      Reprendre la musique
+
+      - ${prefix}**musiquerredemarrer**
+      Redémarrer la musique depuis le début
+
+      - ${prefix}**musiqueajoute** *[lien YouTube]**
+      Ajouter une musique à la file d'attente
+
+      - ${prefix}**musiqueattente**
+      Afficher la liste d'attente
+      
+      - ${prefix}**musiquesuppr** *[numéro]*
+      Supprimer une musique de la file d'attente
+
+      - ${prefix}**musiquesuivante**
+      Passer à la musique suivante
+
+      - ${prefix}**musiquedirect** *[lien YouTube]*
+      Passer directement à la musique du lien
+
+      - ${prefix}**musiquedirect** *[numéro]*
+      Passer directement à la musique du numéro de la file d'attente
+
+      - ${prefix}**musiquehelp**
+      Afficher cette liste de commandes
+    `);
+
+  message.channel.send({ embeds: [helpEmbed] });
+}
+
