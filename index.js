@@ -382,7 +382,13 @@ const handleInteraction = async (interaction) => {
           await interaction.member.roles.add(role);
           const membersWithRole = interaction.guild.members.cache.filter(member => member.roles.cache.has(role.id));
           const memberMentions = membersWithRole.map(member => `<@${member.user.id}>`);
-          await interaction.reply({ content: `Le rôle **${roleName}** vous a été attribué. \nLes adhérents suivants sont du même département : ${memberMentions.join(', ')}`, ephemeral: true });
+          await interaction.reply({ content: `Le rôle **${roleName}** vous a été attribué. \nLes adhérents suivants sont du même département : ${memberMentions.join(', ')}`, ephemeral: true })
+          .then(reply => {
+            setTimeout(() => {
+              reply.delete();
+            }, 10000);
+          })
+          .catch(console.error);
       } catch (error) {
           console.error(`Impossible d'attribuer le rôle en raison de: **${error}**`);
           await interaction.reply({ content: "Une erreur s'est produite lors de l'attribution du rôle.", ephemeral: true });
