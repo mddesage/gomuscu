@@ -1549,40 +1549,48 @@ client.on('messageCreate', async (message) => {
 
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
-  
+
   if (message.content === 'ENVOIE_LE_BOUTON_POUR_AJOUTER_MOTIVATION') {
-      if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
-          return message.reply("Désolé, cette commande est réservée aux employés.");
-      }
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
 
-      const roleToAddId = '1091411059648241684';
+    const roleToAddId = '1091411059648241684';
 
-      const embed = new MessageEmbed()
-          .setTitle('Appuyer sur le bouton pour ajouter')
-          .setDescription(`<@&${roleToAddId}> \n\n Ceci enverra dans un salon spécifique un message de motivation tout les matins !`)
-          .setColor('#774466')
-          .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
-          
+    const embed = new MessageEmbed()
+      .setTitle('Appuyer sur le bouton pour ajouter')
+      .setDescription(`<@&${roleToAddId}> \n\n Ceci enverra dans un salon spécifique un message de motivation tout les matins !`)
+      .setColor('#774466')
+      .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.', 'https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png');
 
-      const button = new MessageButton()
-          .setCustomId('add_motivation_role')
-          .setLabel('💪Motivation')
-          .setStyle('PRIMARY');
+    const addButton = new MessageButton()
+      .setCustomId('add_motivation_role')
+      .setLabel('💪Motivation')
+      .setStyle('PRIMARY');
 
-      const row = new MessageActionRow()
-          .addComponents(button);
+    const removeButton = new MessageButton()
+      .setCustomId('remove_motivation_role')
+      .setLabel('⛔Retirer')
+      .setStyle('DANGER');
 
-      message.channel.send({ embeds: [embed], components: [row] });
+    const row = new MessageActionRow()
+      .addComponents(addButton, removeButton);
+
+    message.channel.send({ embeds: [embed], components: [row] });
   }
 });
 
 client.on('interactionCreate', async (interaction) => {
   if (!interaction.isButton()) return;
-  if (interaction.customId === 'add_motivation_role') {
-      const roleToAddId = '1091411059648241684';
 
-      await interaction.member.roles.add(roleToAddId);
-      await interaction.reply({ content: 'Le rôle a été ajouté avec succès !', ephemeral: true });
+  const roleToAddId = '1091411059648241684';
+
+  if (interaction.customId === 'add_motivation_role') {
+    await interaction.member.roles.add(roleToAddId);
+    await interaction.reply({ content: 'Le rôle a été ajouté avec succès !', ephemeral: true });
+  } else if (interaction.customId === 'remove_motivation_role') {
+    await interaction.member.roles.remove(roleToAddId);
+    await interaction.reply({ content: 'Le rôle a été retiré avec succès !', ephemeral: true });
   }
 });
 
