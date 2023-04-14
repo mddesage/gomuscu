@@ -1669,19 +1669,25 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 const roleIdNouveau = '1096405141898407997';
-client.on('guildMemberAdd', async (member) => {
+client.on('guildMemberUpdate', async (oldMember, newMember) => {
   try {
-    await member.roles.add(roleIdNouveau);
-    console.log(`Rôle ajouté à ${member.user.tag}`);
+    const hadRoleBefore = oldMember.roles.cache.has('987820202198712445');
+    const hasRoleNow = newMember.roles.cache.has('987820202198712445');
 
-    setTimeout(async () => {
-      await member.roles.remove(roleIdNouveau);
-      console.log(`Rôle retiré de ${member.user.tag}`);
-    }, 86400000);
+    if (!hadRoleBefore && hasRoleNow) {
+      await newMember.roles.add(roleIdNouveau);
+      console.log(`Rôle ajouté à ${newMember.user.tag}`);
+
+      setTimeout(async () => {
+        await newMember.roles.remove(roleIdNouveau);
+        console.log(`Rôle retiré de ${newMember.user.tag}`);
+      }, 86400000);
+    }
   } catch (error) {
     console.error(`Erreur lors de l'ajout/la suppression du rôle : ${error}`);
   }
 });
+
 
 
 
