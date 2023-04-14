@@ -1586,13 +1586,22 @@ client.on('interactionCreate', async (interaction) => {
   const roleToAddId = '1091411059648241684';
 
   if (interaction.customId === 'add_motivation_role') {
-    await interaction.member.roles.add(roleToAddId);
-    await interaction.reply({ content: 'Le rôle a été ajouté avec succès !', ephemeral: true });
+    if (interaction.member.roles.cache.has(roleToAddId)) {
+      await interaction.reply({ content: 'Le rôle est déjà attribué.', ephemeral: true });
+    } else {
+      await interaction.member.roles.add(roleToAddId);
+      await interaction.reply({ content: 'Le rôle a été ajouté avec succès !', ephemeral: true });
+    }
   } else if (interaction.customId === 'remove_motivation_role') {
-    await interaction.member.roles.remove(roleToAddId);
-    await interaction.reply({ content: 'Le rôle a été retiré avec succès !', ephemeral: true });
+    if (!interaction.member.roles.cache.has(roleToAddId)) {
+      await interaction.reply({ content: 'Le rôle n\'est déjà pas attribué.', ephemeral: true });
+    } else {
+      await interaction.member.roles.remove(roleToAddId);
+      await interaction.reply({ content: 'Le rôle a été retiré avec succès !', ephemeral: true });
+    }
   }
 });
+
 
 
 
