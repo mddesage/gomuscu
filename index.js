@@ -1657,39 +1657,6 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
-//ooooo      ooo   .oooooo.   ooooo     ooo oooooo     oooo oooooooooooo       .o.       ooooo     ooo 
-//`888b.     `8'  d8P'  `Y8b  `888'     `8'  `888.     .8'  `888'     `8      .888.      `888'     `8' 
-// 8 `88b.    8  888      888  888       8    `888.   .8'    888             .8"888.      888       8  
-// 8   `88b.  8  888      888  888       8     `888. .8'     888oooo8       .8' `888.     888       8  
-// 8     `88b.8  888      888  888       8      `888.8'      888    "      .88ooo8888.    888       8  
-// 8       `888  `88b    d88'  `88.    .8'       `888'       888       o  .8'     `888.   `88.    .8'  
-//o8o        `8   `Y8bood8P'     `YbodP'          `8'       o888ooooood8 o88o     o8888o    `YbodP'    
-
-
-
-
-const roleIdNouveau = '1096405141898407997';
-client.on('guildMemberUpdate', async (oldMember, newMember) => {
-  try {
-    const hadRoleBefore = oldMember.roles.cache.has('987820202198712445');
-    const hasRoleNow = newMember.roles.cache.has('987820202198712445');
-
-    if (!hadRoleBefore && hasRoleNow) {
-      await newMember.roles.add(roleIdNouveau);
-      console.log(`Rôle ajouté à ${newMember.user.tag}`);
-
-      setTimeout(async () => {
-        await newMember.roles.remove(roleIdNouveau);
-        console.log(`Rôle retiré de ${newMember.user.tag}`);
-      }, 86400000);
-    }
-  } catch (error) {
-    console.error(`Erreur lors de l'ajout/la suppression du rôle : ${error}`);
-  }
-});
-
-
-
 
 
 //const fs = require('fs');
