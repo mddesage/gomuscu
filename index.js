@@ -1712,7 +1712,7 @@ client.on('messageCreate', async (message) => {
     const departmentNumber = args[0];
 
     if (!departmentNumber) {
-      return message.reply('Veuillez fournir un numéro de département.');
+      return message.reply('Veuillez fournir un numéro de département.', { ephemeral: true });
     }
 
     const departmentRole = message.guild.roles.cache.find(
@@ -1720,7 +1720,11 @@ client.on('messageCreate', async (message) => {
     );
 
     if (!departmentRole) {
-      return message.reply(`Le rôle "🧭┃Département ${departmentNumber}" n'a pas été trouvé.`);
+      if (departmentNumber.length === 1) {
+        return message.reply("Il faut 2 chiffres pour le numéro du département. \nExemple : 1 → 01.", { ephemeral: true });
+      } else {
+        return message.reply(`Le rôle "🧭┃Département ${departmentNumber}" n'a pas été trouvé.`, { ephemeral: true });
+      }
     }
 
     const membersWithRole = message.guild.members.cache.filter((member) =>
