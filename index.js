@@ -1659,6 +1659,54 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
+client.on('messageCreate', async (message) => {
+  if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'qui') {
+    const departmentNumber = args[0];
+
+    if (!departmentNumber) {
+      return message.reply('Veuillez fournir un numéro de département.');
+    }
+
+    const departmentRole = message.guild.roles.cache.find(
+      (role) => role.name === `🧭┃Département ${departmentNumber}`
+    );
+
+    if (!departmentRole) {
+      return message.reply(`Le rôle "🧭┃Département ${departmentNumber}" n'a pas été trouvé.`);
+    }
+
+    const membersWithRole = message.guild.members.cache.filter((member) =>
+      member.roles.cache.has(departmentRole.id)
+    );
+
+    if (membersWithRole.size === 0) {
+      return message.reply({
+        content: `Aucun membre n'a le rôle "🧭┃Département ${departmentNumber}".`,
+        ephemeral: true,
+      });
+    }
+
+    const memberList = membersWithRole.map((member) => `- ${member.displayName}`).join('\n');
+
+    const embed = new MessageEmbed()
+      .setTitle(`Membres ayant le rôle "🧭┃Département ${departmentNumber}":`)
+      .setDescription(memberList)
+      .setColor('RANDOM');
+
+    message.reply({ embeds: [embed], ephemeral: true });
+  }
+});
+
+
+
+
+
+
 //const fs = require('fs');
 //const FILENAME = './scores.json';
 //const MOVEMENTS = [
