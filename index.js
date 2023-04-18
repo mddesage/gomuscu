@@ -162,11 +162,6 @@ client.on("messageCreate", async message => {
 
                         Le prefix de <@994859660727291985> est **sa mention**.
                         
-                         / ____|/ __ \  |  \/  | |  | |/ ____|/ ____| |  | |
-                        | |  __| |  | | | \  / | |  | | (___ | |    | |  | |
-                        | | |_ | |  | | | |\/| | |  | |\___ \| |    | |  | |
-                        | |__| | |__| | | |  | | |__| |____) | |____| |__| |
-                         \_____|\____/  |_|  |_|\____/|_____/ \_____|\____/ 
                         
                         ${prefix}*[le salon que vous cherchez]*
                         Vous envoie bouton cliquable du salon demandé.
