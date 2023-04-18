@@ -480,7 +480,7 @@ client.on('messageCreate', async (message) => {
     const memberList = membersWithRole.map((member) => `- ${member}`).join('\n');
 
     const embed = new MessageEmbed()
-      .setTitle(`Membres ayant le rôle "🧭┃Département ${departmentNumber}":`)
+      .setTitle(`Membres ayant le rôle "🧭┃Département ${departmentNumber}" :`)
       .setDescription(memberList)
       .setColor('RANDOM');
 
