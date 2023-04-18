@@ -1921,29 +1921,79 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 //  }
 //});
 
-client.on('messageCreate', message => {
-  if (message.content === 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE') {
-    const disciplineSelect = new MessageActionRow()
-      .addComponents(
-        new MessageSelectMenu()
-          .setCustomId('disciplineSelect')
-          .setPlaceholder('Choisis ta discipline')
-          .addOptions([
-            { label: 'Body Building', value: 'bodyBuilding' },
-            { label: 'Power Lifting', value: 'powerLifting' },
-            { label: 'Street Workout', value: 'streetWorkout' },
-            { label: 'Street Lifting', value: 'streetLifting' },
-            { label: 'Haltérophilie', value: 'halterophilie' },
-            { label: 'Cross Fit', value: 'crossFit' },
-            { label: 'Fitness', value: 'fitness' }
-          ])
-      );
+const { MessageActionRow, MessageSelectMenu, MessageEmbed } = require('discord.js');
 
-    const disciplineEmbed = new MessageEmbed()
-      .setTitle('🏋️ Choisis ta discipline grâce au menu ci-dessous 🏋️')
-      .setColor('#0000FF')
-      .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.');
+module.exports = {
+    name: 'salle',
+    description: 'Permet de choisir une salle de sport',
+    execute(message) {
+        const salleOptions = [
+            { label: 'Basic Fit', value: 'basic_fit', role: '987821823607570462' },
+            { label: 'Fitness Park', value: 'fitness_park', role: '987822236335480842' },
+            { label: 'On Air', value: 'on_air', role: '1097948959907000422' },
+            { label: 'Orange Bleue', value: 'orange_bleue', role: '1097947839134441492' },
+            { label: 'Keep Cool', value: 'keep_cool', role: '1097947941823590491' },
+            { label: 'Salle Power Lifting', value: 'salle_power_lifting', role: '1097948044474990752' },
+            { label: 'Salle Cross Fit', value: 'salle_cross_fit', role: '1097948253254852738' },
+            { label: 'Salle Indépandente', value: 'salle_independente', role: '1097948278097723462' },
+            { label: 'Park Street', value: 'park_street', role: '1097948489696161834' },
+            { label: 'Home Gym', value: 'home_gym', role: '987822447967473734' },
+        ];
 
-    message.channel.send({ embeds: [disciplineEmbed], components: [disciplineSelect] });
-  }
-});
+        const selectMenu = new MessageSelectMenu()
+            .setCustomId('salle_menu')
+            .setPlaceholder('Choisis ta salle de sport')
+            .addOptions(salleOptions);
+
+        const row = new MessageActionRow().addComponents(selectMenu);
+
+        const embed = new MessageEmbed()
+            .setTitle('🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰')
+            .setColor('#0000FF')
+            .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
+
+        message.channel.send({ embeds: [embed], components: [row] });
+
+        const filter = (interaction) => interaction.customId === 'salle_menu';
+
+        const collector = message.channel.createMessageComponentCollector({ filter, time: 15000 });
+
+        collector.on('collect', (interaction) => {
+            const selectedOption = salleOptions.find((option) => option.value === interaction.values[0]);
+
+            if (selectedOption) {
+                const role = message.guild.roles.cache.get(selectedOption.role);
+
+                if (role) {
+                    const member = message.member;
+
+                    if (member.roles.cache.has(role.id)) {
+                        interaction.reply({ content: 'Vous avez déjà ce rôle.', ephemeral: true });
+                    } else {
+                        member.roles.add(role).then(() => {
+                            interaction.reply({
+                                content: `Le rôle ${role.name} vous a été attribué.`,
+                                ephemeral: true,
+                            });
+                        });
+                    }
+                } else {
+                    interaction.reply({
+                        content: 'Une erreur est survenue. Veuillez réessayer plus tard.',
+                        ephemeral: true,
+                    });
+                }
+            }
+
+            collector.stop();
+        });
+
+        collector.on('end', () => {
+          row.components[0].setDisabled(true);
+          message.channel.send({
+              content: 'Le menu a expiré. Veuillez utiliser la commande à nouveau pour choisir une salle de sport.',
+              components: [row],
+          });
+      });
+  },
+};
