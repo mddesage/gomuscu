@@ -1920,3 +1920,30 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 //    message.channel.send({ embeds: [classementEmbed] });
 //  }
 //});
+
+client.on('messageCreate', message => {
+  if (message.content === 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE') {
+    const disciplineSelect = new MessageActionRow()
+      .addComponents(
+        new MessageSelectMenu()
+          .setCustomId('disciplineSelect')
+          .setPlaceholder('Choisis ta discipline')
+          .addOptions([
+            { label: 'Body Building', value: 'bodyBuilding' },
+            { label: 'Power Lifting', value: 'powerLifting' },
+            { label: 'Street Workout', value: 'streetWorkout' },
+            { label: 'Street Lifting', value: 'streetLifting' },
+            { label: 'Haltérophilie', value: 'halterophilie' },
+            { label: 'Cross Fit', value: 'crossFit' },
+            { label: 'Fitness', value: 'fitness' }
+          ])
+      );
+
+    const disciplineEmbed = new MessageEmbed()
+      .setTitle('🏋️ Choisis ta discipline grâce au menu ci-dessous 🏋️')
+      .setColor('#0000FF')
+      .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.');
+
+    message.channel.send({ embeds: [disciplineEmbed], components: [disciplineSelect] });
+  }
+});
