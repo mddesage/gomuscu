@@ -1921,3 +1921,66 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 //  }
 //});
 
+
+
+module.exports = {
+  name: 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE',
+  description: 'Envoie un menu pour choisir sa salle de sport.',
+  execute(message) {
+      const gymRoles = [
+          '987821823607570462', // Basic Fit
+          '987822236335480842', // Fitness Park
+          '1097948959907000422', // On Air
+          '1097947839134441492', // Orange Bleue
+          '1097947941823590491', // Keep Cool
+          '1097948044474990752', // Salle Power Lifting
+          '1097948253254852738', // Salle Cross Fit
+          '1097948278097723462', // Salle Indépendante
+          '1097948489696161834', // Park Street
+          '987822447967473734'  // Home Gym
+      ];
+
+      const embed = new MessageEmbed()
+          .setTitle('🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰')
+          .setColor('#0000FF')
+          .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
+
+      const selectMenu = new MessageSelectMenu()
+          .setCustomId('choose_gym')
+          .setPlaceholder('Choisis une salle de sport')
+          .addOptions([
+              { label: 'Basic Fit', value: 'basic_fit' },
+              { label: 'Fitness Park', value: 'fitness_park' },
+              { label: 'On Air', value: 'on_air' },
+              { label: 'Orange Bleue', value: 'orange_bleue' },
+              { label: 'Keep Cool', value: 'keep_cool' },
+              { label: 'Salle Power Lifting', value: 'salle_power_lifting' },
+              { label: 'Salle Cross Fit', value: 'salle_cross_fit' },
+              { label: 'Salle Indépendante', value: 'salle_independante' },
+              { label: 'Park Street', value: 'park_street' },
+              { label: 'Home Gym', value: 'home_gym' }
+          ]);
+
+      const row = new MessageActionRow().addComponents(selectMenu);
+
+      message.reply({ embeds: [embed], components: [row] });
+
+      const filter = (interaction) => interaction.customId === 'choose_gym';
+      const collector = message.channel.createMessageComponentCollector({ filter, time: 15000 });
+
+      collector.on('collect', (interaction) => {
+          const choice = interaction.values[0];
+
+          const role = gymRoles[selectMenu.options.findIndex(opt => opt.value === choice)];
+
+          interaction.reply({ content: `Le rôle <@&${role}> vous a été attribué.`, ephemeral: true });
+          interaction.member.roles.add(role);
+      });
+
+      collector.on('end', (collected, reason) => {
+          if (reason === 'time') {
+              message.channel.send({ content: 'Temps écoulé. Veuillez recommencer la commande.', ephemeral: true });
+          }
+      });
+  }
+};
