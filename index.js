@@ -166,6 +166,9 @@ client.on("messageCreate", async message => {
                         ${prefix}*[le salon que vous cherchez]*
                         Vous envoie bouton cliquable du salon demandé.
                         
+                        ${prefix}**quidu** *[numéro du département]*
+                        Vous envoie le nom des personnes ayant le rôle.
+
                         ${prefix}**exerciceaide**
                         Vous envoie comment utiliser les commandes sur *exercice*.
                         
