@@ -462,7 +462,7 @@ client.on('messageCreate', async (message) => {
       if (departmentNumber.length === 1) {
         return message.reply("Il faut **2 chiffres** pour le numéro du département. \nExemple : **1 → 01**.", { ephemeral: true });
       } else {
-        return message.reply(`Le rôle **"🧭┃Département ${departmentNumber}"** n'a pas été trouvé.`, { ephemeral: true });
+        return message.reply(`Le rôle "🧭┃Département **${departmentNumber}**" n'a pas été trouvé.`, { ephemeral: true });
       }
     }
 
