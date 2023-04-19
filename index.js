@@ -1750,12 +1750,16 @@ const gymRoleNames = [
 client.on('messageCreate', async message => {
 if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
   
-  const gymRow = new MessageActionRow()
+  const gymRow1 = new MessageActionRow()
     .addComponents(
       new MessageSelectMenu()
         .setCustomId('gymSelect')
         .setPlaceholder('Choisis ta salle de sport')
-        .addOptions(gymRoleNames.map((name, index) => ({ label: name, value: gymRoles[index] }))),
+        .addOptions(gymRoleNames.map((name, index) => ({ label: name, value: gymRoles[index] })))
+    );
+  
+  const gymRow2 = new MessageActionRow()
+    .addComponents(
       new MessageButton()
         .setCustomId('gymRemove')
         .setLabel('Retirer toutes les salles')
@@ -1768,7 +1772,7 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
     footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
   };
 
-  await message.reply({ embeds: [gymEmbed], components: [gymRow] });
+  await message.reply({ embeds: [gymEmbed], components: [gymRow1, gymRow2] });
 }
 });
 
