@@ -2118,7 +2118,7 @@ client.on('messageCreate', async message => {
     const role = message.mentions.roles.first();
     if (!role) return message.reply('Rôle non valide.');
 
-    const membersWithRole = role.members.map(member => member.user.tag).join('\n');
+    const membersWithRole = role.members.map(member => member.toString()).join('\n');
     const embed = new MessageEmbed()
       .setColor('GREEN')
       .setTitle(`Membres avec le rôle ${role.name}`)
