@@ -1711,215 +1711,14 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
+//.oooooo..o oooooooooooo ooooo        oooooooooooo   .oooooo.   ooooooooooooo  .oooooo..o      ooo        ooooo oooooooooooo ooooo      ooo ooooo     ooo  .oooooo..o 
+//d8P'    `Y8 `888'     `8 `888'        `888'     `8  d8P'  `Y8b  8'   888   `8 d8P'    `Y8      `88.       .888' `888'     `8 `888b.     `8' `888'     `8' d8P'    `Y8 
+//Y88bo.       888          888          888         888               888      Y88bo.            888b     d'888   888          8 `88b.    8   888       8  Y88bo.      
+// `"Y8888o.   888oooo8     888          888oooo8    888               888       `"Y8888o.        8 Y88. .P  888   888oooo8     8   `88b.  8   888       8   `"Y8888o.  
+//     `"Y88b  888    "     888          888    "    888               888           `"Y88b       8  `888'   888   888    "     8     `88b.8   888       8       `"Y88b 
+//oo     .d8P  888       o  888       o  888       o `88b    ooo       888      oo     .d8P       8    Y     888   888       o  8       `888   `88.    .8'  oo     .d8P 
+//8""88888P'  o888ooooood8 o888ooooood8 o888ooooood8  `Y8bood8P'      o888o     8""88888P'       o8o        o888o o888ooooood8 o8o        `8     `YbodP'    8""88888P'  
 
-
-
-
-
-
-
-
-
-//const fs = require('fs');
-//const FILENAME = './scores.json';
-//const MOVEMENTS = [
-//  'squat',
-//  'bench',
-//  'deadlift',
-//  'dips',
-//  'traction',
-//  'muscleup',
-//];
-//
-//const CUMULATIVE_RANKINGS = {
-//  SBD: ['squat', 'bench', 'deadlift'],
-//  streetlifting: ['squat', 'dips', 'traction', 'muscleup'],
-//};
-//
-//const readJson = () => {
-//  try {
-//    const data = fs.readFileSync(FILENAME, 'utf8');
-//    return JSON.parse(data);
-//  } catch (err) {
-//    if (err.code === 'ENOENT') {
-//      return {};
-//    } else {
-//      console.error('Error reading JSON file:', err);
-//      throw err;
-//    }
-//  }
-//};
-//
-//const writeJson = (data) => {
-//  fs.writeFileSync(FILENAME, JSON.stringify(data, null, 2), 'utf8');
-//};
-//
-//writeJson(readJson());
-//
-//client.on('messageCreate', async (message) => {
-//  if (message.author.bot || !message.content.startsWith(prefix)) return;
-//
-//  const args = message.content.slice(prefix.length).trim().split(/ +/);
-//  const command = args.shift().toLowerCase();
-//
-//  if (command === 'ajouter') {
-//    if (args.length !== 4) {
-//      message.reply(`Utilisation incorrecte. Utilisez: ${prefix}**ajouter** *[mouvement] [poids soulevé] [âge] [poids]*`);
-//      return;
-//    }
-//
-//    const [movement, liftedWeight, age, userWeight] = args;
-//    if (!MOVEMENTS.includes(movement)) {
-//      message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', ')}**`);
-//      return;
-//    }
-//
-//    if (isNaN(liftedWeight) || isNaN(age) || isNaN(userWeight)) {
-//      message.reply('Le poids soulevé, l\'âge et le poids doivent être des **nombres**.');
-//      return;
-//    }
-//
-//    const scores = readJson();
-//    if (!scores[movement]) {
-//      scores[movement] = {};
-//    }
-//
-//    scores[movement][message.author.id] = {
-//      weight: parseFloat(liftedWeight),
-//      age: parseInt(age, 10),
-//      user_weight: parseFloat(userWeight),
-//    };
-//
-//    writeJson(scores);
-//
-//    message.reply(`Score mis à jour pour **${movement}**. \nPerformance: **${liftedWeight} kg**. \nÂge: **${age} ans**. \nPoids: **${userWeight} kg**.`);
-//  } else if (command === 'classement') {
-//    const movement = args[0];
-//    const scores = readJson();
-//
-//    if (CUMULATIVE_RANKINGS[movement]) {
-//    } else {
-//      if (!MOVEMENTS.includes(movement)) {
-//        message.reply(`Mouvement inconnu. Les mouvements valides sont: **${MOVEMENTS.join(', ')}**`);
-//        return;
-//      }
-//
-//      const userData = scores[movement] || {};
-//      const sortedUsers = Object.entries(userData).sort(([, a], [, b]) => b.weight - a.weight);
-//
-//      const embed = new MessageEmbed()
-//        .setTitle(`Classement des meilleurs scores pour ${movement}`)
-//        .setColor(0x00AE86);
-//
-//      for (let i = 0; i < sortedUsers.length && i < 10; i++) {
-//        const [userId, data] = sortedUsers[i];
-//        const user = await client.users.fetch(userId);
-//        const rank = i + 1;
-//        const username = user.username;
-//        const weight = data.weight;
-//        const age = data.age;
-//        const userWeight = data.user_weight;
-//        embed.addField(
-//          `#${rank} ${username}`,
-//          `1 rep - ${weight} kg\nÂge: ${age} ans\nPoids: ${userWeight} kg`
-//        );
-//      }
-//
-//      message.channel.send({ embeds: [embed] });
-//    }
-//  } else if (command === 'helpscore') {
-//    const embed = new MessageEmbed()
-//      .setTitle('Aide pour le système de scores')
-//      .setColor(0x00AE86)
-//      .setDescription(
-//        "Ce bot permet d'ajouter et de consulter les scores des membres pour différents mouvements. Voici comment l'utiliser :"
-//      )
-//      .addField(
-//        `${prefix}ajouter`,
-//        `Pour ajouter un score : ${prefix}ajouter [mouvement] [poids soulevé] [âge] [poids]`
-//      )
-//      .addField(
-//        `${prefix}classement`,
-//        `Pour consulter le classement d'un mouvement : ${prefix}classement [mouvement]`
-//      )
-//      .addField(
-//        `${prefix}classementtotal`,
-//        `Pour consulter tous les classements et/ou un classement général : ${prefix}classementtotal`
-//      );
-//
-//    message.channel.send({ embeds: [embed] });
-//  }
-//});
-//
-//
-//
-//
-//
-//
-//
-//if (!fs.existsSync("records.json")) {
-//  fs.writeFileSync("records.json", JSON.stringify({}));
-//}
-//
-//client.on("messageCreate", async (message) => {
-//  if (!message.content.startsWith(prefix) || message.author.bot) return;
-//
-//  const args = message.content.slice(prefix.length).trim().split(/ +/);
-//  const command = args.shift().toLowerCase();
-//
-//  if (command === "ajouterecord") {
-//    if (args.length !== 3) {
-//      return message.reply("Utilisation : `!ajouterecord <exercice> <poids> <unité>`");
-//    }
-//
-//    const exercice = args[0];
-//    const poids = parseFloat(args[1]);
-//    const unite = args[2];
-//
-//    if (isNaN(poids)) {
-//      return message.reply("Le poids doit être un nombre.");
-//    }
-//
-//    const records = JSON.parse(fs.readFileSync("records.json", "utf-8"));
-//    const userId = message.author.id;
-//
-//    if (!records[exercice]) {
-//      records[exercice] = {};
-//    }
-//
-//    records[exercice][userId] = { poids, unite, username: message.author.username };
-//    fs.writeFileSync("records.json", JSON.stringify(records));
-//
-//    message.reply(`Ton record pour ${exercice} a été ajouté avec succès : ${poids} ${unite}.`);
-//  }
-//
-//  if (command === "classement") {
-//    if (args.length !== 1) {
-//      return message.reply("Utilisation : `!classement <exercice>`");
-//    }
-//
-//    const exercice = args[0];
-//    const records = JSON.parse(fs.readFileSync("records.json", "utf-8"));
-//
-//    if (!records[exercice]) {
-//      return message.reply(`Aucun record trouvé pour ${exercice}.`);
-//    }
-//
-//    const classement = Object.values(records[exercice])
-//      .sort((a, b) => b.poids - a.poids)
-//      .slice(0, 10)
-//      .map((record, index) => `${index + 1}. ${record.username}: ${record.poids} ${record.unite}`)
-//      .join("\n");
-//
-//    const classementEmbed = new MessageEmbed()
-//      .setColor("#0099ff")
-//      .setTitle(`Classement pour ${exercice}`)
-//      .setDescription(classement)
-//      .setTimestamp();
-//
-//    message.channel.send({ embeds: [classementEmbed] });
-//  }
-//});
 
 
 const roles = [
@@ -1948,10 +1747,8 @@ const options = [
   { label: 'Home Gym', value: roles[9] }
 ];
 
-client.on('interactionCreate', async interaction => {
-if (!interaction.isCommand()) return;
-
-if (interaction.commandName === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
+client.on('messageCreate', async message => {
+if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
     const row = new MessageActionRow()
         .addComponents(
             new MessageSelectMenu()
@@ -1972,10 +1769,10 @@ if (interaction.commandName === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
         }
     };
 
-    await interaction.reply({ embeds: [embed], components: [row] });
+    await message.reply({ embeds: [embed], components: [row] });
 
     const filter = i => i.customId === 'select' || i.customId === 'remove';
-    const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
+    const collector = message.channel.createMessageComponentCollector({ filter, time: 15000 });
 
     collector.on('collect', async i => {
         if (i.customId === 'select') {
