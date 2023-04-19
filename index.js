@@ -1948,43 +1948,44 @@ const options = [
   { label: 'Home Gym', value: roles[9] }
 ];
 
-module.exports = {
-  name: "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE",
-  async execute(interaction) {
-      const row = new MessageActionRow()
-          .addComponents(
-              new MessageSelectMenu()
-                  .setCustomId('select')
-                  .setPlaceholder('Choisis ta salle de sport')
-                  .addOptions(options),
-              new MessageButton()
-                  .setCustomId('remove')
-                  .setLabel('Retirer toutes les salles')
-                  .setStyle('DANGER')
-          );
+client.on('interactionCreate', async interaction => {
+if (!interaction.isCommand()) return;
 
-      const embed = {
-          title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
-          color: "#0000FF",
-          footer: {
-              text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈."
-          }
-      };
+if (interaction.commandName === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
+    const row = new MessageActionRow()
+        .addComponents(
+            new MessageSelectMenu()
+                .setCustomId('select')
+                .setPlaceholder('Choisis ta salle de sport')
+                .addOptions(options),
+            new MessageButton()
+                .setCustomId('remove')
+                .setLabel('Retirer toutes les salles')
+                .setStyle('DANGER')
+        );
 
-      await interaction.reply({ embeds: [embed], components: [row] });
+    const embed = {
+        title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
+        color: "#0000FF",
+        footer: {
+            text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈."
+        }
+    };
 
-      const filter = i => i.customId === 'select' || i.customId === 'remove';
-      const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
+    await interaction.reply({ embeds: [embed], components: [row] });
 
-      collector.on('collect', async i => {
-          if (i.customId === 'select') {
-              const role = i.values[0];
-              await i.member.roles.add(role);
-              await i.reply({ content: `Le rôle ${role} vous a été attribué.`, ephemeral: true });
-          } else if (i.customId === 'remove') {
-              await i.member.roles.remove(roles);
-              await i.reply({ content: `Tous les rôles ont été retirés.`, ephemeral: true });
-          }
-      });
-  }
-};
+    const filter = i => i.customId === 'select' || i.customId === 'remove';
+    const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
+
+    collector.on('collect', async i => {
+        if (i.customId === 'select') {
+            const role = i.values[0];
+            await i.member.roles.add(role);
+            await i.reply({ content: `Le rôle ${role} vous a été attribué.`, ephemeral: true });
+        } else if (i.customId === 'remove') {
+            await i.member.roles.remove(roles);
+            await i.reply({ content: `Tous les rôles ont été retirés.`, ephemeral: true });
+        }
+    });
+}
+});
