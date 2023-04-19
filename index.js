@@ -1729,7 +1729,7 @@ client.on('messageCreate', async message => {
       .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
 
     const selectMenu = new MessageSelectMenu()
-      .setCustomId('select')
+      .setCustomId('selectsalle')
       .setPlaceholder('Choisis ta salle de sport')
       .addOptions([
         { label: 'Basic Fit', value: '987821823607570462' },
@@ -1757,7 +1757,7 @@ client.on('messageCreate', async message => {
 
 client.on('interactionCreate', async interaction => {
   if (interaction.isSelectMenu()) {
-    if (interaction.customId === 'select') {
+    if (interaction.customId === 'selectsalle') {
       const role = interaction.values[0];
       await interaction.member.roles.add(role);
       await interaction.reply({ content: `Le rôle ${role} vous a été attribué.`, ephemeral: true });
