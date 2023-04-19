@@ -426,7 +426,7 @@ client.on("messageCreate", async message => {
               .setTitle("🧭 Choisis ton département grâce aux menus ci-dessous 🧭")
               .setColor("#0000FF")
               .setImage("https://cdn.discordapp.com/attachments/987820203016618015/1098258559319408731/DEPARTEMENT.gif")
-              .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
+              .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.", "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
           await message.channel.send({ embeds: [embed], components: [menu1, menu2, menu3, menu4] });
           await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
           await message.channel.send({ content: ' ', components: [removeButtonRow] });
