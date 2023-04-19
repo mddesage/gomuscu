@@ -1721,8 +1721,6 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
-const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
-
 client.on('messageCreate', async message => {
   if (message.content === 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE') {
     const embed = new MessageEmbed()
