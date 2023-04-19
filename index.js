@@ -1776,7 +1776,7 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
     title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
     color: "#0000FF",
     image: {
-      url: "https://cdn.discordapp.com/attachments/987820203016618015/1098258559319408731/DEPARTEMENT.gif"
+      url: "https://cdn.discordapp.com/attachments/987820203016618015/1098259736891228191/SALLE_DE_SPORT.gif"
     },
     footer: {
       text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
@@ -1855,6 +1855,9 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE") {
   const disciplineEmbed = {
     title: "🏋️ Choisis ta discipline grâce au menu ci-dessous 🏋️",
     color: "#0000FF",
+    image: {
+      url: "https://cdn.discordapp.com/attachments/987820203016618015/1098259759242686547/DISCIPLINE.gif"
+    },
     footer: {
       text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
       iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
@@ -1915,6 +1918,9 @@ client.on('messageCreate', async message => {
     const sexeEmbed = {
       title: "♀️ Choisis ton sexe grâce au menu ci-dessous ♂️",
       color: "#0000FF",
+      image: {
+        url: "https://cdn.discordapp.com/attachments/987820203016618015/1098260465798357052/SEXE.gif"
+      },
       footer: {
         text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
         iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
@@ -1985,6 +1991,9 @@ client.on('messageCreate', async message => {
     const notificationEmbed = {
       title: "🔔 Choisis tes notifications grâce au menu ci-dessous 🔔",
       color: "#0000FF",
+      image: {
+        url: "https://cdn.discordapp.com/attachments/987820203016618015/1098261868621078658/NOTIFICATION.gif"
+      },
       footer: {
         text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
         iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
