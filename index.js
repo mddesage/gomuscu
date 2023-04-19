@@ -1927,3 +1927,66 @@ client.on('interactionCreate', async interaction => {
   
   }
 });
+
+
+
+
+
+
+const notificationRoles = [
+  '987820202177749089',
+  '987820202177749090',
+  '987820202177749091',
+];
+
+const notificationRoleNames = [
+  'Annonces',
+  'Programmes',
+  'Réseaux Sociaux',
+];
+
+client.on('messageCreate', async message => {
+  if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SES_NOTIFICATIONS") {
+  
+    const notificationRow1 = new MessageActionRow()
+      .addComponents(
+        new MessageSelectMenu()
+          .setCustomId('notificationSelect')
+          .setPlaceholder('Choisis tes notifications')
+          .addOptions(notificationRoleNames.map((name, index) => ({ label: name, value: notificationRoles[index] })))
+      );
+  
+    const notificationRow2 = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('notificationRemove')
+          .setLabel('Retirer toutes les notifications')
+          .setStyle('DANGER')
+      );
+
+    const notificationEmbed = {
+      title: "🔔 Choisis tes notifications grâce au menu ci-dessous 🔔",
+      color: "#0000FF",
+      footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
+    };
+
+    await message.reply({ embeds: [notificationEmbed], components: [notificationRow1, notificationRow2] });
+  }
+});
+
+client.on('interactionCreate', async interaction => {
+  if (interaction.isSelectMenu()) {
+    if (interaction.customId === 'notificationSelect') {
+      const role = interaction.values[0];
+      const roleName = notificationRoleNames[notificationRoles.indexOf(role)];
+      
+      await interaction.member.roles.add(role);
+      await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+    }
+  } else if (interaction.isButton()) {
+    if (interaction.customId === 'notificationRemove') {
+      await interaction.member.roles.remove(notificationRoles);
+      await interaction.reply({ content: `Le rôle ${notificationRoleNames.join(', ')} vous a été retiré.`, ephemeral: true });
+    }
+  }
+});
