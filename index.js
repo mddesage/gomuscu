@@ -1755,6 +1755,10 @@ const gymRoleNames = [
 
 client.on('messageCreate', async message => {
 if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
+  if (message.member.permissions.has("ADMINISTRATOR")) {
+  } else {
+    message.reply("Désolé, cette commande est réservée aux employés.");
+  }
   
   const gymRow1 = new MessageActionRow()
     .addComponents(
