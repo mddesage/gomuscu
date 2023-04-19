@@ -425,6 +425,7 @@ client.on("messageCreate", async message => {
           const embed = new MessageEmbed()
               .setTitle("🧭 Choisis ton départemnent grâce aux menus ci-dessous 🧭")
               .setColor("#0000FF")
+              .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1098258559319408731/DEPARTEMENT.gif")
               .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
           await message.channel.send({ embeds: [embed], components: [menu1, menu2, menu3, menu4] });
           await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
