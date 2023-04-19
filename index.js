@@ -1799,7 +1799,7 @@ if (interaction.isSelectMenu()) {
 
 
 
-const roleIds = [
+const disciplineRoleIds = [
   '987827124138307604',
   '987826944630468688',
   '987827687664005170',
@@ -1809,14 +1809,14 @@ const roleIds = [
   '1097950875298828461'
 ];
 
-const menuOptions = [
-  { label: 'Body Building', value: roleIds[0] },
-  { label: 'Power Lifting', value: roleIds[1] },
-  { label: 'Street Workout', value: roleIds[2] },
-  { label: 'Street Lifting', value: roleIds[3] },
-  { label: 'Haltérophilie', value: roleIds[4] },
-  { label: 'Cross Fit', value: roleIds[5] },
-  { label: 'Fitness', value: roleIds[6] }
+const disciplineMenuOptions = [
+  { label: 'Body Building', value: disciplineRoleIds[0] },
+  { label: 'Power Lifting', value: disciplineRoleIds[1] },
+  { label: 'Street Workout', value: disciplineRoleIds[2] },
+  { label: 'Street Lifting', value: disciplineRoleIds[3] },
+  { label: 'Haltérophilie', value: disciplineRoleIds[4] },
+  { label: 'Cross Fit', value: disciplineRoleIds[5] },
+  { label: 'Fitness', value: disciplineRoleIds[6] }
 ];
 
 client.on('messageCreate', async (message) => {
@@ -1827,12 +1827,12 @@ client.on('messageCreate', async (message) => {
       .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
 
     const selectMenu = new MessageSelectMenu()
-      .setCustomId('selectMenu')
+      .setCustomId('disciplineSelectMenu')
       .setPlaceholder('Choisis ta discipline')
-      .addOptions(menuOptions);
+      .addOptions(disciplineMenuOptions);
 
     const removeButton = new MessageButton()
-      .setCustomId('removeButton')
+      .setCustomId('disciplineRemoveButton')
       .setLabel('Retirer toutes les disciplines')
       .setStyle('DANGER');
 
@@ -1844,7 +1844,7 @@ client.on('messageCreate', async (message) => {
 
 client.on('interactionCreate', async (interaction) => {
   if (interaction.isSelectMenu()) {
-    if (interaction.customId === 'selectMenu') {
+    if (interaction.customId === 'disciplineSelectMenu') {
       const roleId = interaction.values[0];
       const role = interaction.guild.roles.cache.get(roleId);
       await interaction.member.roles.add(role);
@@ -1854,8 +1854,8 @@ client.on('interactionCreate', async (interaction) => {
       });
     }
   } else if (interaction.isButton()) {
-    if (interaction.customId === 'removeButton') {
-      for (const roleId of roleIds) {
+    if (interaction.customId === 'disciplineRemoveButton') {
+      for (const roleId of disciplineRoleIds) {
         await interaction.member.roles.remove(roleId);
       }
       await interaction.reply({
