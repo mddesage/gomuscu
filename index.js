@@ -2075,7 +2075,7 @@ client.on('messageCreate', async message => {
     
     Nous espérons que ces règles vous aideront à passer un bon moment sur notre serveur et à profiter pleinement de notre communauté. Si vous avez des questions ou des préoccupations, n'hésitez pas à contacter un administrateur.
     
-    Merci de votre compréhension et bonne musculation ! 💪`)
+    Merci de votre compréhension et bonne musculation ! :gf:`)
     .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.", "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
     .setImage("https://cdn.discordapp.com/attachments/987820203016618015/1098330144336261140/REGLEMENT.gif");
 
