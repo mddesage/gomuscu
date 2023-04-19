@@ -1755,8 +1755,7 @@ const gymRoleNames = [
 
 client.on('messageCreate', async message => {
 if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
-  if (message.member.permissions.has("ADMINISTRATOR")) {
-
+  
   
   const gymRow1 = new MessageActionRow()
     .addComponents(
@@ -1785,10 +1784,8 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
       iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
     }
   };
-} else {
-  message.reply("Désolé, cette commande est réservée aux employés.");
-}
-  await message.reply({ embeds: [gymEmbed], components: [gymRow1, gymRow2] });
+
+  await message.channel.send({ embeds: [gymEmbed], components: [gymRow1, gymRow2] });
 }
 });
 
@@ -1868,7 +1865,7 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE") {
     }
   };
 
-  await message.reply({ embeds: [disciplineEmbed], components: [disciplineRow1, disciplineRow2] });
+  await message.channel.send({ embeds: [disciplineEmbed], components: [disciplineRow1, disciplineRow2] });
 }
 });
 
@@ -1931,7 +1928,7 @@ client.on('messageCreate', async message => {
       }
     };
 
-    await message.reply({ embeds: [sexeEmbed], components: [sexeRow1, sexeRow2] });
+    await message.channel.send({ embeds: [sexeEmbed], components: [sexeRow1, sexeRow2] });
   }
 });
 
@@ -2004,7 +2001,7 @@ client.on('messageCreate', async message => {
       }
     };
 
-    await message.reply({ embeds: [notificationEmbed], components: [notificationRow1, notificationRow2] });
+    await message.channel.send({ embeds: [notificationEmbed], components: [notificationRow1, notificationRow2] });
   }
 });
 
