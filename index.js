@@ -243,6 +243,12 @@ client.on("messageCreate", async message => {
                         ${prefix}**avertissementinfo** *[user_mention]*
                         Envoie le nombre d'avertissement(s) de la personné mentionnée.
 
+                        ${prefix}**quirole** *[role_mention]*
+                        Envoie la liste des utilisateurs ayant le rôle mentionné
+
+                        ${prefix}**quirole&** *[premier_role_mention]* *[deuxième_role_mention]*
+                        Envoie la liste des utilisateurs ayant les deux rôles mentionnés
+
 
                         `)
                         .setTitle("Liste des commandes EMPLOYÉS");
@@ -1489,23 +1495,7 @@ client.on('interactionCreate', async (interaction) => {
                 }, 2000);
             }
         });
-      
-  
-
-
-
-//        ooo        ooooo ooooo     ooo  .oooooo..o ooooo   .oooooo.      ooooo     ooo oooooooooooo 
-//        `88.       .888' `888'     `8' d8P'    `Y8 `888'  d8P'  `Y8b     `888'     `8' `888'     `8 
-//         888b     d'888   888       8  Y88bo.       888  888      888     888       8   888         
-//         8 Y88. .P  888   888       8   `"Y8888o.   888  888      888     888       8   888oooo8    
-//         8  `888'   888   888       8       `"Y88b  888  888      888     888       8   888    "    
-//         8    Y     888   `88.    .8'  oo     .d8P  888  `88b    d88b     `88.    .8'   888       o 
-//        o8o        o888o    `YbodP'    8""88888P'  o888o  `Y8bood8P'Ybd'    `YbodP'    o888ooooood8 
-
-
-
-//LE CODE ...
-
+       
 
 
 //              .o.  ooooo     oooo oooooooooooo ooooooooo.   ooooooooooooo ooooo  .oooooo..o  .oooooo..o oooooooooooo ooo        ooooo oooooooooooo ooooo      ooo ooooooooooooo 
@@ -1717,13 +1707,13 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
-//.oooooo..o oooooooooooo ooooo        oooooooooooo   .oooooo.   ooooooooooooo  .oooooo..o      ooo        ooooo oooooooooooo ooooo      ooo ooooo     ooo  .oooooo..o 
-//d8P'    `Y8 `888'     `8 `888'        `888'     `8  d8P'  `Y8b  8'   888   `8 d8P'    `Y8      `88.       .888' `888'     `8 `888b.     `8' `888'     `8' d8P'    `Y8 
-//Y88bo.       888          888          888         888               888      Y88bo.            888b     d'888   888          8 `88b.    8   888       8  Y88bo.      
-// `"Y8888o.   888oooo8     888          888oooo8    888               888       `"Y8888o.        8 Y88. .P  888   888oooo8     8   `88b.  8   888       8   `"Y8888o.  
-//     `"Y88b  888    "     888          888    "    888               888           `"Y88b       8  `888'   888   888    "     8     `88b.8   888       8       `"Y88b 
-//oo     .d8P  888       o  888       o  888       o `88b    ooo       888      oo     .d8P       8    Y     888   888       o  8       `888   `88.    .8'  oo     .d8P 
-//8""88888P'  o888ooooood8 o888ooooood8 o888ooooood8  `Y8bood8P'      o888o     8""88888P'       o8o        o888o o888ooooood8 o8o        `8     `YbodP'    8""88888P'  
+//        .oooooo..o oooooooooooo ooooo        oooooooooooo   .oooooo.   ooooooooooooo  .oooooo..o      ooo        ooooo oooooooooooo ooooo      ooo ooooo     ooo  .oooooo..o 
+//        d8P'    `Y8 `888'     `8 `888'        `888'     `8  d8P'  `Y8b  8'   888   `8 d8P'    `Y8      `88.       .888' `888'     `8 `888b.     `8' `888'     `8' d8P'    `Y8 
+//        Y88bo.       888          888          888         888               888      Y88bo.            888b     d'888   888          8 `88b.    8   888       8  Y88bo.      
+//         `"Y8888o.   888oooo8     888          888oooo8    888               888       `"Y8888o.        8 Y88. .P  888   888oooo8     8   `88b.  8   888       8   `"Y8888o.  
+//             `"Y88b  888    "     888          888    "    888               888           `"Y88b       8  `888'   888   888    "     8     `88b.8   888       8       `"Y88b 
+//        oo     .d8P  888       o  888       o  888       o `88b    ooo       888      oo     .d8P       8    Y     888   888       o  8       `888   `88.    .8'  oo     .d8P 
+//        8""88888P'  o888ooooood8 o888ooooood8 o888ooooood8  `Y8bood8P'      o888o     8""88888P'       o8o        o888o o888ooooood8 o8o        `8     `YbodP'    8""88888P'  
 
 
 
@@ -1816,8 +1806,6 @@ if (interaction.isSelectMenu()) {
 
 
 
-
-
 const disciplineRoles = [
   '987827124138307604',
   '987826944630468688',
@@ -1900,7 +1888,6 @@ if (interaction.isSelectMenu()) {
 
 
 
-
 const sexeRoles = [  '987826511295950889',  '987826660130816020'];
 
 const sexeRoleNames = [  'Fille',  'Garçon'];
@@ -1964,9 +1951,6 @@ client.on('interactionCreate', async interaction => {
   
   }
 });
-
-
-
 
 
 
@@ -2040,8 +2024,13 @@ client.on('interactionCreate', async interaction => {
 
 
 
-
-
+//        ooooooooo.   oooooooooooo   .oooooo.    ooooo        oooooooooooo ooo        ooooo oooooooooooo ooooo      ooo ooooooooooooo 
+//        `888   `Y88. `888'     `8  d8P'  `Y8b   `888'        `888'     `8 `88.       .888' `888'     `8 `888b.     `8' 8'   888   `8 
+//         888   .d88'  888         888            888          888          888b     d'888   888          8 `88b.    8       888      
+//         888ooo88P'   888oooo8    888            888          888oooo8     8 Y88. .P  888   888oooo8     8   `88b.  8       888      
+//         888`88b.     888    "    888     ooooo  888          888    "     8  `888'   888   888    "     8     `88b.8       888      
+//         888  `88b.   888       o `88.    .88'   888       o  888       o  8    Y     888   888       o  8       `888       888      
+//        o888o  o888o o888ooooood8  `Y8bood8P'   o888ooooood8 o888ooooood8 o8o        o888o o888ooooood8 o8o        `8      o888o     
 
 
 
@@ -2100,6 +2089,14 @@ client.on('interactionCreate', async interaction => {
 });
 
 
+
+//ooooooooo.     .oooooo.   ooooo        oooooooooooo   .oooooo.      ooooo     ooo ooooo        .o   .oo.     o.   
+//`888   `Y88.  d8P'  `Y8b  `888'        `888'     `8  d8P'  `Y8b     `888'     `8' `888'       .8' .88' `8.   `8.  
+// 888   .d88' 888      888  888          888         888      888     888       8   888       .8'  88.  .8'    `8. 
+// 888ooo88P'  888      888  888          888oooo8    888      888     888       8   888       88   `88.8P       88 
+// 888`88b.    888      888  888          888    "    888      888     888       8   888       88    d888[.8'    88 
+// 888  `88b.  `88b    d88'  888       o  888       o `88b    d88b     `88.    .8'   888       `8.  88' `88.    .8' 
+//o888o  o888o  `Y8bood8P'  o888ooooood8 o888ooooood8  `Y8bood8P'Ybd'    `YbodP'    o888o       `8. `bodP'`88. .8'  
 
 
 
