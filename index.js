@@ -1870,3 +1870,60 @@ if (interaction.isSelectMenu()) {
   
 }
 });
+
+
+
+
+const sexeRoles = [  '987826511295950889',  '987826660130816020'];
+
+const sexeRoleNames = [  'Fille',  'Garçon'];
+
+client.on('messageCreate', async message => {
+  if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SON_SEXE") {
+  
+    const sexeRow1 = new MessageActionRow()
+      .addComponents(
+        new MessageSelectMenu()
+          .setCustomId('sexeSelect')
+          .setPlaceholder('Choisis ton sexe')
+          .addOptions(sexeRoleNames.map((name, index) => ({ label: name, value: sexeRoles[index] })))
+      );
+  
+    const sexeRow2 = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('sexeRemove')
+          .setLabel('Retirer tous les sexes')
+          .setStyle('DANGER')
+      );
+
+    const sexeEmbed = {
+      title: "♀️ Choisis ton sexe grâce au menu ci-dessous ♂️",
+      color: "#0000FF",
+      footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
+    };
+
+    await message.reply({ embeds: [sexeEmbed], components: [sexeRow1, sexeRow2] });
+  }
+});
+
+client.on('interactionCreate', async interaction => {
+  if (interaction.isSelectMenu()) {
+  
+    if (interaction.customId === 'sexeSelect') {
+      const role = interaction.values[0];
+      const roleName = sexeRoleNames[sexeRoles.indexOf(role)];
+      
+      await interaction.member.roles.add(role);
+      await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+    }
+  
+  } else if (interaction.isButton()) {
+  
+    if (interaction.customId === 'sexeRemove') {
+      await interaction.member.roles.remove(sexeRoles);
+      await interaction.reply({ content: `Le rôle ${sexeRoleNames[0]} et ${sexeRoleNames[1]} vous ont été retirés.`, ephemeral: true });
+    }
+  
+  }
+});
