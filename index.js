@@ -1922,104 +1922,69 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 //});
 
 
-
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
-
-// Liste des salles de sport
-const sallesDeSport = [
-  { label: 'Basic Fit', value: 'basic-fit', role: '987821823607570462' },
-  { label: 'Fitness Park', value: 'fitness-park', role: '987822236335480842' },
-  { label: 'On Air', value: 'on-air', role: '1097948959907000422' },
-  { label: 'Orange Bleue', value: 'orange-bleue', role: '1097947839134441492' },
-  { label: 'Keep Cool', value: 'keep-cool', role: '1097947941823590491' },
-  { label: 'Salle Power Lifting', value: 'salle-power-lifting', role: '1097948044474990752' },
-  { label: 'Salle Cross Fit', value: 'salle-cross-fit', role: '1097948253254852738' },
-  { label: 'Salle Indépendante', value: 'salle-independante', role: '1097948278097723462' },
-  { label: 'Park Street', value: 'park-street', role: '1097948489696161834' },
-  { label: 'Home Gym', value: 'home-gym', role: '987822447967473734' },
+const roles = [
+  '987821823607570462',
+  '987822236335480842',
+  '1097948959907000422',
+  '1097947839134441492',
+  '1097947941823590491',
+  '1097948044474990752',
+  '1097948253254852738',
+  '1097948278097723462',
+  '1097948489696161834',
+  '987822447967473734'
 ];
 
-// Liste des disciplines
-const disciplines = [
-  { label: 'Body Building', value: 'body-building', role: '987827124138307604' },
-  { label: 'Power Lifting', value: 'power-lifting', role: '987826944630468688' },
-  { label: 'Street Workout', value: 'street-workout', role: '987827687664005170' },
-  { label: 'Street Lifting', value: 'street-lifting', role: '1097950501963829411' },
-  { label: 'Haltérophilie', value: 'halterophilie', role: '1097950743513796760' },
-  { label: 'Cross Fit', value: 'cross-fit', role: '1097950337324826725' },
-  { label: 'Fitness', value: 'fitness', role: '1097950875298828461' },
-];
-
-// Liste des sexes
-const sexes = [
-  { label: 'Fille', value: 'fille', role: '987826511295950889' },
-  { label: 'Garçon', value: 'garcon', role: '987826660130816020' },
+const options = [
+  { label: 'Basic Fit', value: roles[0] },
+  { label: 'Fitness Park', value: roles[1] },
+  { label: 'On Air', value: roles[2] },
+  { label: "L'Orange Bleue", value: roles[3] },
+  { label: 'Keep Cool', value: roles[4] },
+  { label: 'Salle Power Lifting', value: roles[5] },
+  { label: 'Salle Cross Fit', value: roles[6] },
+  { label: 'Salle Indépendante', value: roles[7] },
+  { label: 'Park Street', value: roles[8] },
+  { label: 'Home Gym', value: roles[9] }
 ];
 
 module.exports = {
-  name: 'menu',
-  execute(message, args) {
-    const command = args[0];
+  name: "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE",
+  async execute(interaction) {
+      const row = new MessageActionRow()
+          .addComponents(
+              new MessageSelectMenu()
+                  .setCustomId('select')
+                  .setPlaceholder('Choisis ta salle de sport')
+                  .addOptions(options),
+              new MessageButton()
+                  .setCustomId('remove')
+                  .setLabel('Retirer toutes les salles')
+                  .setStyle('DANGER')
+          );
 
-    if (command === 'salle') {
-      // Création du select menu
-      const salleSelectMenu = new MessageSelectMenu()
-        .setCustomId('salleSelectMenu')
-        .setPlaceholder('Choisis ta salle de sport')
-        .addOptions(sallesDeSport);
+      const embed = {
+          title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
+          color: "#0000FF",
+          footer: {
+              text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈."
+          }
+      };
 
-      // Création de l'embed
-      const salleEmbed = new MessageEmbed()
-        .setTitle('🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰')
-        .setColor('#0000FF')
-        .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.');
+      await interaction.reply({ embeds: [embed], components: [row] });
 
-  // Envoi du message avec l'embed et la ligne d'action
-  message.channel.send({ embeds: [salleEmbed], components: [salleActionRow] });
+      const filter = i => i.customId === 'select' || i.customId === 'remove';
+      const collector = interaction.channel.createMessageComponentCollector({ filter, time: 15000 });
 
-} else if (command === 'discipline') {
-  // Création du select menu
-  const disciplineSelectMenu = new MessageSelectMenu()
-    .setCustomId('disciplineSelectMenu')
-    .setPlaceholder('Choisis ta discipline')
-    .addOptions(disciplines);
-
-  // Création de l'embed
-  const disciplineEmbed = new MessageEmbed()
-    .setTitle('💪 Choisis ta discipline grâce au menu ci-dessous 💪')
-    .setColor('#0000FF')
-    .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.');
-
-  // création d'une nouvelle ligne d'action
-  const disciplineActionRow = new MessageActionRow()
-    .addComponents(disciplineSelectMenu);
-
-  // Envoi du message avec l'embed et la ligne d'action
-  message.channel.send({ embeds: [disciplineEmbed], components: [disciplineActionRow] });
-
-} else if (command === 'sexe') {
-  // Création du select menu
-  const sexeSelectMenu = new MessageSelectMenu()
-    .setCustomId('sexeSelectMenu')
-    .setPlaceholder('Choisis ton sexe')
-    .addOptions(sexes);
-
-  // Création de l'embed
-  const sexeEmbed = new MessageEmbed()
-    .setTitle('🚻 Choisis ton sexe grâce au menu ci-dessous 🚻')
-    .setColor('#0000FF')
-    .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.');
-
-  // création d'une nouvelle ligne d'action
-  const sexeActionRow = new MessageActionRow()
-    .addComponents(sexeSelectMenu);
-
-  // Envoi du message avec l'embed et la ligne d'action
-  message.channel.send({ embeds: [sexeEmbed], components: [sexeActionRow] });
-
-} else {
-  // Si la commande n'est pas reconnue, envoie un message d'erreur
-  message.reply('Commande invalide.');
-}
-},
+      collector.on('collect', async i => {
+          if (i.customId === 'select') {
+              const role = i.values[0];
+              await i.member.roles.add(role);
+              await i.reply({ content: `Le rôle ${role} vous a été attribué.`, ephemeral: true });
+          } else if (i.customId === 'remove') {
+              await i.member.roles.remove(roles);
+              await i.reply({ content: `Tous les rôles ont été retirés.`, ephemeral: true });
+          }
+      });
+  }
 };
