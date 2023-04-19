@@ -1721,3 +1721,74 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
+const roles = [
+  '987821823607570462',
+  '987822236335480842',
+  '1097948959907000422',
+  '1097947839134441492',
+  '1097947941823590491',
+  '1097948044474990752',
+  '1097948253254852738',
+  '1097948278097723462',
+  '1097948489696161834',
+  '987822447967473734'
+];
+
+const roleNames = [
+  'Basic Fit',
+  'Fitness Park',
+  'On Air',
+  'Orange Bleue',
+  'Keep Cool',
+  'Salle Power Lifting',
+  'Salle Cross Fit',
+  'Salle Indépandente',
+  'Park Street',
+  'Home Gym'
+];
+
+client.on('messageCreate', async message => {
+if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
+  
+  const row = new MessageActionRow()
+    .addComponents(
+      new MessageSelectMenu()
+        .setCustomId('select')
+        .setPlaceholder('Choisis ta salle de sport')
+        .addOptions(roleNames.map((name, index) => ({ label: name, value: roles[index] }))),
+      new MessageButton()
+        .setCustomId('remove')
+        .setLabel('Retirer toutes les salles')
+        .setStyle('DANGER')
+    );
+
+  const embed = {
+    title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
+    color: "#0000FF",
+    footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
+  };
+
+  await message.reply({ embeds: [embed], components: [row] });
+}
+});
+
+client.on('interactionCreate', async interaction => {
+if (interaction.isSelectMenu()) {
+  
+  if (interaction.customId === 'select') {
+    const role = interaction.values[0];
+    const roleName = roleNames[roles.indexOf(role)];
+    
+    await interaction.member.roles.add(role);
+    await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+  }
+  
+} else if (interaction.isButton()) {
+  
+  if (interaction.customId === 'remove') {
+    await interaction.member.roles.remove(roles);
+    await interaction.reply({ content: `Tous les rôles vous ont été retirés.`, ephemeral: true });
+  }
+  
+}
+});
