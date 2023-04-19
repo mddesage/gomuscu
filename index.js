@@ -503,7 +503,7 @@ client.on('messageCreate', async (message) => {
                                                                                                                            
                                                                                                                            
                                                                                                                            
-client.on('message', async message => {
+client.on('messageCreate', async message => {
   if (message.author.bot) return;
   if (message.content === prefix + 'code') {
     if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
@@ -1721,63 +1721,3 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
-client.on('messageCreate', async message => {
-  if (message.content === 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE') {
-    const embed = new MessageEmbed()
-      .setTitle('🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰')
-      .setColor('#0000FF')
-      .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
-
-    const selectMenu = new MessageSelectMenu()
-      .setCustomId('select')
-      .setPlaceholder('Choisis ta salle de sport')
-      .addOptions([
-        { label: 'Basic Fit', value: '987821823607570462' },
-        { label: 'Fitness Park', value: '987822236335480842' },
-        { label: 'On Air', value: '1097948959907000422' },
-        { label: 'Orange Bleue', value: '1097947839134441492' },
-        { label: 'Keep Cool', value: '1097947941823590491' },
-        { label: 'Salle Power Lifting', value: '1097948044474990752' },
-        { label: 'Salle Cross Fit', value: '1097948253254852738' },
-        { label: 'Salle Indépandente', value: '1097948278097723462' },
-        { label: 'Park Street', value: '1097948489696161834' },
-        { label: 'Home Gym', value: '987822447967473734' }
-      ]);
-
-    const button = new MessageButton()
-      .setCustomId('remove')
-      .setLabel('Retirer toutes les salles')
-      .setStyle('DANGER');
-
-    const row = new MessageActionRow().addComponents(selectMenu, button);
-
-    await message.reply({ embeds: [embed], components: [row] });
-  }
-});
-
-client.on('interactionCreate', async interaction => {
-  if (interaction.isSelectMenu()) {
-    if (interaction.customId === 'select') {
-      const role = interaction.values[0];
-      await interaction.member.roles.add(role);
-      await interaction.reply({ content: `Le rôle ${role} vous a été attribué.`, ephemeral: true });
-    }
-  } else if (interaction.isButton()) {
-    if (interaction.customId === 'remove') {
-      const roles = [
-        '987821823607570462',
-        '987822236335480842',
-        '1097948959907000422',
-        '1097947839134441492',
-        '1097947941823590491',
-        '1097948044474990752',
-        '1097948253254852738',
-        '1097948278097723462',
-        '1097948489696161834',
-        '987822447967473734'
-      ];
-      await interaction.member.roles.remove(roles);
-      await interaction.reply({ content: `Tous les rôles ont été retirés.`, ephemeral: true });
-    }
-  }
-});
