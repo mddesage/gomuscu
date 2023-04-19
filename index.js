@@ -2049,9 +2049,7 @@ client.on('messageCreate', async message => {
   if (message.content === 'ENVOIE_LE_REGLEMENT') {
     const embed = new MessageEmbed()
       .setColor('GREEN')
-      .setTitle(`Bienvenue sur le serveur Discord "GO MUSCU" dédié à la musculation ! Nous sommes ravis de vous accueillir dans notre communauté de passionnés. Notre objectif est de créer un espace convivial et respectueux où les membres peuvent échanger des conseils, des astuces et des expériences sur la musculation.
-
-      `)
+      .setTitle(`Bienvenue sur le serveur Discord "GO MUSCU" dédié à la musculation ! Nous sommes ravis de vous accueillir dans notre communauté de passionnés. Notre objectif est de créer un espace convivial et respectueux où les membres peuvent échanger des conseils, des astuces et des expériences sur la musculation.`)
       .setDescription(`Afin de maintenir une ambiance agréable et respectueuse, nous vous demandons de suivre les règles suivantes :
       
       1. Respectez les autres membres : Nous encourageons les discussions animées et les débats, mais nous ne tolérons pas les insultes, les attaques personnelles ou les comportements agressifs. Si vous êtes en désaccord avec quelqu'un, exprimez-vous de manière respectueuse et constructive. Nous sommes tous ici pour apprendre et grandir ensemble.
