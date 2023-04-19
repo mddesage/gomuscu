@@ -1796,3 +1796,72 @@ if (interaction.isSelectMenu()) {
   
 }
 });
+
+
+
+const roleIds = [
+  '987827124138307604',
+  '987826944630468688',
+  '987827687664005170',
+  '1097950501963829411',
+  '1097950743513796760',
+  '1097950337324826725',
+  '1097950875298828461'
+];
+
+const menuOptions = [
+  { label: 'Body Building', value: roleIds[0] },
+  { label: 'Power Lifting', value: roleIds[1] },
+  { label: 'Street Workout', value: roleIds[2] },
+  { label: 'Street Lifting', value: roleIds[3] },
+  { label: 'Haltérophilie', value: roleIds[4] },
+  { label: 'Cross Fit', value: roleIds[5] },
+  { label: 'Fitness', value: roleIds[6] }
+];
+
+client.on('messageCreate', async (message) => {
+  if (message.content === 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE') {
+    const embed = new MessageEmbed()
+      .setTitle('🏋️ Choisis ta discipline grâce au menu ci-dessous 🏋️')
+      .setColor('#0000FF')
+      .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
+
+    const selectMenu = new MessageSelectMenu()
+      .setCustomId('selectMenu')
+      .setPlaceholder('Choisis ta discipline')
+      .addOptions(menuOptions);
+
+    const removeButton = new MessageButton()
+      .setCustomId('removeButton')
+      .setLabel('Retirer toutes les disciplines')
+      .setStyle('DANGER');
+
+    const row = new MessageActionRow().addComponents(selectMenu, removeButton);
+
+    await message.reply({ embeds: [embed], components: [row] });
+  }
+});
+
+client.on('interactionCreate', async (interaction) => {
+  if (interaction.isSelectMenu()) {
+    if (interaction.customId === 'selectMenu') {
+      const roleId = interaction.values[0];
+      const role = interaction.guild.roles.cache.get(roleId);
+      await interaction.member.roles.add(role);
+      await interaction.reply({
+        content: `Le rôle ${role.name} vous a été attribué.`,
+        ephemeral: true
+      });
+    }
+  } else if (interaction.isButton()) {
+    if (interaction.customId === 'removeButton') {
+      for (const roleId of roleIds) {
+        await interaction.member.roles.remove(roleId);
+      }
+      await interaction.reply({
+        content: `Tous les rôles ont été retirés.`,
+        ephemeral: true
+      });
+    }
+  }
+});
