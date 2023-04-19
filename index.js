@@ -2037,3 +2037,59 @@ client.on('interactionCreate', async interaction => {
     }
   }
 });
+
+
+
+
+
+
+
+
+client.on('messageCreate', async message => {
+  if (message.content === 'ENVOIE_LE_REGLEMENT') {
+    const embed = new MessageEmbed()
+      .setColor('GREEN')
+      .setTitle('Règlement')
+      .setDescription(`Bienvenue sur le serveur Discord "GO MUSCU" dédié à la musculation ! Nous sommes ravis de vous accueillir dans notre communauté de passionnés. Notre objectif est de créer un espace convivial et respectueux où les membres peuvent échanger des conseils, des astuces et des expériences sur la musculation.
+
+      Afin de maintenir une ambiance agréable et respectueuse, nous vous demandons de suivre les règles suivantes :
+      
+      1. Respectez les autres membres : Nous encourageons les discussions animées et les débats, mais nous ne tolérons pas les insultes, les attaques personnelles ou les comportements agressifs. Si vous êtes en désaccord avec quelqu'un, exprimez-vous de manière respectueuse et constructive. Nous sommes tous ici pour apprendre et grandir ensemble.
+      
+      2. Évitez les sujets controversés : Nous demandons à nos membres d'éviter les sujets controversés tels que la politique ou la religion. Ces sujets peuvent rapidement dégénérer en conflits et ne sont pas propices à une communauté soudée. Notre objectif est de créer un espace où tout le monde se sent à l'aise de partager ses idées et ses expériences sans crainte de jugement ou de conflit.
+      
+      3. Ne partagez pas de contenu inapproprié ou illégal : Nous ne tolérons pas le partage de contenu inapproprié ou illégal sur notre serveur. Cela inclut, mais n'est pas limité à, la pornographie, la violence gratuite, les discours haineux ou les activités illégales. Nous voulons que notre serveur soit un endroit sûr et accueillant pour tous.
+      
+      4. Publicité limitée : Nous permettons la publicité limitée pour les réseaux sociaux des membres sur notre serveur. Si vous souhaitez partager vos réseaux sociaux avec les autres membres, veuillez utiliser le canal <#990913515218927656> dédié à cet effet. Pour toute autre publicité, veuillez demander l'autorisation au staff avant de poster. La publicité non autorisée est strictement interdite et peut entraîner des sanctions, y compris l'avertissement, la suppression de messages ou l'expulsion du serveur. Veuillez noter que nous demandons à nos membres de ne pas abuser de cette possibilité.
+      
+      5. Utilisez les canaux appropriés : Notre serveur dispose de plusieurs canaux dédiés à différents sujets. Veuillez utiliser le canal approprié pour vos discussions. Par exemple, utilisez le canal <#987829603462709278> pour discuter de vos routines d'entraînement et le canal <#991696422745428018> pour discuter de votre alimentation. Cela permettra à tout le monde de trouver facilement les informations qu'il cherche.
+      
+      6. Suivez les instructions des administrateurs : Les administrateurs sont là pour assurer le bon fonctionnement du serveur et maintenir une ambiance agréable. Si un administrateur vous demande de cesser un comportement ou de suivre une règle spécifique, veuillez suivre ses instructions. Les administrateurs ont le bien-être de la communauté à cœur et travaillent dur pour maintenir un environnement agréable pour tous.
+      
+      7. Signalez tout comportement inapproprié : Si vous êtes témoin d'un comportement inapproprié sur notre serveur, veuillez le signaler aux administrateurs immédiatement. Nous prendrons les mesures nécessaires pour résoudre la situation. Nous comptons sur nos membres pour nous aider à maintenir un environnement sûr et respectueux pour tous.
+      
+      Les administrateurs se réservent le droit de prendre des mesures en cas de non-respect de ces règles, y compris l'avertissement, la suppression de messages ou l'expulsion du serveur.
+      
+      Nous espérons que ces règles vous aideront à passer un bon moment sur notre serveur et à profiter pleinement de notre communauté. Si vous avez des questions ou des préoccupations, n'hésitez pas à contacter un administrateur.
+      
+      Merci de votre compréhension et bonne musculation ! 💪`)
+      .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.", "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png");
+
+    const button = new MessageButton()
+      .setCustomId('accept')
+      .setLabel("J'ai lu et j'accepte")
+      .setStyle('SUCCESS');
+
+    const row = new MessageActionRow().addComponents(button);
+
+    await message.channel.send({ embeds: [embed], components: [row] });
+  }
+});
+
+client.on('interactionCreate', async interaction => {
+  if (interaction.isButton() && interaction.customId === 'accept') {
+    const role = interaction.guild.roles.cache.get('1098325166238478417');
+    await interaction.member.roles.add(role);
+    await interaction.reply({ content: 'Rôle ajouté !', ephemeral: true });
+  }
+});
