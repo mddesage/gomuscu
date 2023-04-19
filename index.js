@@ -1775,7 +1775,10 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
   const gymEmbed = {
     title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
     color: "#0000FF",
-    footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
+    footer: {
+      text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
+      iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
+    }
   };
 
   await message.reply({ embeds: [gymEmbed], components: [gymRow1, gymRow2] });
@@ -1849,7 +1852,10 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE") {
   const disciplineEmbed = {
     title: "🏋️ Choisis ta discipline grâce au menu ci-dessous 🏋️",
     color: "#0000FF",
-    footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
+    footer: {
+      text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
+      iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
+    }
   };
 
   await message.reply({ embeds: [disciplineEmbed], components: [disciplineRow1, disciplineRow2] });
@@ -1906,7 +1912,10 @@ client.on('messageCreate', async message => {
     const sexeEmbed = {
       title: "♀️ Choisis ton sexe grâce au menu ci-dessous ♂️",
       color: "#0000FF",
-      footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
+      footer: {
+        text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
+        iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
+      }
     };
 
     await message.reply({ embeds: [sexeEmbed], components: [sexeRow1, sexeRow2] });
@@ -1973,7 +1982,10 @@ client.on('messageCreate', async message => {
     const notificationEmbed = {
       title: "🔔 Choisis tes notifications grâce au menu ci-dessous 🔔",
       color: "#0000FF",
-      footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
+      footer: {
+        text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
+        iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
+      }
     };
 
     await message.reply({ embeds: [notificationEmbed], components: [notificationRow1, notificationRow2] });
