@@ -421,7 +421,12 @@ client.on("messageCreate", async message => {
 
           const removeButtonRow = createRemoveButton();
 
-          await message.channel.send({ content: '**Sélectionnez votre département** :', components: [menu1, menu2, menu3, menu4] });
+          const { MessageEmbed } = require('discord.js');
+          const embed = new MessageEmbed()
+              .setTitle("🧭 Choisis ton départemnent grâce aux menus ci-dessous 🧭")
+              .setColor("#0000FF")
+              .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.")
+          await message.channel.send({ embeds: [embed], components: [menu1, menu2, menu3, menu4] });
           await message.channel.send({ content: '*(+971, 972, 973, 974, 976)*', components: [] });
           await message.channel.send({ content: ' ', components: [removeButtonRow] });
 
