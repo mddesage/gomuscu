@@ -1923,64 +1923,103 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
+const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
+
+// Liste des salles de sport
+const sallesDeSport = [
+  { label: 'Basic Fit', value: 'basic-fit', role: '987821823607570462' },
+  { label: 'Fitness Park', value: 'fitness-park', role: '987822236335480842' },
+  { label: 'On Air', value: 'on-air', role: '1097948959907000422' },
+  { label: 'Orange Bleue', value: 'orange-bleue', role: '1097947839134441492' },
+  { label: 'Keep Cool', value: 'keep-cool', role: '1097947941823590491' },
+  { label: 'Salle Power Lifting', value: 'salle-power-lifting', role: '1097948044474990752' },
+  { label: 'Salle Cross Fit', value: 'salle-cross-fit', role: '1097948253254852738' },
+  { label: 'Salle Indépendante', value: 'salle-independante', role: '1097948278097723462' },
+  { label: 'Park Street', value: 'park-street', role: '1097948489696161834' },
+  { label: 'Home Gym', value: 'home-gym', role: '987822447967473734' },
+];
+
+// Liste des disciplines
+const disciplines = [
+  { label: 'Body Building', value: 'body-building', role: '987827124138307604' },
+  { label: 'Power Lifting', value: 'power-lifting', role: '987826944630468688' },
+  { label: 'Street Workout', value: 'street-workout', role: '987827687664005170' },
+  { label: 'Street Lifting', value: 'street-lifting', role: '1097950501963829411' },
+  { label: 'Haltérophilie', value: 'halterophilie', role: '1097950743513796760' },
+  { label: 'Cross Fit', value: 'cross-fit', role: '1097950337324826725' },
+  { label: 'Fitness', value: 'fitness', role: '1097950875298828461' },
+];
+
+// Liste des sexes
+const sexes = [
+  { label: 'Fille', value: 'fille', role: '987826511295950889' },
+  { label: 'Garçon', value: 'garcon', role: '987826660130816020' },
+];
+
 module.exports = {
-  name: 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE',
-  description: 'Envoie un menu pour choisir sa salle de sport.',
-  execute(message) {
-      const gymRoles = [
-          '987821823607570462', // Basic Fit
-          '987822236335480842', // Fitness Park
-          '1097948959907000422', // On Air
-          '1097947839134441492', // Orange Bleue
-          '1097947941823590491', // Keep Cool
-          '1097948044474990752', // Salle Power Lifting
-          '1097948253254852738', // Salle Cross Fit
-          '1097948278097723462', // Salle Indépendante
-          '1097948489696161834', // Park Street
-          '987822447967473734'  // Home Gym
-      ];
+  name: 'menu',
+  execute(message, args) {
+    const command = args[0];
 
-      const embed = new MessageEmbed()
-          .setTitle('🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰')
-          .setColor('#0000FF')
-          .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
+    if (command === 'salle') {
+      // Création du select menu
+      const salleSelectMenu = new MessageSelectMenu()
+        .setCustomId('salleSelectMenu')
+        .setPlaceholder('Choisis ta salle de sport')
+        .addOptions(sallesDeSport);
 
-      const selectMenu = new MessageSelectMenu()
-          .setCustomId('choose_gym')
-          .setPlaceholder('Choisis une salle de sport')
-          .addOptions([
-              { label: 'Basic Fit', value: 'basic_fit' },
-              { label: 'Fitness Park', value: 'fitness_park' },
-              { label: 'On Air', value: 'on_air' },
-              { label: 'Orange Bleue', value: 'orange_bleue' },
-              { label: 'Keep Cool', value: 'keep_cool' },
-              { label: 'Salle Power Lifting', value: 'salle_power_lifting' },
-              { label: 'Salle Cross Fit', value: 'salle_cross_fit' },
-              { label: 'Salle Indépendante', value: 'salle_independante' },
-              { label: 'Park Street', value: 'park_street' },
-              { label: 'Home Gym', value: 'home_gym' }
-          ]);
+      // Création de l'embed
+      const salleEmbed = new MessageEmbed()
+        .setTitle('🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰')
+        .setColor('#0000FF')
+        .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.');
 
-      const row = new MessageActionRow().addComponents(selectMenu);
+  // Envoi du message avec l'embed et la ligne d'action
+  message.channel.send({ embeds: [salleEmbed], components: [salleActionRow] });
 
-      message.reply({ embeds: [embed], components: [row] });
+} else if (command === 'discipline') {
+  // Création du select menu
+  const disciplineSelectMenu = new MessageSelectMenu()
+    .setCustomId('disciplineSelectMenu')
+    .setPlaceholder('Choisis ta discipline')
+    .addOptions(disciplines);
 
-      const filter = (interaction) => interaction.customId === 'choose_gym';
-      const collector = message.channel.createMessageComponentCollector({ filter, time: 15000 });
+  // Création de l'embed
+  const disciplineEmbed = new MessageEmbed()
+    .setTitle('💪 Choisis ta discipline grâce au menu ci-dessous 💪')
+    .setColor('#0000FF')
+    .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.');
 
-      collector.on('collect', (interaction) => {
-          const choice = interaction.values[0];
+  // création d'une nouvelle ligne d'action
+  const disciplineActionRow = new MessageActionRow()
+    .addComponents(disciplineSelectMenu);
 
-          const role = gymRoles[selectMenu.options.findIndex(opt => opt.value === choice)];
+  // Envoi du message avec l'embed et la ligne d'action
+  message.channel.send({ embeds: [disciplineEmbed], components: [disciplineActionRow] });
 
-          interaction.reply({ content: `Le rôle <@&${role}> vous a été attribué.`, ephemeral: true });
-          interaction.member.roles.add(role);
-      });
+} else if (command === 'sexe') {
+  // Création du select menu
+  const sexeSelectMenu = new MessageSelectMenu()
+    .setCustomId('sexeSelectMenu')
+    .setPlaceholder('Choisis ton sexe')
+    .addOptions(sexes);
 
-      collector.on('end', (collected, reason) => {
-          if (reason === 'time') {
-              message.channel.send({ content: 'Temps écoulé. Veuillez recommencer la commande.', ephemeral: true });
-          }
-      });
-  }
+  // Création de l'embed
+  const sexeEmbed = new MessageEmbed()
+    .setTitle('🚻 Choisis ton sexe grâce au menu ci-dessous 🚻')
+    .setColor('#0000FF')
+    .setFooter('Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.');
+
+  // création d'une nouvelle ligne d'action
+  const sexeActionRow = new MessageActionRow()
+    .addComponents(sexeSelectMenu);
+
+  // Envoi du message avec l'embed et la ligne d'action
+  message.channel.send({ embeds: [sexeEmbed], components: [sexeActionRow] });
+
+} else {
+  // Si la commande n'est pas reconnue, envoie un message d'erreur
+  message.reply('Commande invalide.');
+}
+},
 };
