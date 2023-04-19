@@ -1767,7 +1767,7 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
     );
 
   const gymEmbed = {
-    title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
+    title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
     color: "#0000FF",
     footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
   };
