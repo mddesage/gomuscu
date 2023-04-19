@@ -1721,6 +1721,8 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
 
 
 
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton } = require('discord.js');
+
 client.on('messageCreate', async message => {
   if (message.content === 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE') {
     const embed = new MessageEmbed()
@@ -1729,7 +1731,7 @@ client.on('messageCreate', async message => {
       .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
 
     const selectMenu = new MessageSelectMenu()
-      .setCustomId('selectsalle')
+      .setCustomId('select')
       .setPlaceholder('Choisis ta salle de sport')
       .addOptions([
         { label: 'Basic Fit', value: '987821823607570462' },
@@ -1757,7 +1759,7 @@ client.on('messageCreate', async message => {
 
 client.on('interactionCreate', async interaction => {
   if (interaction.isSelectMenu()) {
-    if (interaction.customId === 'selectsalle') {
+    if (interaction.customId === 'select') {
       const role = interaction.values[0];
       await interaction.member.roles.add(role);
       await interaction.reply({ content: `Le rôle ${role} vous a été attribué.`, ephemeral: true });
