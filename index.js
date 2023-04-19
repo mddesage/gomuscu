@@ -1799,7 +1799,9 @@ if (interaction.isSelectMenu()) {
 
 
 
-const disciplineRoleIds = [
+
+
+const disciplineRoles = [
   '987827124138307604',
   '987826944630468688',
   '987827687664005170',
@@ -1809,59 +1811,62 @@ const disciplineRoleIds = [
   '1097950875298828461'
 ];
 
-const disciplineMenuOptions = [
-  { label: 'Body Building', value: disciplineRoleIds[0] },
-  { label: 'Power Lifting', value: disciplineRoleIds[1] },
-  { label: 'Street Workout', value: disciplineRoleIds[2] },
-  { label: 'Street Lifting', value: disciplineRoleIds[3] },
-  { label: 'Haltérophilie', value: disciplineRoleIds[4] },
-  { label: 'Cross Fit', value: disciplineRoleIds[5] },
-  { label: 'Fitness', value: disciplineRoleIds[6] }
+const disciplineRoleNames = [
+  'Body Building',
+  'Power Lifting',
+  'Street Workout',
+  'Street Lifting',
+  'Haltérophilie',
+  'Cross Fit',
+  'Fitness'
 ];
 
-client.on('messageCreate', async (message) => {
-  if (message.content === 'ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE') {
-    const embed = new MessageEmbed()
-      .setTitle('🏋️ Choisis ta discipline grâce au menu ci-dessous 🏋️')
-      .setColor('#0000FF')
-      .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.");
+client.on('messageCreate', async message => {
+if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE") {
+  
+  const disciplineRow1 = new MessageActionRow()
+    .addComponents(
+      new MessageSelectMenu()
+        .setCustomId('disciplineSelect')
+        .setPlaceholder('Choisis ta discipline')
+        .addOptions(disciplineRoleNames.map((name, index) => ({ label: name, value: disciplineRoles[index] })))
+    );
+  
+  const disciplineRow2 = new MessageActionRow()
+    .addComponents(
+      new MessageButton()
+        .setCustomId('disciplineRemove')
+        .setLabel('Retirer toutes les disciplines')
+        .setStyle('DANGER')
+    );
 
-    const selectMenu = new MessageSelectMenu()
-      .setCustomId('disciplineSelectMenu')
-      .setPlaceholder('Choisis ta discipline')
-      .addOptions(disciplineMenuOptions);
+  const disciplineEmbed = {
+    title: "🏋️ Choisis ta discipline grâce au menu ci-dessous 🏋️",
+    color: "#0000FF",
+    footer: { text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." }
+  };
 
-    const removeButton = new MessageButton()
-      .setCustomId('disciplineRemoveButton')
-      .setLabel('Retirer toutes les disciplines')
-      .setStyle('DANGER');
-
-    const row = new MessageActionRow().addComponents(selectMenu, removeButton);
-
-    await message.reply({ embeds: [embed], components: [row] });
-  }
+  await message.reply({ embeds: [disciplineEmbed], components: [disciplineRow1, disciplineRow2] });
+}
 });
 
-client.on('interactionCreate', async (interaction) => {
-  if (interaction.isSelectMenu()) {
-    if (interaction.customId === 'disciplineSelectMenu') {
-      const roleId = interaction.values[0];
-      const role = interaction.guild.roles.cache.get(roleId);
-      await interaction.member.roles.add(role);
-      await interaction.reply({
-        content: `Le rôle ${role.name} vous a été attribué.`,
-        ephemeral: true
-      });
-    }
-  } else if (interaction.isButton()) {
-    if (interaction.customId === 'disciplineRemoveButton') {
-      for (const roleId of disciplineRoleIds) {
-        await interaction.member.roles.remove(roleId);
-      }
-      await interaction.reply({
-        content: `Tous les rôles ont été retirés.`,
-        ephemeral: true
-      });
-    }
+client.on('interactionCreate', async interaction => {
+if (interaction.isSelectMenu()) {
+  
+  if (interaction.customId === 'disciplineSelect') {
+    const role = interaction.values[0];
+    const roleName = disciplineRoleNames[disciplineRoles.indexOf(role)];
+    
+    await interaction.member.roles.add(role);
+    await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
   }
+  
+} else if (interaction.isButton()) {
+  
+  if (interaction.customId === 'disciplineRemove') {
+    await interaction.member.roles.remove(disciplineRoles);
+    await interaction.reply({ content: `Tous les rôles vous ont été retirés.`, ephemeral: true });
+  }
+  
+}
 });
