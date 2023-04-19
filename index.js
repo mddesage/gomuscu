@@ -2052,7 +2052,7 @@ client.on('messageCreate', async message => {
     }
     const embed = new MessageEmbed()
     .setColor('GREEN')
-    .setTitle('Règlement')
+    .setTitle('Règlement à suivre chez 𝐺𝑂𝑀𝑈𝑆𝐶𝑈')
     .setDescription(`Bienvenue sur le serveur Discord 𝐺𝑂𝑀𝑈𝑆𝐶𝑈 dédié à la musculation ! Nous sommes ravis de vous accueillir dans notre communauté de passionnés. Notre objectif est de créer un espace convivial et respectueux où les membres peuvent échanger des conseils, des astuces et des expériences sur la musculation.
 
     Afin de maintenir une ambiance agréable et respectueuse, nous vous demandons de suivre les règles suivantes :
