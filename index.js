@@ -2053,7 +2053,7 @@ client.on('messageCreate', async message => {
     const embed = new MessageEmbed()
       .setColor('GREEN')
       .setTitle('Règlement')
-      .setDescription(`Bienvenue sur le serveur Discord "GO MUSCU" dédié à la musculation ! Nous sommes ravis de vous accueillir dans notre communauté de passionnés. Notre objectif est de créer un espace convivial et respectueux où les membres peuvent échanger des conseils, des astuces et des expériences sur la musculation.
+      .setDescription(`Bienvenue sur le serveur Discord 𝐺𝑂𝑀𝑈𝑆𝐶𝑈 dédié à la musculation ! Nous sommes ravis de vous accueillir dans notre communauté de passionnés. Notre objectif est de créer un espace convivial et respectueux où les membres peuvent échanger des conseils, des astuces et des expériences sur la musculation.
 
       Afin de maintenir une ambiance agréable et respectueuse, nous vous demandons de suivre les règles suivantes :
       
@@ -2076,6 +2076,7 @@ client.on('messageCreate', async message => {
       Nous espérons que ces règles vous aideront à passer un bon moment sur notre serveur et à profiter pleinement de notre communauté. Si vous avez des questions ou des préoccupations, n'hésitez pas à contacter un administrateur.
       
       Merci de votre compréhension et bonne musculation ! 💪`)
+      .setImage("https://discord.com/channels/987820202177749082/987820203016618015/1098330144625672193")
       .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.", "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png");
 
     const button = new MessageButton()
