@@ -1840,7 +1840,8 @@ const disciplineRoleNames = [
 
 client.on('messageCreate', async message => {
 if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE") {
-  
+  if (message.member.permissions.has("ADMINISTRATOR")) {
+
   const disciplineRow1 = new MessageActionRow()
     .addComponents(
       new MessageSelectMenu()
@@ -1870,6 +1871,9 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE") {
   };
 
   await message.channel.send({ embeds: [disciplineEmbed], components: [disciplineRow1, disciplineRow2] });
+} else {
+  message.reply("Désolé, cette commande est réservée aux employés.");
+}
 }
 });
 
@@ -1903,7 +1907,8 @@ const sexeRoleNames = [  'Fille',  'Garçon'];
 
 client.on('messageCreate', async message => {
   if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SON_SEXE") {
-  
+    if (message.member.permissions.has("ADMINISTRATOR")) {
+
     const sexeRow1 = new MessageActionRow()
       .addComponents(
         new MessageSelectMenu()
@@ -1933,6 +1938,9 @@ client.on('messageCreate', async message => {
     };
 
     await message.channel.send({ embeds: [sexeEmbed], components: [sexeRow1, sexeRow2] });
+  } else {
+    message.reply("Désolé, cette commande est réservée aux employés.");
+  }
   }
 });
 
@@ -1976,7 +1984,8 @@ const notificationRoleNames = [
 
 client.on('messageCreate', async message => {
   if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SES_NOTIFICATIONS") {
-  
+    if (message.member.permissions.has("ADMINISTRATOR")) {
+
     const notificationRow1 = new MessageActionRow()
       .addComponents(
         new MessageSelectMenu()
@@ -2006,6 +2015,9 @@ client.on('messageCreate', async message => {
     };
 
     await message.channel.send({ embeds: [notificationEmbed], components: [notificationRow1, notificationRow2] });
+  } else {
+    message.reply("Désolé, cette commande est réservée aux employés.");
+  }
   }
 });
 
