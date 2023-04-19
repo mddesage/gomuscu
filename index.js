@@ -1801,14 +1801,14 @@ if (interaction.isSelectMenu()) {
     const roleName = gymRoleNames[gymRoles.indexOf(role)];
     
     await interaction.member.roles.add(role);
-    await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+    await interaction.reply({ content: `Le rôle de la salle de sport **${roleName}** vous a été attribué.`, ephemeral: true });
   }
   
 } else if (interaction.isButton()) {
   
   if (interaction.customId === 'gymRemove') {
     await interaction.member.roles.remove(gymRoles);
-    await interaction.reply({ content: `Tous les rôles vous ont été retirés.`, ephemeral: true });
+    await interaction.reply({ content: `Tous les rôles de **salle de sport** vous ont été retirés.`, ephemeral: true });
   }
   
 }
@@ -1885,14 +1885,14 @@ if (interaction.isSelectMenu()) {
     const roleName = disciplineRoleNames[disciplineRoles.indexOf(role)];
     
     await interaction.member.roles.add(role);
-    await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+    await interaction.reply({ content: `Le rôle de la discipline du **${roleName}** vous a été attribué.`, ephemeral: true });
   }
   
 } else if (interaction.isButton()) {
   
   if (interaction.customId === 'disciplineRemove') {
     await interaction.member.roles.remove(disciplineRoles);
-    await interaction.reply({ content: `Tous les rôles vous ont été retirés.`, ephemeral: true });
+    await interaction.reply({ content: `Tous les rôles de **discipline* vous ont été retirés.`, ephemeral: true });
   }
   
 }
@@ -1952,14 +1952,14 @@ client.on('interactionCreate', async interaction => {
       const roleName = sexeRoleNames[sexeRoles.indexOf(role)];
       
       await interaction.member.roles.add(role);
-      await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+      await interaction.reply({ content: `Le rôle de **${roleName}** vous a été attribué.`, ephemeral: true });
     }
   
   } else if (interaction.isButton()) {
   
     if (interaction.customId === 'sexeRemove') {
       await interaction.member.roles.remove(sexeRoles);
-      await interaction.reply({ content: `Le rôle ${sexeRoleNames[0]} et ${sexeRoleNames[1]} vous ont été retirés.`, ephemeral: true });
+      await interaction.reply({ content: `Tous les rôles de **sexe* vous ont été retirés.`, ephemeral: true });
     }
   
   }
@@ -2028,12 +2028,12 @@ client.on('interactionCreate', async interaction => {
       const roleName = notificationRoleNames[notificationRoles.indexOf(role)];
       
       await interaction.member.roles.add(role);
-      await interaction.reply({ content: `Le rôle ${roleName} vous a été attribué.`, ephemeral: true });
+      await interaction.reply({ content: `Le rôle de notification de **${roleName}** vous a été attribué.`, ephemeral: true });
     }
   } else if (interaction.isButton()) {
     if (interaction.customId === 'notificationRemove') {
       await interaction.member.roles.remove(notificationRoles);
-      await interaction.reply({ content: `Le rôle ${notificationRoleNames.join(', ')} vous a été retiré.`, ephemeral: true });
+      await interaction.reply({ content: `Tous les rôles de **notification** vous ont été retirés.`, ephemeral: true });
     }
   }
 });
