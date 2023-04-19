@@ -1775,8 +1775,8 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
   const gymEmbed = {
     title: "🏰 Choisis ta salle de sport grâce au menu ci-dessous 🏰",
     color: "#0000FF",
-    image: "https://cdn.discordapp.com/attachments/987820203016618015/1098259736891228191/SALLE_DE_SPORT.gif",
-    footer: {
+    thumbnail: { url: "https://cdn.discordapp.com/attachments/987820203016618015/1098258559319408731/DEPARTEMENT.gif" },
+     footer: {
       text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.",
       iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
     }
