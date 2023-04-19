@@ -1756,9 +1756,7 @@ const gymRoleNames = [
 client.on('messageCreate', async message => {
 if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
   if (message.member.permissions.has("ADMINISTRATOR")) {
-  } else {
-    message.reply("Désolé, cette commande est réservée aux employés.");
-  }
+
   
   const gymRow1 = new MessageActionRow()
     .addComponents(
@@ -1787,7 +1785,9 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
       iconURL: "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png"
     }
   };
-
+} else {
+  message.reply("Désolé, cette commande est réservée aux employés.");
+}
   await message.reply({ embeds: [gymEmbed], components: [gymRow1, gymRow2] });
 }
 });
