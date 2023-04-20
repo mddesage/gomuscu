@@ -2360,3 +2360,47 @@ client.on('messageCreate', message => {
       message.channel.send({ embeds: [embed] });
   }
 });
+
+
+
+// Définir un temps limite en millisecondes pour les messages de spam
+const SPAM_TIME_LIMIT = 5000;
+
+// Définir un nombre maximum de messages autorisés dans le temps limite
+const SPAM_MESSAGE_LIMIT = 5;
+
+// Créer un objet pour stocker les données de spam des utilisateurs
+const spamData = {};
+
+client.on('messageCreate', message => {
+    // Vérifier si l'auteur du message est un bot
+    if (message.author.bot) return;
+
+    // Obtenir l'ID de l'auteur du message
+    const authorId = message.author.id;
+
+    // Vérifier si l'auteur du message est déjà dans les données de spam
+    if (!spamData[authorId]) {
+        // Si l'auteur n'est pas dans les données de spam, l'ajouter avec un compteur de messages à 1 et la date actuelle
+        spamData[authorId] = {
+            messageCount: 1,
+            startTime: Date.now()
+        };
+    } else {
+        // Si l'auteur est déjà dans les données de spam, incrémenter son compteur de messages
+        spamData[authorId].messageCount++;
+
+        // Vérifier si le temps écoulé depuis le premier message dépasse le temps limite
+        if (Date.now() - spamData[authorId].startTime > SPAM_TIME_LIMIT) {
+            // Si le temps écoulé dépasse le temps limite, réinitialiser les données de spam pour cet auteur
+            spamData[authorId] = {
+                messageCount: 1,
+                startTime: Date.now()
+            };
+        } else if (spamData[authorId].messageCount > SPAM_MESSAGE_LIMIT) {
+            // Si le nombre de messages dépasse la limite autorisée dans le temps limite, prendre des mesures contre l'auteur du message
+            // Par exemple, vous pouvez avertir l'auteur, supprimer ses messages ou le bannir du serveur
+            message.channel.send(`${message.author}, veuillez arrêter de spammer.`);
+        }
+    }
+});
