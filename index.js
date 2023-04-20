@@ -1128,14 +1128,6 @@ client.on("messageCreate", async (message) => {
 
 const { Client, Intents, MessageEmbed } = require('discord.js');
 const LESDIXMINDELEMBED = 10 * 60 * 1000;
-const isValidURL = (string) => {
-  try {
-    new URL(string);
-    return true;
-  } catch (_) {
-    return false;
-  }
-};
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
@@ -1166,12 +1158,8 @@ client.on('messageCreate', async (message) => {
       .setDescription(embedDescription)
       .setColor(embedColor);
 
-     if (imageURL.toLowerCase() !== 'skip') {
-      if (isValidURL(imageURL)) {
-        embed.setImage(imageURL);
-      } else {
-        message.reply('Il faut un **lien**.');
-      }
+    if (imageURL.toLowerCase() !== 'skip') {
+      embed.setImage(imageURL);
     }
 
     const targetChannel = targetChannelId.toLowerCase() === 'ici' || targetChannelId.toLowerCase() === 'here'
