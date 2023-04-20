@@ -1128,6 +1128,14 @@ client.on("messageCreate", async (message) => {
 
 const { Client, Intents, MessageEmbed } = require('discord.js');
 const LESDIXMINDELEMBED = 10 * 60 * 1000;
+const isValidURL = (string) => {
+  try {
+    new URL(string);
+    return true;
+  } catch (_) {
+    return false;
+  }
+};
 client.on('messageCreate', async (message) => {
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
@@ -1147,19 +1155,23 @@ client.on('messageCreate', async (message) => {
       return collected.first().content;
     };
 
-    const targetChannelId = await askForInput('Veuillez entrer l\'**ID** du salon où envoyer l\'embed, ou répondez par "**ici**" ou "**here**" pour envoyer dans le salon actuel :\n*Faites **Répondre** à ce message.*');
-    const embedTitle = await askForInput('Veuillez entrer le **titre** de l\'embed :\n*Faites **Répondre** à ce message.*');
+    const targetChannelId = await askForInput('Veuillez entrer l\'**ID** du salon où envoyer l\'embed, ou répondez par "**ici**" ou "**here**" pour envoyer dans le salon actuel :');
+    const embedTitle = await askForInput('Veuillez entrer le **titre** de l\'embed :');
     const embedDescription = await askForInput('Veuillez entrer la **description** de l\'embed :\n*Faites **Répondre** à ce message.*');
-    const embedColor = await askForInput('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :\nhttps://htmlcolorcodes.com/fr/\n*Faites **Répondre** à ce message.*');
-    const imageURL = await askForInput('Veuillez fournir l\'**URL** de l\'**image** (facultatif, répondez par "**skip**" pour ignorer) :\n*Faites **Répondre** à ce message.*');
+    const embedColor = await askForInput('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :\nhttps://htmlcolorcodes.com/fr/');
+    const imageURL = await askForInput('Veuillez fournir l\'**URL** de l\'**image** (facultatif, répondez par "**skip**" pour ignorer) :');
 
     const embed = new MessageEmbed()
       .setTitle(embedTitle)
       .setDescription(embedDescription)
       .setColor(embedColor);
 
-    if (imageURL.toLowerCase() !== 'skip') {
-      embed.setImage(imageURL);
+     if (imageURL.toLowerCase() !== 'skip') {
+      if (isValidURL(imageURL)) {
+        embed.setImage(imageURL);
+      } else {
+        message.reply('Il faut un **lien**.');
+      }
     }
 
     const targetChannel = targetChannelId.toLowerCase() === 'ici' || targetChannelId.toLowerCase() === 'here'
