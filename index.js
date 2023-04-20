@@ -2370,18 +2370,18 @@ client.on('messageCreate', message => {
 <@&987826511295950889> & <@&987826660130816020>           **Vanquish** → *https://www.vqfit.com/*
 <@&987826511295950889> & <@&987826660130816020>           **Young LA** → *https://www.youngla.com/*
 
-<@&987826511295950889>                                             **Abbl** → *https://fr.beaybl.com/*
-<@&987826511295950889> & <@&987826660130816020>           **Alphalete** → *https://alphaleteathletics.com/*
-<@&987826511295950889> & <@&987826660130816020>           **Bulk** → *https://www.bulk.com/fr/*
-<@&987826511295950889>                                             **Fabletics** → *https://www.fabletics.fr/*
-<@&987826511295950889> & <@&987826660130816020>           **Gymshark** → *https://fr.gymshark.com/*
-<@&987826511295950889>                                             **Lululemon** → *https://www.lululemon.fr/*
-<@&987826511295950889> & <@&987826660130816020>           **My Protein** → *https://fr.myprotein.com/*
-<@&987826511295950889> & <@&987826660130816020>           **Prozis** → *https://www.prozis.com/fr/*
-<@&987826511295950889> & <@&987826660130816020>           **Shein** → *https://fr.shein.com/*
-<@&987826511295950889> & <@&987826660130816020>           **Yamamoto** → *https://www.yamamotonutrition.com/fra/*
-<@&987826511295950889> & <@&987826660130816020>           **Vanquish** → *https://www.vqfit.com/*
-<@&987826511295950889> & <@&987826660130816020>           **Young LA** → *https://www.youngla.com/*
+<@&987826511295950889>                                      **Abbl** → *https://fr.beaybl.com/*
+<@&987826511295950889> & <@&987826660130816020>    **Alphalete** → *https://alphaleteathletics.com/*
+<@&987826511295950889> & <@&987826660130816020>    **Bulk** → *https://www.bulk.com/fr/*
+<@&987826511295950889>                                      **Fabletics** → *https://www.fabletics.fr/*
+<@&987826511295950889> & <@&987826660130816020>    **Gymshark** → *https://fr.gymshark.com/*
+<@&987826511295950889>                                      **Lululemon** → *https://www.lululemon.fr/*
+<@&987826511295950889> & <@&987826660130816020>    **My Protein** → *https://fr.myprotein.com/*
+<@&987826511295950889> & <@&987826660130816020>    **Prozis** → *https://www.prozis.com/fr/*
+<@&987826511295950889> & <@&987826660130816020>    **Shein** → *https://fr.shein.com/*
+<@&987826511295950889> & <@&987826660130816020>    **Yamamoto** → *https://www.yamamotonutrition.com/fra/*
+<@&987826511295950889> & <@&987826660130816020>    **Vanquish** → *https://www.vqfit.com/*
+<@&987826511295950889> & <@&987826660130816020>    **Young LA** → *https://www.youngla.com/*
 `);
       message.channel.send({ embeds: [embed] });
   }
