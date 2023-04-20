@@ -2158,7 +2158,7 @@ client.on('messageCreate', async message => {
     const embed = new Discord.MessageEmbed()
       .setTitle('🗺️ Choisis ton pays grâce au menu ci-dessous 🗺️')
       .setColor('#7f00ff')
-      .setImage('https://cdn.discordapp.com/attachments/987820203016618015/1098259736891228191/SALLE_DE_SPORT.gif')
+      .setImage('https://cdn.discordapp.com/attachments/987820203016618015/1098583165376942120/AUTRES_PAYS.gif')
       .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.", "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png");
 
     const selectMenu = new MessageActionRow()
