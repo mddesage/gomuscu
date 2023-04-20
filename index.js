@@ -1136,8 +1136,8 @@ client.on('messageCreate', async (message) => {
   const command = args.shift().toLowerCase();
 
   if (command === 'embed') {
-    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
-      return message.reply('Désolé, cette commande est réservée aux employés.');
+    if (!message.member.roles.cache.has(requiredEmployedRoleId) && !message.member.roles.cache.has('987820202198712448')) {
+      return message.reply('Désolé, cette commande est réservée aux employés et aux habitués.');
     }
 
     const askForInput = async (question) => {
@@ -1149,7 +1149,7 @@ client.on('messageCreate', async (message) => {
 
     const targetChannelId = await askForInput('Veuillez entrer l\'**ID** du salon où envoyer l\'embed, ou répondez par "**ici**" ou "**here**" pour envoyer dans le salon actuel :');
     const embedTitle = await askForInput('Veuillez entrer le **titre** de l\'embed :');
-    const embedDescription = await askForInput('Veuillez entrer la **description** de l\'embed :\n*Faites **Répondre** à ce message.*');
+    const embedDescription = await askForInput('Veuillez entrer la **description** de l\'embed :');
     const embedColor = await askForInput('Veuillez entrer la **couleur** de l\'embed (en hexadécimal) :\nhttps://htmlcolorcodes.com/fr/');
     const imageURL = await askForInput('Veuillez fournir l\'**URL** de l\'**image** (facultatif, répondez par "**skip**" pour ignorer) :');
 
