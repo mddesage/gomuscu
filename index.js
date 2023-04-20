@@ -2150,3 +2150,180 @@ client.on('messageCreate', async message => {
     await message.channel.send({ embeds: [embed] });
   }
 });
+
+
+
+client.on('messageCreate', async message => {
+  if (message.content === 'autrespays') {
+    const embed = new Discord.MessageEmbed()
+      .setTitle('🗺️ Choisis ton pays grâce au menu ci-dessous 🗺️')
+      .setColor('#0000FF')
+      .setImage('https://cdn.discordapp.com/attachments/987820203016618015/1098259736891228191/SALLE_DE_SPORT.gif')
+      .setFooter("Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.", "https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png");
+
+    const selectMenu = new MessageActionRow()
+      .addComponents(
+        new MessageSelectMenu()
+          .setCustomId('select')
+          .setPlaceholder('Choisis ton pays')
+          .addOptions([
+            {
+              label: '🇩🇿 ┃ Algérie',
+              value: '1098507604759687178',
+            },
+            {
+              label: '🇩🇪 ┃ Allemagne',
+              value: '1098502027216179210',
+            },
+            {
+              label: '🇦🇩 ┃ Andorre',
+              value: '1098505293178093569',
+            },
+            {
+              label: '🇧🇪 ┃ Belgique',
+              value: '1098501557651255316',
+            },
+            {
+              label: '🇨🇲 ┃ Cameroun',
+              value: '1098507645213757511',
+            },
+            {
+              label: '🇨🇦 ┃ Canada',
+              value: '1098501692716232775',
+            },
+            {
+              label: '🇨🇮 ┃ Côte d\'Ivoire',
+              value: '1098505129642176572',
+            },
+            {
+              label: '🇨🇬 ┃ Congo',
+              value: '1098510529733066792',
+            },
+            {
+              label: '🇪🇸 ┃ Espagne',
+              value: '1098502097063911558',
+            },
+            {
+              label: '🇬🇦 ┃ Gabon',
+              value: '1098509400215388212',
+            },
+            {
+              label: '🇬🇳 ┃ Guinée',
+              value: '1098509431735595120',
+            },
+            {
+              label: '🇭🇹 ┃ Haïti',
+              value: '1098501829756727326',
+            },
+            {label: '🇮🇹 ┃ Italie',
+              value: '1098502054365892649',
+            },
+            {
+              label: '🇱🇺 ┃ Luxembourg',
+              value: '1098501755156824086',
+            },
+            {
+              label: '🇲🇬 ┃ Madagascar',
+              value: '1098507710594564117',
+            },
+            {
+              label: '🇲🇱 ┃ Mali',
+              value: '1098507746925617204',
+            },
+            {
+              label: '🇲🇦 ┃ Maroc',
+              value: '1098505063112114186',
+            },
+            {
+              label: '🇲🇺 ┃ Maurice',
+              value: '1098507766483648512',
+            },
+            {
+              label: '🇲🇨 ┃ Monaco',
+              value: '1098501805882744933',
+            },
+            {
+              label: '🇳🇨 ┃ Nouvelle Calédonie',
+              value: '1098505221623255170',
+            },
+            {
+              label: '🇵🇹 ┃ Portugal',
+              value: '1098502266782240840',
+            },
+            {
+              label: '🇬🇧 ┃ Royaume-Uni',
+              value: '1098502362940846152',
+            },
+            {
+              label: '🇸🇳 ┃ Sénégal',
+              value: '1098510605071155233',
+            },
+            {
+              label: '🇨🇭 ┃ Suisse',
+              value: '1098501944735170631',
+            },
+            {
+              label: '🇹🇳 ┃ Tunisie',
+              value: '1098501726325178429'
+            }
+          ])
+      );
+
+    const removeButton = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('remove')
+          .setLabel('Retirer tous les pays')
+          .setStyle('DANGER')
+      );
+
+    await message.reply({ embeds: [embed], components: [selectMenu, removeButton] });
+  }
+});
+
+client.on('interactionCreate', async interaction => {
+  if (interaction.isSelectMenu()) {
+    if (interaction.customId === 'select') {
+      const role = interaction.guild.roles.cache.get(interaction.values[0]);
+      await interaction.member.roles.add(role);
+      await interaction.reply({ content: `Rôle ${role.name} ajouté avec succès!`, ephemeral: true });
+    }
+  } else if (interaction.isButton()) {
+    if (interaction.customId === 'remove') {
+  const roles = [
+    "1098507604759687178",
+    "1098502027216179210",
+    "1098505293178093569",
+    "1098501557651255316",
+    "1098507645213757511",
+    "1098501692716232775",
+    "1098505129642176572",
+    "1098510529733066792",
+    "1098502097063911558",
+    "1098509400215388212",
+    "1098509431735595120",
+    "1098501829756727326",
+    "1098502054365892649",
+    "1098501755156824086",
+    "1098507710594564117",
+    "1098507746925617204",
+    "1098505063112114186",
+    "1098507766483648512",
+    "1098501805882744933",
+    "1098505221623255170",
+    "1098502266782240840",
+    "1098502362940846152",
+    "1098510605071155233",
+    "1098501944735170631",
+    "1098501726325178429"
+  ];
+  for (const roleId of roles) {
+    const role = interaction.guild.roles.cache.get(roleId);
+    if (interaction.member.roles.cache.has(roleId)) {
+      await interaction.member.roles.remove(role);
+    }
+  }
+  await interaction.reply({ content: `Tous les rôles de pays ont été retirés avec succès!`, ephemeral: true });
+}
+}
+});
