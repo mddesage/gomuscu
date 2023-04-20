@@ -2090,13 +2090,13 @@ client.on('interactionCreate', async interaction => {
 
 
 
-//ooooooooo.     .oooooo.   ooooo        oooooooooooo   .oooooo.      ooooo     ooo ooooo        .o   .oo.     o.   
-//`888   `Y88.  d8P'  `Y8b  `888'        `888'     `8  d8P'  `Y8b     `888'     `8' `888'       .8' .88' `8.   `8.  
-// 888   .d88' 888      888  888          888         888      888     888       8   888       .8'  88.  .8'    `8. 
-// 888ooo88P'  888      888  888          888oooo8    888      888     888       8   888       88   `88.8P       88 
-// 888`88b.    888      888  888          888    "    888      888     888       8   888       88    d888[.8'    88 
-// 888  `88b.  `88b    d88'  888       o  888       o `88b    d88b     `88.    .8'   888       `8.  88' `88.    .8' 
-//o888o  o888o  `Y8bood8P'  o888ooooood8 o888ooooood8  `Y8bood8P'Ybd'    `YbodP'    o888o       `8. `bodP'`88. .8'  
+//        ooooooooo.     .oooooo.   ooooo        oooooooooooo   .oooooo.      ooooo     ooo ooooo        .o   .oo.     o.   
+//        `888   `Y88.  d8P'  `Y8b  `888'        `888'     `8  d8P'  `Y8b     `888'     `8' `888'       .8' .88' `8.   `8.  
+//         888   .d88' 888      888  888          888         888      888     888       8   888       .8'  88.  .8'    `8. 
+//         888ooo88P'  888      888  888          888oooo8    888      888     888       8   888       88   `88.8P       88 
+//         888`88b.    888      888  888          888    "    888      888     888       8   888       88    d888[.8'    88 
+//         888  `88b.  `88b    d88'  888       o  888       o `88b    d88b     `88.    .8'   888       `8.  88' `88.    .8' 
+//        o888o  o888o  `Y8bood8P'  o888ooooood8 o888ooooood8  `Y8bood8P'Ybd'    `YbodP'    o888o       `8. `bodP'`88. .8'  
 
 
 
@@ -2363,43 +2363,35 @@ client.on('messageCreate', message => {
 
 
 
-// Définir un temps limite en millisecondes pour les messages de spam
+//              .o.       ooooo      ooo ooooooooooooo ooooo       .oooooo..o ooooooooo.         .o.       ooo        ooooo 
+//             .888.      `888b.     `8' 8'   888   `8 `888'      d8P'    `Y8 `888   `Y88.      .888.      `88.       .888' 
+//            .8"888.      8 `88b.    8       888       888       Y88bo.       888   .d88'     .8"888.      888b     d'888  
+//           .8' `888.     8   `88b.  8       888       888        `"Y8888o.   888ooo88P'     .8' `888.     8 Y88. .P  888  
+//          .88ooo8888.    8     `88b.8       888       888            `"Y88b  888           .88ooo8888.    8  `888'   888  
+//         .8'     `888.   8       `888       888       888       oo     .d8P  888          .8'     `888.   8    Y     888  
+//        o88o     o8888o o8o        `8      o888o     o888o      8""88888P'  o888o        o88o     o8888o o8o        o888o 
+
+
+
 const SPAM_TIME_LIMIT = 5000;
-
-// Définir un nombre maximum de messages autorisés dans le temps limite
 const SPAM_MESSAGE_LIMIT = 5;
-
-// Créer un objet pour stocker les données de spam des utilisateurs
 const spamData = {};
 
 client.on('messageCreate', message => {
-    // Vérifier si l'auteur du message est un bot
     if (message.author.bot) return;
-
-    // Obtenir l'ID de l'auteur du message
     const authorId = message.author.id;
-
-    // Vérifier si l'auteur du message est déjà dans les données de spam
     if (!spamData[authorId]) {
-        // Si l'auteur n'est pas dans les données de spam, l'ajouter avec un compteur de messages à 1 et la date actuelle
         spamData[authorId] = {
             messageCount: 1,
             startTime: Date.now()
-        };
-    } else {
-        // Si l'auteur est déjà dans les données de spam, incrémenter son compteur de messages
+        };} else {
         spamData[authorId].messageCount++;
-
-        // Vérifier si le temps écoulé depuis le premier message dépasse le temps limite
         if (Date.now() - spamData[authorId].startTime > SPAM_TIME_LIMIT) {
-            // Si le temps écoulé dépasse le temps limite, réinitialiser les données de spam pour cet auteur
             spamData[authorId] = {
                 messageCount: 1,
                 startTime: Date.now()
             };
         } else if (spamData[authorId].messageCount > SPAM_MESSAGE_LIMIT) {
-            // Si le nombre de messages dépasse la limite autorisée dans le temps limite, prendre des mesures contre l'auteur du message
-            // Par exemple, vous pouvez avertir l'auteur, supprimer ses messages ou le bannir du serveur
             message.channel.send(`${message.author}, veuillez arrêter de spammer.`);
         }
     }
