@@ -1142,7 +1142,7 @@ client.on('messageCreate', async (message) => {
 
     const askForInput = async (question) => {
       const sentMessage = await message.reply(question);
-      const filter = (m) => m.author.id === message.author.id && m.reference && m.reference.messageId === sentMessage.id;
+      const filter = (m) => m.author.id === message.author.id;
       const collected = await message.channel.awaitMessages({ filter, max: 1, time: LESDIXMINDELEMBED });
       return collected.first().content;
     };
