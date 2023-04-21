@@ -188,7 +188,7 @@ client.on("messageCreate", async message => {
                         **(ACTUELLEMENT INDISPONIBLE)**
 
                         **autrespays**
-                        Si aucun des rôles de départements disponibles dans <#987820202752356375> vous conviennent, si vous n'êtes pas de France, vous pouvez taper cette commande pour faire apparaître un menu pour choisir d'autres pays.
+                        Si aucun des rôles de départements disponibles dans <#987820202752356375> vous conviennent, si vous n'êtes pas de, vous pouvez taper cette commande pour faire apparaître un menu pour choisir d'autres pays.
                         `)
                         .setTitle("Liste des commandes GLOBALES");
                     message.reply({ embeds: [embed] });
@@ -2399,4 +2399,39 @@ client.on('messageCreate', message => {
             message.channel.send(`${message.author}, veuillez arrêter de spammer.`);
         }
     }
+});
+
+
+
+
+
+
+
+
+client.on('messageCreate', async message => {
+  if (message.content === '!createChannels') {
+    for (let i = 1; i <= 95; i++) {
+      let channelName = `『🧭』𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡-${i.toString().padStart(2, '0')}`;
+      let roleName = `🧭┃Département ${i.toString().padStart(2, '0')}`;
+      let role = message.guild.roles.cache.find(r => r.name === roleName);
+      if (!role) {
+        role = await message.guild.roles.create({
+          name: roleName
+        });
+      }
+      await message.guild.channels.create(channelName, {
+        type: 'GUILD_TEXT',
+        permissionOverwrites: [
+          {
+            id: role.id,
+            allow: ['VIEW_CHANNEL']
+          },
+          {
+            id: message.guild.roles.everyone,
+            deny: ['VIEW_CHANNEL']
+          }
+        ]
+      });
+    }
+  }
 });
