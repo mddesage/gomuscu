@@ -2411,7 +2411,7 @@ client.on('messageCreate', message => {
 client.on('messageCreate', async message => {
   if (message.content === '!createChannels') {
     for (let i = 1; i <= 50; i++) {
-      let channelName = `『🧭』${numberCharacters[Math.floor(i / 10)]}${numberCharacters[i % 10]} 𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
+      let channelName = `『🧭』${i.toString().padStart(2, '0')} 𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
       let roleName = `🧭┃Département ${i.toString().padStart(2, '0')}`;
       let role = message.guild.roles.cache.find(r => r.name === roleName);
       if (!role) {
