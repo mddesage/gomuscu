@@ -2400,3 +2400,17 @@ client.on('messageCreate', message => {
 
 
 
+
+client.on('messageCreate', message => {
+  const emojiRegex = /:(.*?):/g;
+  let newMessage = message.content;
+  let match;
+  while ((match = emojiRegex.exec(message.content)) !== null) {
+    const emojiName = match[1];
+    const emoji = message.guild.emojis.cache.find(emoji => emoji.name === emojiName);
+    if (emoji) {
+      newMessage = newMessage.replace(`:${emojiName}:`, `${emoji}`);
+    }
+  }
+  message.channel.send(newMessage);
+});
