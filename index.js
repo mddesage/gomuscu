@@ -2426,7 +2426,7 @@ client.on('messageCreate', async message => {
 
 client.on('messageCreate', async message => {
   if (message.content === '!createChannels') {
-    for (let i = 51; i <= 95; i++) {
+    for (let i = 50; i <= 95; i++) {
       let channelName = `『🧭』${i.toString().padStart(2, '0')} 𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
       let roleName = `🧭┃Département ${i.toString().padStart(2, '0')}`;
       let role = message.guild.roles.cache.find(r => r.name === roleName);
@@ -2471,7 +2471,7 @@ client.on('messageCreate', async message => {
       }
       await message.guild.channels.create(channelName, {
         type: 'GUILD_TEXT',
-        parent: '1099016236924412014',
+        parent: '1099073760218337311',
         permissionOverwrites: [
           {
             id: role.id,
