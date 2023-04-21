@@ -2424,7 +2424,6 @@ client.on('messageCreate', async message => {
 
 
 
-
 client.on('messageCreate', async message => {
   if (message.content === '!createChannels') {
     for (let i = 51; i <= 95; i++) {
@@ -2453,6 +2452,8 @@ client.on('messageCreate', async message => {
     }
   }
 });
+
+
 
 const departments = ['2A', '2B', '971', '972', '973', '974', '976'];
 
