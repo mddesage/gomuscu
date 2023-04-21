@@ -2402,18 +2402,16 @@ client.on('messageCreate', message => {
 
 
 client.on('messageCreate', message => {
-  if (message.author.bot) return; 
-  const emojiRegex = /<a?:([a-zA-Z0-9_]+):[0-9]+>/g;
+  if (message.author.bot) return; // ignore messages from bots
+  const emojiRegex = /:(.*?):/g;
   let newMessage = message.content;
   let match;
   while ((match = emojiRegex.exec(message.content)) !== null) {
     const emojiName = match[1];
     const emoji = message.guild.emojis.cache.find(emoji => emoji.name === emojiName);
     if (emoji) {
-      newMessage = newMessage.replace(match[0], `${emoji}`);
+      newMessage = newMessage.replace(`:${emojiName}:`, `${emoji}`);
     }
   }
-  if (newMessage !== message.content) {
-    message.channel.send(newMessage);
-  }
+  message.channel.send(newMessage);
 });
