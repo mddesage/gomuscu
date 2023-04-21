@@ -185,7 +185,11 @@ client.on("messageCreate", async message => {
                         Vous répond à partir de chat GPT.
                         
                         ${prefix}**musique** *[lien YouTube]*
-                        **(ACTUELLEMENT INDISPONIBLE)**`)
+                        **(ACTUELLEMENT INDISPONIBLE)**
+
+                        **autrespays**
+                        Si aucun des rôles de départements disponible dans <#987820202752356375>, si vous n'êtes, vous pouvez taper cette commande pour faire apparaître un menu pour choisir d'autres pays.
+                        `)
                         .setTitle("Liste des commandes GLOBALES");
                     message.reply({ embeds: [embed] });
                     break;
