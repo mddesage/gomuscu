@@ -17,8 +17,6 @@ client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
 const requiredEmployedRoleId = ("987820202198712449");
 
-const emoji_gomuscugif = message.guild.emojis.cache.find(emoji => emoji.name === 'gomuscugif');
-
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
@@ -2404,7 +2402,8 @@ client.on('messageCreate', message => {
 
 
 client.on('messageCreate', message => {
-  if (message.content === 'gomuscugif') {
-    message.channel.send(`${emoji_gomuscugif}`);
+  if (message.content === 'fleche') {
+    const emoji = message.guild.emojis.cache.find(emoji => emoji.name === 'fleche');
+    message.channel.send(`${emoji}`);
   }
 });
