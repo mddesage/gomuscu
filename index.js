@@ -2421,6 +2421,7 @@ client.on('messageCreate', async message => {
       }
       await message.guild.channels.create(channelName, {
         type: 'GUILD_TEXT',
+        parent: '1099016236924412014',
         permissionOverwrites: [
           {
             id: role.id,
