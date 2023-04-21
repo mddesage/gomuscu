@@ -2455,7 +2455,7 @@ client.on('messageCreate', async message => {
 
 
 
-const departments = ['2A', '2B', '971', '972', '973', '974', '976'];
+const departments = ['971', '972', '973', '974', '976'];
 
 
 client.on('messageCreate', async message => {
