@@ -2454,7 +2454,7 @@ client.on('messageCreate', async message => {
 });
 
 client.on('messageCreate', async message => {
-  if (message.content === '!createChannels') {
+  if (message.content === '!createChannels2') {
     for (let i = 51; i <= 95; i++) {
       let channelName = `『🧭』${i.toString().padStart(2, '0')} 𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
       let roleName = `🧭┃Département ${i.toString().padStart(2, '0')}`;
