@@ -2402,7 +2402,8 @@ client.on('messageCreate', message => {
 
 
 client.on('messageCreate', message => {
-  if (message.content === 'ping') {
-    message.channel.send(':gf:');
+  if (message.content === 'emoji') {
+    const emoji = message.guild.emojis.cache.find(emoji => emoji.name === 'gf');
+    message.channel.send(`${emoji}`);
   }
 });
