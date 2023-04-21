@@ -17,6 +17,16 @@ client.login(process.env.TOKEN);
 const prefix = (process.env.PREFIX);
 const requiredEmployedRoleId = ("987820202198712449");
 
+const emoji_gomuscugif = message.guild.emojis.cache.find(emoji => emoji.name === 'gomuscugif');
+const emoji_fleche = message.guild.emojis.cache.find(emoji => emoji.name === 'fleche');
+const emoji_gomuscu = message.guild.emojis.cache.find(emoji => emoji.name === 'gomuscu');
+const emoji_gomuscublanc = message.guild.emojis.cache.find(emoji => emoji.name === 'gomuscublanc');
+const emoji_gomuscunoir = message.guild.emojis.cache.find(emoji => emoji.name === 'gomuscunoir');
+const emoji_gomuscu2 = message.guild.emojis.cache.find(emoji => emoji.name === 'gomuscu2');
+const emoji_jack = message.guild.emojis.cache.find(emoji => emoji.name === 'jack');
+const emoji_gf = message.guild.emojis.cache.find(emoji => emoji.name === 'fleche');
+_
+
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
 
@@ -2402,8 +2412,36 @@ client.on('messageCreate', message => {
 
 
 client.on('messageCreate', message => {
-  if (message.content === 'emoji') {
-    const emoji = message.guild.emojis.cache.find(emoji => emoji.name === 'fleche');
-    message.channel.send(`${emoji}`);
+  if (message.content === 'gomuscugif') {
+    message.channel.send(`${emoji_gomuscugif}`);
+  }
+});
+client.on('messageCreate', message => {
+  if (message.content === 'fleche') {
+    message.channel.send(`${emoji_fleche}`);
+  }
+});client.on('messageCreate', message => {
+  if (message.content === 'gomuscu') {
+    message.channel.send(`${emoji_gomuscu}`);
+  }
+});client.on('messageCreate', message => {
+  if (message.content === 'gomuscublanc') {
+    message.channel.send(`${emoji_gomuscublanc}`);
+  }
+});client.on('messageCreate', message => {
+  if (message.content === 'gomuscunoir') {
+    message.channel.send(`${emoji_gomuscunoir}`);
+  }
+});client.on('messageCreate', message => {
+  if (message.content === 'gomuscu2') {
+    message.channel.send(`${emoji_gomuscu2}`);
+  }
+});client.on('messageCreate', message => {
+  if (message.content === 'jack') {
+    message.channel.send(`${emoji_jack}`);
+  }
+});client.on('messageCreate', message => {
+  if (message.content === 'gf') {
+    message.channel.send(`${emoji_gf}`);
   }
 });
