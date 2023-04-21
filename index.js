@@ -188,7 +188,7 @@ client.on("messageCreate", async message => {
                         **(ACTUELLEMENT INDISPONIBLE)**
 
                         **autrespays**
-                        Si aucun des rôles de départements disponible dans <#987820202752356375>, si vous n'êtes, vous pouvez taper cette commande pour faire apparaître un menu pour choisir d'autres pays.
+                        Si aucun des rôles de départements disponibles dans <#987820202752356375> vous conviennent, si vous n'êtes pas de France, vous pouvez taper cette commande pour faire apparaître un menu pour choisir d'autres pays.
                         `)
                         .setTitle("Liste des commandes GLOBALES");
                     message.reply({ embeds: [embed] });
