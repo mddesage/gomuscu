@@ -2403,7 +2403,7 @@ client.on('messageCreate', message => {
 
 client.on('messageCreate', message => {
   if (message.content === 'emoji') {
-    const emoji = message.guild.emojis.cache.find(emoji => emoji.name === 'gf');
+    const emoji = message.guild.emojis.cache.find(emoji => emoji.name === 'fleche');
     message.channel.send(`${emoji}`);
   }
 });
