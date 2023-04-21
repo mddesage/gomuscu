@@ -2410,7 +2410,7 @@ client.on('messageCreate', message => {
 
 client.on('messageCreate', async message => {
   if (message.content === '!deleteChannels') {
-    for (let i = 1; i <= 50; i++) {
+    for (let i = 1; i <= 1000; i++) {
       let channelName = `『🧭』${i.toString().padStart(2, '0')}-𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
       let channel = message.guild.channels.cache.find(c => c.name === channelName);
       if (channel) {
