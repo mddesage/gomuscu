@@ -2518,45 +2518,30 @@ const countries = [
   { name: 'Togo', flag: '🇹🇬' },
   { name: 'Tunisie', flag: '🇹🇳' },
 ];
-
-client.on('messageCreate', async (message) => {
-  if (message.content === 'newchannel') {
-    const category = message.guild.channels.cache.get(categoryId);
-    if (!category || category.type !== 'GUILD_CATEGORY') {
-      message.reply('La catégorie n\'existe pas.');
-      return;
-    }
-
+client.on('messageCreate', async message => {
+  if (message.content === '!createCountryChannels') {
+    const guild = message.guild;
+    const category = guild.channels.cache.get('1099075019662958613');
     for (const country of countries) {
       const channelName = `『🏴』${country.name}`;
       const roleName = `${country.flag}┃${country.name}`;
-
-      // Création du rôle
-      const role = await message.guild.roles.create({
-        name: roleName,
-        color: 'RANDOM',
-      });
-
-      // Création du salon
-      const channel = await message.guild.channels.create(channelName, {
-        type: 'GUILD_TEXT',
-        parent: category,
-        permissionOverwrites: [
-          {
-            id: message.guild.roles.everyone,
-            id: role.id,
-            allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
-          },
-        ],
-      });
-      
-        // Envoi d'un message dans le salon
-        channel.send(`Bienvenue sur le salon ${channelName} !`);
-      
-        // Ajout du rôle à l'utilisateur qui a créé le salon
-        message.member.roles.add(role);
+      const role = guild.roles.cache.find(r => r.name === roleName);
+      if (role) {
+        const channel = await guild.channels.create(channelName, {
+          type: 'GUILD_TEXT',
+          parent: category,
+          permissionOverwrites: [
+            {
+              id: role.id,
+              allow: ['VIEW_CHANNEL'],
+            },
+            {
+              id: guild.roles.everyone,
+              deny: ['VIEW_CHANNEL'],
+            },
+          ],
+        });
       }
-      
-      message.reply('Les salons ont été créés avec succès.');
     }
-  });
+  }
+});
