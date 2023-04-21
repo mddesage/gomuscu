@@ -2396,3 +2396,13 @@ client.on('messageCreate', message => {
         }
     }
 });
+
+
+
+
+
+client.on('messageCreate', message => {
+  if (message.content === 'ping') {
+    message.channel.send(':fleche:');
+  }
+});
