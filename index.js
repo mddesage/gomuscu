@@ -2400,9 +2400,3 @@ client.on('messageCreate', message => {
 
 
 
-const emoji_fleche = message.guild.emojis.cache.find(emoji => emoji.name === 'fleche');
-client.on('messageCreate', message => {
-  if (message.content === 'fleche') {
-    message.channel.send(`${emoji_fleche}`);
-  }
-});
