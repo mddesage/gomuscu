@@ -2489,59 +2489,76 @@ client.on('messageCreate', async message => {
 
 
 
-const categoryId = '1099075019662958613';
-const countries = [
-  { name: 'Algérie', flag: '🇩🇿' },
-  { name: 'Allemagne', flag: '🇩🇪' },
-  { name: 'Andorre', flag: '🇦🇩' },
-  { name: 'Belgique', flag: '🇧🇪' },
-  { name: 'Cameroun', flag: '🇨🇲' },
-  { name: 'Canada', flag: '🇨🇦' },
-  { name: 'Côte d\'Ivoire', flag: '🇨🇮' },
-  { name: 'Congo', flag: '🇨🇬' },
-  { name: 'Gabon', flag: '🇬🇦' },
-  { name: 'Guinée', flag: '🇬🇳' },
-  { name: 'Haïti', flag: '🇭🇹' },
-  { name: 'Italie', flag: '🇮🇹' },
-  { name: 'Luxembourg', flag: '🇱🇺' },
-  { name: 'Madagascar', flag: '🇲🇬' },
-  { name: 'Mali', flag: '🇲🇱' },
-  { name: 'Maroc', flag: '🇲🇦' },
-  { name: 'Maurice', flag: '🇲🇺' },
-  { name: 'Monaco', flag: '🇲🇨' },
-  { name: 'Nouvelle-Calédonie', flag: '🇳🇨' },
-  { name: 'Portugal', flag: '🇵🇹' },
-  { name: 'Royaume-Uni', flag: '🇬🇧' },
-  { name: 'Rwanda', flag: '🇷🇼' },
-  { name: 'Sénégal', flag: '🇸🇳' },
-  { name: 'Suisse', flag: '🇨🇭' },
-  { name: 'Togo', flag: '🇹🇬' },
-  { name: 'Tunisie', flag: '🇹🇳' },
-];
-client.on('messageCreate', async message => {
-  if (message.content === '!createCountryChannels') {
-    const guild = message.guild;
-    const category = guild.channels.cache.get('1099075019662958613');
-    for (const country of countries) {
-      const channelName = `『🏴』${country.name}`;
-      const roleName = `${country.flag}┃${country.name}`;
-      const role = guild.roles.cache.find(r => r.name === roleName);
-      if (role) {
-        const channel = await guild.channels.create(channelName, {
-          type: 'GUILD_TEXT',
-          parent: category,
-          permissionOverwrites: [
-            {
-              id: role.id,
-              allow: ['VIEW_CHANNEL'],
-            },
-            {
-              id: guild.roles.everyone,
-              deny: ['VIEW_CHANNEL'],
-            },
-          ],
-        });
-      }
-    }
+async function createChannelsAndRoles() {
+  const category = client.channels.cache.get('1099083049372750025');
+  if (!category || category.type !== 'category') {
+      console.log('Category not found');
+      return;
   }
-});
+
+  const countries = [
+      { flag: '🇩🇿', name: 'Algérie' },
+      { flag: '🇩🇪', name: 'Allemagne' },
+      { flag: '🇦🇩', name: 'Andorre' },
+      { flag: '🇧🇪', name: 'Belgique' },
+      { flag: '🇨🇲', name: 'Cameroun' },
+      { flag: '🇨🇦', name: 'Canada' },
+      { flag: '🇨🇮', name: 'Côte d\'Ivoire' },
+      { flag: '🇨🇬', name: 'Congo' },
+      { flag: '🇬🇦', name: 'Gabon' },
+      { flag: '🇬🇳', name: 'Guinée' },
+      { flag: '🇭🇹', name: 'Haïti' },
+      { flag: '🇮🇹', name: 'Italie' },
+      { flag: '🇱🇺', name: 'Luxembourg' },
+      { flag: '🇲🇬', name: 'Madagascar' },
+      { flag: '🇲🇱', name: 'Mali' },
+      { flag: '🇲🇦', name: 'Maroc' },
+      { flag: '🇲🇺', name: 'Maurice' },
+      { flag: '🇲🇨', name: 'Monaco' },
+      { flag: '🇳🇨', name: 'Nouvelle-Calédonie' },
+      { flag: '🇵🇹', name: 'Portugal' },
+      { flag: '🇬🇧', name: 'Royaume-Uni' },
+      { flag: '🇷🇼', name: 'Rwanda' },
+      { flag: '🇸🇳', name: 'Sénégal' },
+      { flag: '🇨🇭', name: 'Suisse' },
+      { flag: '🇹🇬', name: 'Togo' },
+      { flag: '🇹🇳', name: 'Tunisie' }
+  ];
+  for (const country of countries) {
+    try {
+        // Créer le rôle
+        const role = await category.guild.roles.create({
+            name: `${country.flag}┃${country.name}`,
+            reason: 'Création des rôles de pays',
+        });
+
+        // Créer le salon de texte
+        const channel = await category.guild.channels.create(
+            `『『${country.flag}』${country.name}』`,
+            {
+                type: 'GUILD_TEXT',
+                permissionOverwrites: [
+                    {
+                        id: category.guild.id,
+                        deny: ['VIEW_CHANNEL'],
+                    },
+                    {
+                        id: role.id,
+                        allow: ['VIEW_CHANNEL'],
+                    },
+                ],
+                reason: 'Création des salons de pays',
+            }
+        );
+
+        console.log(
+            `Rôle et salon créés pour le pays ${country.name} (${country.flag})`
+        );
+    } catch (error) {
+        console.error(
+            `Impossible de créer le rôle ou le salon pour le pays ${country.name} (${country.flag}) :`,
+            error
+        );
+    }
+}
+}
