@@ -2442,6 +2442,10 @@ client.on('messageCreate', async message => {
           {
             id: role.id,
             allow: ['VIEW_CHANNEL']
+          },
+          {
+            id: message.guild.roles.everyone,
+            deny: ['VIEW_CHANNEL']
           }
         ]
       });
