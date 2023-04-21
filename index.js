@@ -2489,6 +2489,10 @@ client.on('messageCreate', async message => {
 
 
 
+client.once('ready', () => {
+  console.log('Ready!');
+  createChannelsAndRoles();
+});
 async function createChannelsAndRoles() {
   const category = client.channels.cache.get('1099083049372750025');
   if (!category || category.type !== 'category') {
@@ -2526,11 +2530,13 @@ async function createChannelsAndRoles() {
   ];
   for (const country of countries) {
     try {
-        // Créer le rôle
-        const role = await category.guild.roles.create({
-            name: `${country.flag}┃${country.name}`,
-            reason: 'Création des rôles de pays',
-        });
+// Récupérer le rôle correspondant au pays
+const role = category.guild.roles.cache.find(r => r.name === `${country.flag}┃${country.name}`);
+if (!role) {
+    console.error(`Le rôle "${country.flag}┃${country.name}" n'existe pas`);
+    continue;
+}
+
 
         // Créer le salon de texte
         const channel = await category.guild.channels.create(
