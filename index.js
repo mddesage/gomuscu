@@ -2410,9 +2410,18 @@ client.on('messageCreate', message => {
 
 client.on('messageCreate', async message => {
   if (message.content === '!deleteChannels') {
-    for (let i = 1; i <= 50; i++) {
-      let channelName = `『🧭』${i.toString().padStart(2, '0')}-𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
-      let channel = message.guild.channels.cache.find(c => c.name === channelName);
+    const guild = message.guild;
+    for (let i = 1; i <= 95; i++) {
+      const channelName = `『🧭』${i.toString().padStart(2, '0')} 𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
+      const channel = guild.channels.cache.find(c => c.name === channelName);
+      if (channel) {
+        await channel.delete();
+      }
+    }
+    const departments = ['2A', '2B', '971', '972', '973', '974', '976'];
+    for (const department of departments) {
+      const channelName = `『🧭』${department} 𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
+      const channel = guild.channels.cache.find(c => c.name === channelName);
       if (channel) {
         await channel.delete();
       }
