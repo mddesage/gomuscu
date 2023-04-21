@@ -2486,3 +2486,77 @@ client.on('messageCreate', async message => {
     }
   }
 });
+
+
+
+const categoryId = '1099075019662958613';
+const countries = [
+  { name: 'Algérie', flag: '🇩🇿' },
+  { name: 'Allemagne', flag: '🇩🇪' },
+  { name: 'Andorre', flag: '🇦🇩' },
+  { name: 'Belgique', flag: '🇧🇪' },
+  { name: 'Cameroun', flag: '🇨🇲' },
+  { name: 'Canada', flag: '🇨🇦' },
+  { name: 'Côte d\'Ivoire', flag: '🇨🇮' },
+  { name: 'Congo', flag: '🇨🇬' },
+  { name: 'Gabon', flag: '🇬🇦' },
+  { name: 'Guinée', flag: '🇬🇳' },
+  { name: 'Haïti', flag: '🇭🇹' },
+  { name: 'Italie', flag: '🇮🇹' },
+  { name: 'Luxembourg', flag: '🇱🇺' },
+  { name: 'Madagascar', flag: '🇲🇬' },
+  { name: 'Mali', flag: '🇲🇱' },
+  { name: 'Maroc', flag: '🇲🇦' },
+  { name: 'Maurice', flag: '🇲🇺' },
+  { name: 'Monaco', flag: '🇲🇨' },
+  { name: 'Nouvelle-Calédonie', flag: '🇳🇨' },
+  { name: 'Portugal', flag: '🇵🇹' },
+  { name: 'Royaume-Uni', flag: '🇬🇧' },
+  { name: 'Rwanda', flag: '🇷🇼' },
+  { name: 'Sénégal', flag: '🇸🇳' },
+  { name: 'Suisse', flag: '🇨🇭' },
+  { name: 'Togo', flag: '🇹🇬' },
+  { name: 'Tunisie', flag: '🇹🇳' },
+];
+
+client.on('messageCreate', async (message) => {
+  if (message.content === 'newchannel') {
+    const category = message.guild.channels.cache.get(categoryId);
+    if (!category || category.type !== 'GUILD_CATEGORY') {
+      message.reply('La catégorie n\'existe pas.');
+      return;
+    }
+
+    for (const country of countries) {
+      const channelName = `『🏴』${country.name}`;
+      const roleName = `${country.flag}┃${country.name}`;
+
+      // Création du rôle
+      const role = await message.guild.roles.create({
+        name: roleName,
+        color: 'RANDOM',
+      });
+
+      // Création du salon
+      const channel = await message.guild.channels.create(channelName, {
+        type: 'GUILD_TEXT',
+        parent: category,
+        permissionOverwrites: [
+          {
+            id: message.guild.roles.everyone,
+            id: role.id,
+            allow: ['VIEW_CHANNEL', 'SEND_MESSAGES', 'READ_MESSAGE_HISTORY'],
+          },
+        ],
+      });
+      
+        // Envoi d'un message dans le salon
+        channel.send(`Bienvenue sur le salon ${channelName} !`);
+      
+        // Ajout du rôle à l'utilisateur qui a créé le salon
+        message.member.roles.add(role);
+      }
+      
+      message.reply('Les salons ont été créés avec succès.');
+    }
+  });
