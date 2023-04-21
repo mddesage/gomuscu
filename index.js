@@ -25,7 +25,6 @@ const emoji_gomuscunoir = message.guild.emojis.cache.find(emoji => emoji.name ==
 const emoji_gomuscu2 = message.guild.emojis.cache.find(emoji => emoji.name === 'gomuscu2');
 const emoji_jack = message.guild.emojis.cache.find(emoji => emoji.name === 'jack');
 const emoji_gf = message.guild.emojis.cache.find(emoji => emoji.name === 'gf');
-_
 
 client.on("ready", () => {
     console.log(`✅ Le Bot ${client.user.tag} est opérationnel ! ✅`)
