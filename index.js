@@ -2409,30 +2409,13 @@ client.on('messageCreate', message => {
 
 
 client.on('messageCreate', async message => {
-  if (message.content === '!createChannels') {
+  if (message.content === '!deleteChannels') {
     for (let i = 1; i <= 50; i++) {
-      let channelName = `『🧭』${i.toString().padStart(2, '0')} 𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
-      let roleName = `🧭┃Département ${i.toString().padStart(2, '0')}`;
-      let role = message.guild.roles.cache.find(r => r.name === roleName);
-      if (!role) {
-        role = await message.guild.roles.create({
-          name: roleName
-        });
+      let channelName = `『🧭』${i.toString().padStart(2, '0')}-𝐷𝑒́𝑝𝑎𝑟𝑡𝑒𝑚𝑒𝑛𝑡`;
+      let channel = message.guild.channels.cache.find(c => c.name === channelName);
+      if (channel) {
+        await channel.delete();
       }
-      await message.guild.channels.create(channelName, {
-        type: 'GUILD_TEXT',
-        parent: '1099016236924412014',
-        permissionOverwrites: [
-          {
-            id: role.id,
-            allow: ['VIEW_CHANNEL']
-          },
-          {
-            id: message.guild.roles.everyone,
-            deny: ['VIEW_CHANNEL']
-          }
-        ]
-      });
     }
   }
 });
