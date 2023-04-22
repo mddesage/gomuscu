@@ -2489,40 +2489,43 @@ client.on('messageCreate', async message => {
 
 
 
-const verifiedRoleID = '987820202198712445';
-const unverifiedRoleID = '987834306716135504';
+const memberRole = '987820202198712445'; // ID du rôle à ajouter après la vérification
+const unverifiedRole = '987834306716135504'; // ID du rôle non vérifié à retirer après la vérification
+const captchaInterval = 5 * 60 * 1000; // intervalle de temps en millisecondes entre chaque captcha
 
-client.on('guildMemberAdd', member => {
-    const captcha = generateCaptcha();
-    const filter = m => m.author.id === member.id;
-    const collector = member.createDM().createMessageCollector({ filter, time: 300000 });
+let captchaTimeout;
 
-    member.roles.add(unverifiedRoleID);
-    member.send(`Veuillez résoudre ce captcha pour vérifier votre compte: ${captcha}`);
+client.on('guildMemberAdd', async (member) => {
+  // Ajoute le rôle non vérifié
+  await member.roles.add(unverifiedRole);
 
-    collector.on('collect', m => {
-        if (m.content === captcha) {
-            member.roles.add(verifiedRoleID);
-            member.roles.remove(unverifiedRoleID);
-            member.send('Vous avez été vérifié avec succès!');
-            collector.stop();
-        } else {
-            member.send('Captcha incorrect. Veuillez réessayer.');
-        }
-    });
+  // Envoie un message privé contenant le captcha
+  const captchaMessage = await member.send('Veuillez répondre à ce message pour vérifier que vous n\'êtes pas un robot :');
 
-    collector.on('end', collected => {
-        if (collected.size === 0) {
-            member.send(`Vous n'avez pas répondu à temps. Veuillez résoudre ce nouveau captcha pour vérifier votre compte: ${generateCaptcha()}`);
-        }
+  // Attend la réponse du membre
+  const filter = (message) => message.author.id === member.id;
+  captchaMessage.channel.awaitMessages(filter, { max: 1, time: captchaInterval })
+    .then(async (collected) => {
+      // Vérifie la réponse
+      const response = collected.first().content.toLowerCase();
+      if (response === 'captcha') {
+        // Si la réponse est correcte, ajoute le rôle membre et retire le rôle non vérifié
+        await member.roles.add(memberRole);
+        await member.roles.remove(unverifiedRole);
+        await captchaMessage.channel.send('Vérification réussie ! Vous avez maintenant accès au serveur.');
+      } else {
+        // Si la réponse est incorrecte, renvoie un nouveau captcha dans 5 minutes
+        await captchaMessage.channel.send('Mauvaise réponse. Un nouveau captcha sera envoyé dans 5 minutes.');
+        captchaTimeout = setTimeout(() => {
+          member.send('Veuillez répondre à ce message pour vérifier que vous n\'êtes pas un robot :');
+        }, captchaInterval);
+      }
+    })
+    .catch(async () => {
+      // Si le membre ne répond pas, renvoie un nouveau captcha dans 5 minutes
+      await captchaMessage.channel.send('Vous n\'avez pas répondu à temps. Un nouveau captcha sera envoyé dans 5 minutes.');
+      captchaTimeout = setTimeout(() => {
+        member.send('Veuillez répondre à ce message pour vérifier que vous n\'êtes pas un robot :');
+      }, captchaInterval);
     });
 });
-
-function generateCaptcha() {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  for (let i = 0; i < 6; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
