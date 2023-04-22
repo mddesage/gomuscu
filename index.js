@@ -2489,3 +2489,40 @@ client.on('messageCreate', async message => {
 
 
 
+const verifiedRoleID = '987820202198712445';
+const unverifiedRoleID = '987834306716135504';
+
+client.on('guildMemberAdd', member => {
+    const captcha = generateCaptcha();
+    const filter = m => m.author.id === member.id;
+    const collector = member.createDM().createMessageCollector({ filter, time: 300000 });
+
+    member.roles.add(unverifiedRoleID);
+    member.send(`Veuillez résoudre ce captcha pour vérifier votre compte: ${captcha}`);
+
+    collector.on('collect', m => {
+        if (m.content === captcha) {
+            member.roles.add(verifiedRoleID);
+            member.roles.remove(unverifiedRoleID);
+            member.send('Vous avez été vérifié avec succès!');
+            collector.stop();
+        } else {
+            member.send('Captcha incorrect. Veuillez réessayer.');
+        }
+    });
+
+    collector.on('end', collected => {
+        if (collected.size === 0) {
+            member.send(`Vous n'avez pas répondu à temps. Veuillez résoudre ce nouveau captcha pour vérifier votre compte: ${generateCaptcha()}`);
+        }
+    });
+});
+
+function generateCaptcha() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
