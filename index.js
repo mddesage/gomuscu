@@ -2489,15 +2489,3 @@ client.on('messageCreate', async message => {
 
 
 
-const svgCaptcha = require('svg-captcha');
-const { createCanvas, loadImage } = require('canvas');
-client.on('guildMemberAdd', async member => {
-  member.roles.add('987834306716135504'); 
-  const captcha = svgCaptcha.create();
-  const canvas = createCanvas(150, 50);
-  const ctx = canvas.getContext('2d');
-  const img = await loadImage(`data:image/svg+xml;base64,${Buffer.from(captcha.data).toString('base64')}`);
-  ctx.drawImage(img, 0, 0, 150, 50);
-  const attachment = new MessageAttachment(canvas.toBuffer(), 'captcha.png');
-  client.channels.cache.get('987834307651457044').send({ content: 'Veuillez entrer le texte de l\'image ci-dessous pour vérifier votre compte:', files: [attachment] });
-});
