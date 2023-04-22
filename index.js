@@ -2489,58 +2489,15 @@ client.on('messageCreate', async message => {
 
 
 
-const NON_VERIFIED_ROLE_ID = '987834306716135504';
-const MEMBER_ROLE_ID = '987820202198712445';
-const CAPTCHA_CHANNEL_ID = '987834307651457044';
-const REPORTS_CHANNEL_ID = '987832691439337482';
-
-client.once('ready', () => {
-  console.log('Ready!');
-});
-
-client.on('guildMemberAdd', async (member) => {
-  // Remove all roles except "Non vérifié"
-  const rolesToRemove = member.roles.cache.filter(role => role.id !== NON_VERIFIED_ROLE_ID).map(role => role.id);
-  await member.roles.remove(rolesToRemove);
-
-  // Add "Non vérifié" role
-  const nonVerifiedRole = member.guild.roles.cache.get(NON_VERIFIED_ROLE_ID);
-  await member.roles.add(nonVerifiedRole);
-
-  const captchaChannel = await client.channels.fetch(CAPTCHA_CHANNEL_ID);
-  if (captchaChannel.type !== 'text') {
-    return console.error('Le salon de captchas n\'est pas un salon de texte.');
-  }
-
-  // Send captcha message in the captcha channel
-  const filter = (message) => message.author.id === member.id;
-  const captchaMessage = await captchaChannel.send(`Bienvenue ${member} ! Pour avoir accès aux autres salons, veuillez entrer le code suivant :`);
-
-  try {
-    // Wait for the member's response
-    const collected = await captchaChannel.awaitMessages({ filter, max: 1, time: 60000, errors: ['time'] });
-
-    if (collected.first().content === process.env.CAPTCHA_CODE) {
-      await member.roles.remove(nonVerifiedRole);
-
-      const memberRole = member.guild.roles.cache.get(MEMBER_ROLE_ID);
-      await member.roles.add(memberRole);
-
-      // Send success message in the reports channel
-      const reportsChannel = await client.channels.fetch(REPORTS_CHANNEL_ID);
-      if (reportsChannel.type === 'text') {
-        reportsChannel.send(`🎉 ${member} a passé le captcha avec succès ! 🎉`);
-      }
-      
-      await captchaMessage.delete();
-    } else {
-      // Send error message in the captcha channel
-      await captchaMessage.edit(`Désolé ${member}, vous avez entré un code incorrect. Veuillez réessayer dans 5 minutes.`);
-    }
-  } catch (error) {
-    console.error(error);
-
-    // Send error message in the captcha channel
-    await captchaMessage.edit(`Désolé ${member}, vous avez mis trop de temps pour répondre. Veuillez réessayer dans 5 minutes.`);
-  }
+const svgCaptcha = require('svg-captcha');
+const { createCanvas, loadImage } = require('canvas');
+client.on('guildMemberAdd', async member => {
+  member.roles.add('987834306716135504'); 
+  const captcha = svgCaptcha.create();
+  const canvas = createCanvas(150, 50);
+  const ctx = canvas.getContext('2d');
+  const img = await loadImage(`data:image/svg+xml;base64,${Buffer.from(captcha.data).toString('base64')}`);
+  ctx.drawImage(img, 0, 0, 150, 50);
+  const attachment = new MessageAttachment(canvas.toBuffer(), 'captcha.png');
+  client.channels.cache.get('987834307651457044').send({ content: 'Veuillez entrer le texte de l\'image ci-dessous pour vérifier votre compte:', files: [attachment] });
 });
