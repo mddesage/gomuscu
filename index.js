@@ -2489,53 +2489,58 @@ client.on('messageCreate', async message => {
 
 
 
-client.on('guildMemberAdd', async (member) => {
-  const captchaRole = '987834306716135504';
-  const verifiedRole = '987820202198712445';
-  const captchaChannelID = '987834307651457044';
+const NON_VERIFIED_ROLE_ID = '987834306716135504';
+const MEMBER_ROLE_ID = '987820202198712445';
+const CAPTCHA_CHANNEL_ID = '987834307651457044';
+const REPORTS_CHANNEL_ID = '987832691439337482';
 
-  const captchaChannel = await client.channels.fetch(captchaChannelID);
-  if (!captchaChannel) return console.error(`Impossible de trouver le salon avec l'ID ${captchaChannelID}`);
-
-  try {
-    const msg = await captchaChannel.send({ content: `${member}, Bienvenue sur le serveur! Veuillez passer la vérification anti-robot ci-dessous pour accéder aux salons du serveur.`, components: [captchaRow()] });
-
-    const filter = (interaction) => {
-      if (interaction.user.bot) return false;
-      if (interaction.user.id !== member.id) return false;
-      if (interaction.channel.id !== captchaChannelID) return false;
-      return true;
-    };
-
-    const collector = captchaChannel.createMessageComponentCollector({ filter, max: 1, time: 5 * 60 * 1000 });
-    collector.on('end', async (collected) => {
-      if (collected.size === 0) {
-        await msg.edit({ content: `Délai de vérification dépassé. Veuillez réessayer plus tard.`, components: [] });
-        return;
-      }
-
-      const interaction = collected.first();
-      if (interaction.customId !== 'captcha' || interaction.user.id !== member.id) {
-        await msg.edit({ content: `La vérification a échoué. Veuillez réessayer plus tard.`, components: [] });
-        return;
-      }
-
-      await member.roles.remove(captchaRole);
-      await member.roles.add(verifiedRole);
-      await interaction.deferUpdate();
-      await msg.edit({ content: `La vérification a réussi! Bienvenue sur le serveur, ${member}!`, components: [] });
-    });
-  } catch (error) {
-    console.error(error);
-  }
+client.once('ready', () => {
+  console.log('Ready!');
 });
 
-function captchaRow() {
-  const row = new Discord.MessageActionRow().addComponents(
-    new Discord.MessageButton()
-      .setCustomId('captcha')
-      .setLabel('Cliquez ici pour prouver que vous êtes humain')
-      .setStyle('PRIMARY')
-  );
-  return row;
-}
+client.on('guildMemberAdd', async (member) => {
+  // Remove all roles except "Non vérifié"
+  const rolesToRemove = member.roles.cache.filter(role => role.id !== NON_VERIFIED_ROLE_ID).map(role => role.id);
+  await member.roles.remove(rolesToRemove);
+
+  // Add "Non vérifié" role
+  const nonVerifiedRole = member.guild.roles.cache.get(NON_VERIFIED_ROLE_ID);
+  await member.roles.add(nonVerifiedRole);
+
+  const captchaChannel = await client.channels.fetch(CAPTCHA_CHANNEL_ID);
+  if (captchaChannel.type !== 'text') {
+    return console.error('Le salon de captchas n\'est pas un salon de texte.');
+  }
+
+  // Send captcha message in the captcha channel
+  const filter = (message) => message.author.id === member.id;
+  const captchaMessage = await captchaChannel.send(`Bienvenue ${member} ! Pour avoir accès aux autres salons, veuillez entrer le code suivant :`);
+
+  try {
+    // Wait for the member's response
+    const collected = await captchaChannel.awaitMessages({ filter, max: 1, time: 60000, errors: ['time'] });
+
+    if (collected.first().content === process.env.CAPTCHA_CODE) {
+      await member.roles.remove(nonVerifiedRole);
+
+      const memberRole = member.guild.roles.cache.get(MEMBER_ROLE_ID);
+      await member.roles.add(memberRole);
+
+      // Send success message in the reports channel
+      const reportsChannel = await client.channels.fetch(REPORTS_CHANNEL_ID);
+      if (reportsChannel.type === 'text') {
+        reportsChannel.send(`🎉 ${member} a passé le captcha avec succès ! 🎉`);
+      }
+      
+      await captchaMessage.delete();
+    } else {
+      // Send error message in the captcha channel
+      await captchaMessage.edit(`Désolé ${member}, vous avez entré un code incorrect. Veuillez réessayer dans 5 minutes.`);
+    }
+  } catch (error) {
+    console.error(error);
+
+    // Send error message in the captcha channel
+    await captchaMessage.edit(`Désolé ${member}, vous avez mis trop de temps pour répondre. Veuillez réessayer dans 5 minutes.`);
+  }
+});
