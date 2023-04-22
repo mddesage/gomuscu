@@ -2495,41 +2495,47 @@ client.on('guildMemberAdd', async (member) => {
   const captchaChannelID = '987834307651457044';
 
   const captchaChannel = await client.channels.fetch(captchaChannelID);
-  if (!captchaChannel) return console.error(`Cannot find channel with ID ${captchaChannelID}`);
-
-  const embed = new Discord.MessageEmbed()
-    .setTitle('Verification Captcha')
-    .setDescription(`Please verify that you are human by solving the following captcha:`)
-    .setImage('https://picsum.photos/200/300')
-    .setColor('BLUE');
+  if (!captchaChannel) return console.error(`Impossible de trouver le salon avec l'ID ${captchaChannelID}`);
 
   try {
-    const msg = await captchaChannel.send({ embeds: [embed] });
-    const filter = (response) => {
-      if (response.author.bot) return false;
-      if (response.author.id !== member.id) return false;
-      if (response.channel.id !== captchaChannelID) return false;
+    const msg = await captchaChannel.send({ content: `${member}, Bienvenue sur le serveur! Veuillez passer la vérification anti-robot ci-dessous pour accéder aux salons du serveur.`, components: [captchaRow()] });
+
+    const filter = (interaction) => {
+      if (interaction.user.bot) return false;
+      if (interaction.user.id !== member.id) return false;
+      if (interaction.channel.id !== captchaChannelID) return false;
       return true;
     };
 
-    const collector = captchaChannel.createMessageCollector({ filter, max: 1, time: 5 * 60 * 1000 });
+    const collector = captchaChannel.createMessageComponentCollector({ filter, max: 1, time: 5 * 60 * 1000 });
     collector.on('end', async (collected) => {
       if (collected.size === 0) {
-        await msg.edit('Verification timed out. Please try again later.');
+        await msg.edit({ content: `Délai de vérification dépassé. Veuillez réessayer plus tard.`, components: [] });
         return;
       }
 
-      const response = collected.first();
-      if (response.content !== 'captcha') {
-        await msg.edit('Verification failed. Please try again later.');
+      const interaction = collected.first();
+      if (interaction.customId !== 'captcha' || interaction.user.id !== member.id) {
+        await msg.edit({ content: `La vérification a échoué. Veuillez réessayer plus tard.`, components: [] });
         return;
       }
 
       await member.roles.remove(captchaRole);
       await member.roles.add(verifiedRole);
-      await msg.edit(`Verification successful! Welcome to the server, ${member}!`);
+      await interaction.deferUpdate();
+      await msg.edit({ content: `La vérification a réussi! Bienvenue sur le serveur, ${member}!`, components: [] });
     });
   } catch (error) {
     console.error(error);
   }
 });
+
+function captchaRow() {
+  const row = new Discord.MessageActionRow().addComponents(
+    new Discord.MessageButton()
+      .setCustomId('captcha')
+      .setLabel('Cliquez ici pour prouver que vous êtes humain')
+      .setStyle('PRIMARY')
+  );
+  return row;
+}
