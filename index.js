@@ -2489,45 +2489,47 @@ client.on('messageCreate', async message => {
 
 
 
-const memberRole = '987820202198712445'; // ID du rôle à ajouter après la vérification
-const unverifiedRole = '987834306716135504'; // ID du rôle non vérifié à retirer après la vérification
-const captchaInterval = 5 * 60 * 1000; // intervalle de temps en millisecondes entre chaque captcha
-const captchaChannel = '987834307651457044'; // ID du salon pour envoyer le captcha
-
-let captchaTimeout;
-
 client.on('guildMemberAdd', async (member) => {
-  // Ajoute le rôle non vérifié
-  await member.roles.add(unverifiedRole);
+  const captchaRole = '987834306716135504';
+  const verifiedRole = '987820202198712445';
+  const captchaChannelID = '987834307651457044';
 
-  // Envoie un message dans le salon spécifié contenant le captcha
-  const captchaChannel = await client.channels.fetch(captchaChannel);
-  const captchaMessage = await captchaChannel.send(`<@${member.id}>, veuillez répondre à ce message pour vérifier que vous n'êtes pas un robot :`);
+  const captchaChannel = await client.channels.fetch(captchaChannelID);
+  if (!captchaChannel) return console.error(`Cannot find channel with ID ${captchaChannelID}`);
 
-  // Attend la réponse du membre
-  const filter = (message) => message.author.id === member.id;
-  captchaChannel.awaitMessages(filter, { max: 1, time: captchaInterval })
-    .then(async (collected) => {
-      // Vérifie la réponse
-      const response = collected.first().content.toLowerCase();
-      if (response === 'captcha') {
-        // Si la réponse est correcte, ajoute le rôle membre et retire le rôle non vérifié
-        await member.roles.add(memberRole);
-        await member.roles.remove(unverifiedRole);
-        await captchaChannel.send(`<@${member.id}>, vérification réussie ! Vous avez maintenant accès au serveur.`);
-      } else {
-        // Si la réponse est incorrecte, renvoie un nouveau captcha dans 5 minutes
-        await captchaChannel.send(`<@${member.id}>, mauvaise réponse. Un nouveau captcha sera envoyé dans 5 minutes.`);
-        captchaTimeout = setTimeout(() => {
-          captchaChannel.send(`<@${member.id}>, veuillez répondre à ce message pour vérifier que vous n'êtes pas un robot :`);
-        }, captchaInterval);
+  const embed = new Discord.MessageEmbed()
+    .setTitle('Verification Captcha')
+    .setDescription(`Please verify that you are human by solving the following captcha:`)
+    .setImage('https://picsum.photos/200/300')
+    .setColor('BLUE');
+
+  try {
+    const msg = await captchaChannel.send({ embeds: [embed] });
+    const filter = (response) => {
+      if (response.author.bot) return false;
+      if (response.author.id !== member.id) return false;
+      if (response.channel.id !== captchaChannelID) return false;
+      return true;
+    };
+
+    const collector = captchaChannel.createMessageCollector({ filter, max: 1, time: 5 * 60 * 1000 });
+    collector.on('end', async (collected) => {
+      if (collected.size === 0) {
+        await msg.edit('Verification timed out. Please try again later.');
+        return;
       }
-    })
-    .catch(async () => {
-      // Si le membre ne répond pas, renvoie un nouveau captcha dans 5 minutes
-      await captchaChannel.send(`<@${member.id}>, vous n'avez pas répondu à temps. Un nouveau captcha sera envoyé dans 5 minutes.`);
-      captchaTimeout = setTimeout(() => {
-        captchaChannel.send(`<@${member.id}>, veuillez répondre à ce message pour vérifier que vous n'êtes pas un robot :`);
-      }, captchaInterval);
+
+      const response = collected.first();
+      if (response.content !== 'captcha') {
+        await msg.edit('Verification failed. Please try again later.');
+        return;
+      }
+
+      await member.roles.remove(captchaRole);
+      await member.roles.add(verifiedRole);
+      await msg.edit(`Verification successful! Welcome to the server, ${member}!`);
     });
+  } catch (error) {
+    console.error(error);
+  }
 });
