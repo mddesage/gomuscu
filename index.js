@@ -2492,6 +2492,7 @@ client.on('messageCreate', async message => {
 const memberRole = '987820202198712445'; // ID du rôle à ajouter après la vérification
 const unverifiedRole = '987834306716135504'; // ID du rôle non vérifié à retirer après la vérification
 const captchaInterval = 5 * 60 * 1000; // intervalle de temps en millisecondes entre chaque captcha
+const captchaChannel = '987834307651457044'; // ID du salon pour envoyer le captcha
 
 let captchaTimeout;
 
@@ -2499,12 +2500,13 @@ client.on('guildMemberAdd', async (member) => {
   // Ajoute le rôle non vérifié
   await member.roles.add(unverifiedRole);
 
-  // Envoie un message privé contenant le captcha
-  const captchaMessage = await member.send('Veuillez répondre à ce message pour vérifier que vous n\'êtes pas un robot :');
+  // Envoie un message dans le salon spécifié contenant le captcha
+  const captchaChannel = await client.channels.fetch(captchaChannel);
+  const captchaMessage = await captchaChannel.send(`<@${member.id}>, veuillez répondre à ce message pour vérifier que vous n'êtes pas un robot :`);
 
   // Attend la réponse du membre
   const filter = (message) => message.author.id === member.id;
-  captchaMessage.channel.awaitMessages(filter, { max: 1, time: captchaInterval })
+  captchaChannel.awaitMessages(filter, { max: 1, time: captchaInterval })
     .then(async (collected) => {
       // Vérifie la réponse
       const response = collected.first().content.toLowerCase();
@@ -2512,20 +2514,20 @@ client.on('guildMemberAdd', async (member) => {
         // Si la réponse est correcte, ajoute le rôle membre et retire le rôle non vérifié
         await member.roles.add(memberRole);
         await member.roles.remove(unverifiedRole);
-        await captchaMessage.channel.send('Vérification réussie ! Vous avez maintenant accès au serveur.');
+        await captchaChannel.send(`<@${member.id}>, vérification réussie ! Vous avez maintenant accès au serveur.`);
       } else {
         // Si la réponse est incorrecte, renvoie un nouveau captcha dans 5 minutes
-        await captchaMessage.channel.send('Mauvaise réponse. Un nouveau captcha sera envoyé dans 5 minutes.');
+        await captchaChannel.send(`<@${member.id}>, mauvaise réponse. Un nouveau captcha sera envoyé dans 5 minutes.`);
         captchaTimeout = setTimeout(() => {
-          member.send('Veuillez répondre à ce message pour vérifier que vous n\'êtes pas un robot :');
+          captchaChannel.send(`<@${member.id}>, veuillez répondre à ce message pour vérifier que vous n'êtes pas un robot :`);
         }, captchaInterval);
       }
     })
     .catch(async () => {
       // Si le membre ne répond pas, renvoie un nouveau captcha dans 5 minutes
-      await captchaMessage.channel.send('Vous n\'avez pas répondu à temps. Un nouveau captcha sera envoyé dans 5 minutes.');
+      await captchaChannel.send(`<@${member.id}>, vous n'avez pas répondu à temps. Un nouveau captcha sera envoyé dans 5 minutes.`);
       captchaTimeout = setTimeout(() => {
-        member.send('Veuillez répondre à ce message pour vérifier que vous n\'êtes pas un robot :');
+        captchaChannel.send(`<@${member.id}>, veuillez répondre à ce message pour vérifier que vous n'êtes pas un robot :`);
       }, captchaInterval);
     });
 });
