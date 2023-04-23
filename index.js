@@ -181,10 +181,7 @@ client.on("messageCreate", async message => {
                         ${prefix}**exercice+**
                         Vous envoie 11 boutons pour afficher des exercices de manière totalement aléatoire ou au choix du groupe musculaire.
                         
-                        ${prefix}**chatgpt** *[message]*
-                        Vous répond à partir de chat GPT.
-                        
-                        ${prefix}**musique** *[lien YouTube]*
+                       ${prefix}**musique** *[lien YouTube]*
                         **(ACTUELLEMENT INDISPONIBLE)**
 
                         **autrespays**
@@ -2671,10 +2668,7 @@ client.on('interactionCreate', async interaction => {
       ${prefix}**exercice+**
       Vous envoie 11 boutons pour afficher des exercices de manière totalement aléatoire ou au choix du groupe musculaire.
       
-      ${prefix}**chatgpt** *[message]*
-      Vous répond à partir de chat GPT.
-      
-      ${prefix}**musique** *[lien YouTube]*
+     ${prefix}**musique** *[lien YouTube]*
       **(ACTUELLEMENT INDISPONIBLE)**
 
       **autrespays**
