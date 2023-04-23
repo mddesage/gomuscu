@@ -2628,9 +2628,9 @@ client.on('messageCreate', async message => {
           .setLabel('Liste des commandes')
           .setStyle('PRIMARY'),
         new MessageButton()
-          .setURL('https://discord.com/channels/your-server-id/987820203016618021')
+          .setCustomId('help')
           .setLabel('Besoin d\'aide')
-          .setStyle('LINK')
+          .setStyle('PRIMARY')
       );
 
     await message.reply({ content: 'Voici les boutons d\'aide:', components: [row] });
@@ -2648,6 +2648,8 @@ client.on('interactionCreate', async interaction => {
       .setDescription(` xxx `)
       .setTitle("Liste des commandes GLOBALES");
 
-    await interaction.reply({ embeds: [embed] });
+    await interaction.reply({ embeds: [embed], ephemeral: true });
+  } else if (interaction.customId === 'help') {
+    await interaction.reply({ content: 'Veuillez vous rendre dans le salon #987820203016618021 pour obtenir de l\'aide.', ephemeral: true });
   }
 });
