@@ -2639,6 +2639,9 @@ client.on('messageCreate', async message => {
 
 client.on('interactionCreate', async interaction => {
   if (!interaction.isButton()) return;
+  if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
+    return message.reply("Désolé, cette commande est réservée aux employés.");
+  }
   if (interaction.customId === 'liste_des_commandes') {
     const embed = new MessageEmbed()
       .setColor("YELLOW")
