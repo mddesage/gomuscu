@@ -156,7 +156,7 @@ client.on("messageCreate", async message => {
                     const embed = new Discord.MessageEmbed()
                         .setColor("BLUE")
                         .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
-                        .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+                        .setImage("https://cdn.discordapp.com/attachments/987820203016618015/1099730002355957850/LISTE_DES_COMMANDES_bleu.gif")
                         .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
                         .setDescription(`
 
@@ -2643,7 +2643,7 @@ client.on('interactionCreate', async interaction => {
     const embed = new MessageEmbed()
       .setColor("YELLOW")
       .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
-      .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+      .setImage("https://cdn.discordapp.com/attachments/987820203016618015/1099729685253984376/LISTE_DES_COMMANDES_jaune.gif")
       .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
       .setDescription(`
 
