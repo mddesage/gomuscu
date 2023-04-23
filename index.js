@@ -2630,7 +2630,7 @@ client.on('messageCreate', async message => {
         new MessageButton()
           .setCustomId('besoin_d_aide')
           .setLabel('Besoin d\'aide')
-          .setStyle('PRIMARY')
+          .setStyle('LINK')
       );
 
     await message.channel.send({ components: [row] });
