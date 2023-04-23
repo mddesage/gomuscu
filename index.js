@@ -2639,10 +2639,10 @@ client.on('messageCreate', async message => {
 
 client.on('interactionCreate', async interaction => {
   if (!interaction.isButton()) return;
-  if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
-    return message.reply("Désolé, cette commande est réservée aux employés.");
-  }
   if (interaction.customId === 'liste_des_commandes') {
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
     const embed = new MessageEmbed()
       .setColor("YELLOW")
       .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
