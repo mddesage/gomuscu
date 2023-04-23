@@ -2633,7 +2633,7 @@ client.on('messageCreate', async message => {
           .setStyle('PRIMARY')
       );
 
-    await message.reply({ content: 'Voici les boutons d\'aide:', components: [row] });
+    await message.channel.send({ content: 'Voici les boutons d\'aide:', components: [row] });
   }
 });
 
