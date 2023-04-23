@@ -2626,38 +2626,6 @@ client.on('messageCreate', async message => {
         new MessageButton()
           .setCustomId('commands')
           .setLabel('Liste des commandes')
-          .setDescription(`
-
-                        Le prefix de <@994859660727291985> est **sa mention**.
-                        
-                        
-                        ${prefix}*[le salon que vous cherchez]*
-                        Vous envoie bouton cliquable du salon demandé.
-                        
-                        ${prefix}**quidu** *[numéro du département]*
-                        Vous envoie le nom des personnes ayant le rôle.
-
-                        ${prefix}**exerciceaide**
-                        Vous envoie comment utiliser les commandes sur *exercice*.
-                        
-                        ${prefix}**exercice** 
-                        Vous envoie un exercice au hasard parmi tous.
-
-                        ${prefix}**exercice** *[groupe musculaire]*
-                        Vous envoie un exercice au hasard parmi le groupe demandé (liste de groupe : ${prefix}**exerciceaide**).
-
-                        ${prefix}**exercice+**
-                        Vous envoie 11 boutons pour afficher des exercices de manière totalement aléatoire ou au choix du groupe musculaire.
-                        
-                        ${prefix}**chatgpt** *[message]*
-                        Vous répond à partir de chat GPT.
-                        
-                        ${prefix}**musique** *[lien YouTube]*
-                        **(ACTUELLEMENT INDISPONIBLE)**
-
-                        **autrespays**
-                        Si aucun des rôles de départements disponibles dans <#987820202752356375> vous conviennent, si vous n'êtes pas de, vous pouvez taper cette commande pour faire apparaître un menu pour choisir d'autres pays.
-                        `)
           .setStyle('PRIMARY'),
         new MessageButton()
           .setCustomId('help')
@@ -2677,7 +2645,38 @@ client.on('interactionCreate', async interaction => {
       .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
       .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
       .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
-      .setDescription(` xxx `)
+      .setDescription(`
+
+      Le prefix de <@994859660727291985> est **sa mention**.
+      
+      
+      ${prefix}*[le salon que vous cherchez]*
+      Vous envoie bouton cliquable du salon demandé.
+      
+      ${prefix}**quidu** *[numéro du département]*
+      Vous envoie le nom des personnes ayant le rôle.
+
+      ${prefix}**exerciceaide**
+      Vous envoie comment utiliser les commandes sur *exercice*.
+      
+      ${prefix}**exercice** 
+      Vous envoie un exercice au hasard parmi tous.
+
+      ${prefix}**exercice** *[groupe musculaire]*
+      Vous envoie un exercice au hasard parmi le groupe demandé (liste de groupe : ${prefix}**exerciceaide**).
+
+      ${prefix}**exercice+**
+      Vous envoie 11 boutons pour afficher des exercices de manière totalement aléatoire ou au choix du groupe musculaire.
+      
+      ${prefix}**chatgpt** *[message]*
+      Vous répond à partir de chat GPT.
+      
+      ${prefix}**musique** *[lien YouTube]*
+      **(ACTUELLEMENT INDISPONIBLE)**
+
+      **autrespays**
+      Si aucun des rôles de départements disponibles dans <#987820202752356375> vous conviennent, si vous n'êtes pas de, vous pouvez taper cette commande pour faire apparaître un menu pour choisir d'autres pays.
+      `)
       .setTitle("Liste des commandes GLOBALES");
 
     await interaction.reply({ embeds: [embed], ephemeral: true });
