@@ -2621,6 +2621,9 @@ client.on('messageCreate', async message => {
 
 client.on('messageCreate', async message => {
   if (message.content === 'ENVOIE_LES_BOUTONS_AIDE') {
+    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
+      return message.reply("Désolé, cette commande est réservée aux employés.");
+    }
     const row = new MessageActionRow()
       .addComponents(
         new MessageButton()
@@ -2640,9 +2643,6 @@ client.on('messageCreate', async message => {
 client.on('interactionCreate', async interaction => {
   if (!interaction.isButton()) return;
   if (interaction.customId === 'liste_des_commandes') {
-    if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
-      return message.reply("Désolé, cette commande est réservée aux employés.");
-    }
     const embed = new MessageEmbed()
       .setColor("YELLOW")
       .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
