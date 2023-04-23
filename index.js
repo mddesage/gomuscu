@@ -2633,6 +2633,7 @@ client.on('messageCreate', async message => {
           .setStyle('PRIMARY')
       );
 
+    await message.channel.send({ components: [row] });
   }
 });
 
