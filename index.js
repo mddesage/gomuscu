@@ -2628,7 +2628,7 @@ client.on('messageCreate', async message => {
           .setLabel('Liste des commandes')
           .setStyle('PRIMARY'),
         new MessageButton()
-          .setCustomId('help')
+          .setCustomId('besoin_d_aide')
           .setLabel('Besoin d\'aide')
           .setStyle('PRIMARY')
       );
@@ -2680,7 +2680,7 @@ client.on('interactionCreate', async interaction => {
       .setTitle("Liste des commandes GLOBALES");
 
     await interaction.reply({ embeds: [embed], ephemeral: true });
-  } else if (interaction.customId === 'help') {
+  } else if (interaction.customId === 'besoin_d_aide') {
     await interaction.reply({ content: 'Veuillez vous rendre dans le salon <#987820203016618021> pour obtenir de l\'aide.', ephemeral: true });
   }
 });
