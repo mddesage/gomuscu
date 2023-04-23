@@ -2616,3 +2616,38 @@ client.on('messageCreate', async message => {
     }
   }
 });
+
+
+
+client.on('messageCreate', async message => {
+  if (message.content === 'ENVOIE_LE_BOUTON_AIDE') {
+    const row = new MessageActionRow()
+      .addComponents(
+        new MessageButton()
+          .setCustomId('commands')
+          .setLabel('Liste des commandes')
+          .setStyle('PRIMARY'),
+        new MessageButton()
+          .setURL('https://discord.com/channels/your-server-id/987820203016618021')
+          .setLabel('Besoin d\'aide')
+          .setStyle('LINK')
+      );
+
+    await message.reply({ content: 'Voici les boutons d\'aide:', components: [row] });
+  }
+});
+
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isButton()) return;
+  if (interaction.customId === 'commands') {
+    const embed = new MessageEmbed()
+      .setColor("YELLOW")
+      .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
+      .setImage("https://images-ext-2.discordapp.net/external/gXakbSDik9kWaj6hawV9rAI9bXb0G0IpVspJhvL96xw/https/www.zupimages.net/up/22/27/smao.png?width=1440&height=399")
+      .setThumbnail("https://cdn.discordapp.com/attachments/987820203016618015/1088231600854143077/gars_et_fille_body.png")
+      .setDescription(` xxx `)
+      .setTitle("Liste des commandes GLOBALES");
+
+    await interaction.reply({ embeds: [embed] });
+  }
+});
