@@ -2620,7 +2620,7 @@ client.on('messageCreate', async message => {
 
 
 client.on('messageCreate', async message => {
-  if (message.content === 'ENVOIE_LE_BOUTON_AIDE') {
+  if (message.content === 'ENVOIE_LES_BOUTONS_AIDE') {
     const row = new MessageActionRow()
       .addComponents(
         new MessageButton()
@@ -2630,7 +2630,7 @@ client.on('messageCreate', async message => {
         new MessageButton()
           .setCustomId('besoin_d_aide')
           .setLabel('Besoin d\'aide')
-          .setStyle('LINK')
+          .setStyle('SECONDARY')
       );
 
     await message.channel.send({ components: [row] });
