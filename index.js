@@ -2624,7 +2624,7 @@ client.on('messageCreate', async message => {
     const row = new MessageActionRow()
       .addComponents(
         new MessageButton()
-          .setCustomId('commands')
+          .setCustomId('liste_des_commandes')
           .setLabel('Liste des commandes')
           .setStyle('PRIMARY'),
         new MessageButton()
@@ -2639,7 +2639,7 @@ client.on('messageCreate', async message => {
 
 client.on('interactionCreate', async interaction => {
   if (!interaction.isButton()) return;
-  if (interaction.customId === 'commands') {
+  if (interaction.customId === 'liste_des_commandes') {
     const embed = new MessageEmbed()
       .setColor("YELLOW")
       .setFooter({ text: "Au nom de l'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈." })
