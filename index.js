@@ -2650,7 +2650,7 @@ client.on('interactionCreate', async interaction => {
       Le prefix de <@994859660727291985> est **sa mention**.
       
       
-      ${prefix}aide (/help)
+      ${prefix}**aide (/help)**
       Vous envoie ce message d'aide pour les commandes
 
       ${prefix}*[le salon que vous cherchez]*
