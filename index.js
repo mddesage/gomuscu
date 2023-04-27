@@ -836,7 +836,7 @@ client.on('interactionCreate', async interaction => {
   const exercice = exercicesFiltres[exerciceIndex];
   const userId = interaction.user.id;
 
-  await interaction.reply(`**${exercice.nom}** - `${exercice.description}`\n***${boutton_name}** demandé par* <@${interaction.user.id}>`, { ephemeral: true });
+  await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n**${boutton_name}** demandé par* <@${interaction.user.id}>`, { ephemeral: true });
 });
 
 
