@@ -2155,7 +2155,7 @@ client.on('messageCreate', async message => {
 
 
 client.on('messageCreate', async message => {
-  if (message.content === 'autrespays') {
+  if (message.content.toLowerCase() === 'autrespays') {
     const embed = new Discord.MessageEmbed()
       .setTitle('🗺️ Choisis ton pays grâce au menu ci-dessous 🗺️')
       .setColor('#8700C0')
