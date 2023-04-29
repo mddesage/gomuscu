@@ -2156,15 +2156,15 @@ client.on('messageCreate', async message => {
     }
 
     const membersWithRoles = roles[0].members.filter(member => member.roles.cache.has(roles[1].id)).map(member => member.toString()).join('\n');
-    const roleMentions = roles.map(role => `<@&${role.id}>`).join(' & ');
     const embed = new MessageEmbed()
       .setColor('GREEN')
-      .setTitle(`Membres avec les rôles ${roleMentions}`)
-      .setDescription(`**${roles[0].members.filter(member => member.roles.cache.has(roles[1].id)).size}** membres ont les rôles ${roleMentions}\n\n${membersWithRoles}`);
+      .setTitle(`Membres avec les rôles ${roles[0].name} et ${roles[1].name}`)
+      .setDescription(`**${roles[0].members.filter(member => member.roles.cache.has(roles[1].id)).size}** membres ont les rôles <@&${roles[0].id}> & <@&${roles[1].id}>\n\n${membersWithRoles}`);
 
     await message.channel.send({ embeds: [embed] });
   }
 });
+
 
 
 
