@@ -1677,7 +1677,7 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
                          ***${motivationMessages[motivationMessagesAleatoire]}***
                     
                          
-      ||𝐺𝑂𝑀𝑈𝑆𝐶𝑈 ||
+      ||𝐺𝑂𝑀𝑈𝑆𝐶𝑈||
                     `);
           }
       }
@@ -2115,7 +2115,7 @@ client.on('messageCreate', async message => {
     }
 
     if (!args[0]) return message.reply('Veuillez mentionner un rôle.');
-    let role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
+    const role = message.mentions.roles.first();
     if (!role) return message.reply('Rôle non valide.');
 
     const membersWithRole = role.members.map(member => member.toString()).join('\n');
@@ -2129,7 +2129,6 @@ client.on('messageCreate', async message => {
 });
 
 
-
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix)) return;
 
@@ -2141,21 +2140,19 @@ client.on('messageCreate', async message => {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
-    if (args.length < 2) return message.reply('Veuillez mentionner ou entrer les IDs de deux rôles.');
-    const role1 = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
-    const role2 = message.mentions.roles.last() || message.guild.roles.cache.get(args[1]);
-    if (!role1 || !role2) return message.reply('Rôles non valides.');
+    if (args.length < 2) return message.reply('Veuillez mentionner deux rôles.');
+    const roles = message.mentions.roles;
+    if (roles.size < 2) return message.reply('Rôles non valides.');
 
-    const membersWithRoles = role1.members.filter(member => member.roles.cache.has(role2.id)).map(member => member.toString()).join('\n');
+    const membersWithRoles = roles.first().members.filter(member => member.roles.cache.has(roles.last().id)).map(member => member.toString()).join('\n');
     const embed = new MessageEmbed()
       .setColor('GREEN')
-      .setTitle(`Membres avec les rôles ${role1.name} et ${role2.name}`)
+      .setTitle(`Membres avec les rôles ${roles.first().name} et ${roles.last().name}`)
       .setDescription(membersWithRoles);
 
     await message.channel.send({ embeds: [embed] });
   }
 });
-
 
 
 
