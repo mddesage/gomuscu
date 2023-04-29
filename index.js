@@ -2158,12 +2158,13 @@ client.on('messageCreate', async message => {
     const membersWithRoles = roles[0].members.filter(member => member.roles.cache.has(roles[1].id)).map(member => member.toString()).join('\n');
     const embed = new MessageEmbed()
       .setColor('GREEN')
-      .setTitle(`Membres avec les rôles ${roles[0].name} et ${roles[1].name}`)
-      .setDescription(`${roles[0].members.size} membres ont le rôle ${roles[0].name} et ${roles[1].members.size} membres ont le rôle ${roles[1].name}\n\n${membersWithRoles}`);
+      .setTitle(`Membres avec les rôles ${roles[0]} & ${roles[1]}`)
+      .setDescription(`${roles[0].members.size} membres ont le rôle ${roles[0]} et ${roles[1].members.size} membres ont le rôle ${roles[1]}\n\n${membersWithRoles}`);
 
     await message.channel.send({ embeds: [embed] });
   }
 });
+
 
 
 
