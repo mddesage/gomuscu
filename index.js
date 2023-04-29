@@ -2156,15 +2156,16 @@ client.on('messageCreate', async message => {
     }
 
     const membersWithBothRoles = roles[0].members.filter(member => member.roles.cache.has(roles[1].id));
-    const membersList = membersWithBothRoles.map(member => member.toString()).join('\n');
+    const membersList = membersWithBothRoles.map(member => member.user.tag).join(', ');
     const embed = new MessageEmbed()
       .setColor('GREEN')
       .setTitle(`${roles[0].name} & ${roles[1].name}`)
-      .setDescription(`Les membres ayant les rôles ${roles[0]} et ${roles[1]} :\n${membersList}`);
+      .setDescription(`Les membres ayant les deux rôles :\n${membersList}`);
 
     await message.channel.send({ embeds: [embed] });
   }
 });
+
 
 
 
