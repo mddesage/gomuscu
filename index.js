@@ -2119,8 +2119,8 @@ client.on('messageCreate', async message => {
   const membersWithRole = role.members.map(member => member.toString()).join('\n');
   const embed = new MessageEmbed()
     .setColor('GREEN')
-    .setTitle(`Membres avec le rôle ${role.name} (${role.members.size} membres)`)
-    .setDescription(membersWithRole);
+    .setTitle(`Membres avec le rôle ${role.name}`)
+    .setDescription(`${role.members.size} membres`, membersWithRole);
   
   await message.channel.send({ embeds: [embed] });
 }
