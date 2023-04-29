@@ -2139,10 +2139,20 @@ client.on('messageCreate', async message => {
     if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
+    
+    if (args.length < 2) {
+      return message.reply('Veuillez mentionner deux rôles.');
+    }
 
-    if (args.length < 2) return message.reply('Veuillez mentionner deux rôles.');
-    const roles = getRolesFromArgs(args, message);
-    if (roles.length < 2) return message.reply('Rôles non valides.');
+    const roles = [];
+    for (const arg of args) {
+      const roleId = arg.replace(/[^\d]/g, '');
+      const role = message.guild.roles.cache.get(roleId);
+      if (!role) {
+        return message.reply(`Le rôle avec l'ID ${roleId} n'existe pas.`);
+      }
+      roles.push(role);
+    }
 
     const membersWithRoles = roles[0].members.filter(member => member.roles.cache.has(roles[1].id)).map(member => member.toString()).join('\n');
     const embed = new MessageEmbed()
@@ -2153,6 +2163,7 @@ client.on('messageCreate', async message => {
     await message.channel.send({ embeds: [embed] });
   }
 });
+
 
 
 
