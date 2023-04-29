@@ -2135,24 +2135,25 @@ client.on('messageCreate', async message => {
   const args = message.content.slice(prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
 
-  if (command === 'quirole') {
+  if (command === 'quirole&') {
     if (!message.member.roles.cache.has(requiredEmployedRoleId)) {
       return message.reply("Désolé, cette commande est réservée aux employés.");
     }
 
-    if (!args[0]) return message.reply('Veuillez mentionner un rôle.');
-    const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0].replace(/[^0-9]/g, ''));
-    if (!role) return message.reply('Rôle non valide.');
+    if (args.length < 2) return message.reply('Veuillez mentionner deux rôles.');
+    const roles = getRolesFromArgs(args, message);
+    if (roles.length < 2) return message.reply('Rôles non valides.');
 
-    const membersWithRole = role.members.map(member => member.toString()).join('\n');
+    const membersWithRoles = roles[0].members.filter(member => member.roles.cache.has(roles[1].id)).map(member => member.toString()).join('\n');
     const embed = new MessageEmbed()
       .setColor('GREEN')
-      .setTitle(`Membres avec le rôle ${role.name}`)
-      .setDescription(membersWithRole);
+      .setTitle(`Membres avec les rôles ${roles[0].name} et ${roles[1].name}`)
+      .setDescription(membersWithRoles);
 
     await message.channel.send({ embeds: [embed] });
   }
-})
+});
+
 
 
 client.on('messageCreate', async message => {
