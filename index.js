@@ -2159,7 +2159,7 @@ client.on('messageCreate', async message => {
     const embed = new MessageEmbed()
       .setColor('GREEN')
       .setTitle(`Membres avec les rôles ${roles[0].name} et ${roles[1].name}`)
-      .setDescription(membersWithRoles);
+      .setDescription(`${roles[0].members.size} membres ont le rôle ${roles[0].name} et ${roles[1].members.size} membres ont le rôle ${roles[1].name}\n\n${membersWithRoles}`);
 
     await message.channel.send({ embeds: [embed] });
   }
