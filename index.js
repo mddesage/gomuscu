@@ -2122,11 +2122,12 @@ client.on('messageCreate', async message => {
     const embed = new MessageEmbed()
       .setColor('GREEN')
       .setTitle(`Membres avec le rôle ${role.name}`)
-      .setDescription(`${role.members.size} membres ont le rôle ${role.name}\n\n${membersWithRole}`);
+      .setDescription(`${role.members.size} membres ont le rôle ${role.toString()}\n\n${membersWithRole}`);
 
     await message.channel.send({ embeds: [embed] });
   }
 })
+
 
 
 
