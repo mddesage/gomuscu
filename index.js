@@ -2115,7 +2115,7 @@ client.on('messageCreate', async message => {
     }
 
     if (!args[0]) return message.reply('Veuillez mentionner un rôle.');
-    const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
+    const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0].replace(/[^0-9]/g, ''));
     if (!role) return message.reply('Rôle non valide.');
 
     const membersWithRole = role.members.map(member => member.toString()).join('\n');
@@ -2126,7 +2126,7 @@ client.on('messageCreate', async message => {
 
     await message.channel.send({ embeds: [embed] });
   }
-});
+})
 
 
 client.on('messageCreate', async message => {
