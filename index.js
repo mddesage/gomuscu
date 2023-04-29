@@ -2122,7 +2122,7 @@ client.on('messageCreate', async message => {
     const embed = new MessageEmbed()
       .setColor('GREEN')
       .setTitle(`Membres avec le rôle ${role.name}`)
-      .setDescription(`**${role.members.size}** membres ont le rôle ${role.toString()}\n\n${membersWithRole}`);
+      .setDescription(`**${role.members.size} membres** ont le rôle ${role.toString()}\n\n${membersWithRole}`);
 
     await message.channel.send({ embeds: [embed] });
   }
@@ -2160,7 +2160,7 @@ client.on('messageCreate', async message => {
     const embed = new MessageEmbed()
       .setColor('GREEN')
       .setTitle(`Membres avec les rôles ${roles[0].name} et ${roles[1].name}`)
-      .setDescription(`**${roles[0].members.filter(member => member.roles.cache.has(roles[1].id)).size}** membres ont les rôles <@&${roles[0].id}> & <@&${roles[1].id}>\n\n${membersWithRoles}`);
+      .setDescription(`**${roles[0].members.filter(member => member.roles.cache.has(roles[1].id)).size} membres** ont les rôles <@&${roles[0].id}> & <@&${roles[1].id}>\n\n${membersWithRoles}`);
 
     await message.channel.send({ embeds: [embed] });
   }
