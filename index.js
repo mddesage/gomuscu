@@ -1866,24 +1866,21 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_DISCIPLINE") {
 });
 
 client.on('interactionCreate', async interaction => {
-if (interaction.isSelectMenu()) {
-  
-  if (interaction.customId === 'disciplineSelect') {
-    const role = interaction.values[0];
-    const roleName = disciplineRoleNames[disciplineRoles.indexOf(role)];
-    
-    await interaction.member.roles.add(role);
-    await interaction.reply({ content: `Le rôle de la discipline du **${roleName}** vous a été attribué.`, ephemeral: true });
+  if (interaction.isSelectMenu()) {
+    if (interaction.customId === 'disciplineSelect') {
+      const role = interaction.values[0];
+      const roleName = disciplineRoleNames[disciplineRoles.indexOf(role)];
+      await interaction.member.roles.add(role);
+      await interaction.member.roles.add("987820202177749088");
+      await interaction.reply({ content: `Le rôle de la discipline du **${roleName}** vous a été attribué.`, ephemeral: true });
+    }
+  } else if (interaction.isButton()) {
+    if (interaction.customId === 'disciplineRemove') {
+      await interaction.member.roles.remove(disciplineRoles);
+      await interaction.member.roles.remove("987820202177749088");
+      await interaction.reply({ content: `Tous les rôles de **discipline** vous ont été retirés.`, ephemeral: true });
+    }
   }
-  
-} else if (interaction.isButton()) {
-  
-  if (interaction.customId === 'disciplineRemove') {
-    await interaction.member.roles.remove(disciplineRoles);
-    await interaction.reply({ content: `Tous les rôles de **discipline** vous ont été retirés.`, ephemeral: true });
-  }
-  
-}
 });
 
 
