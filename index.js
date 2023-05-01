@@ -1787,24 +1787,21 @@ if (message.content === "ENVOIE_LE_MENU_POUR_CHOISIR_SA_SALLE") {
 });
 
 client.on('interactionCreate', async interaction => {
-if (interaction.isSelectMenu()) {
-  
-  if (interaction.customId === 'gymSelect') {
-    const role = interaction.values[0];
-    const roleName = gymRoleNames[gymRoles.indexOf(role)];
-    
-    await interaction.member.roles.add(role);
-    await interaction.reply({ content: `Le rôle de la salle de sport **${roleName}** vous a été attribué.`, ephemeral: true });
+  if (interaction.isSelectMenu()) {
+    if (interaction.customId === 'gymSelect') {
+      const role = interaction.values[0];
+      const roleName = gymRoleNames[gymRoles.indexOf(role)];
+      await interaction.member.roles.add(role);
+      await interaction.member.roles.add("987827916865933312");
+      await interaction.reply({ content: `Le rôle de la salle de sport **${roleName}** vous a été attribué.`, ephemeral: true });
+    }
+  } else if (interaction.isButton()) {
+    if (interaction.customId === 'gymRemove') {
+      await interaction.member.roles.remove(gymRoles);
+      await interaction.member.roles.remove("987827916865933312");
+      await interaction.reply({ content: `Tous les rôles de **salle de sport** vous ont été retirés.`, ephemeral: true });
+    }
   }
-  
-} else if (interaction.isButton()) {
-  
-  if (interaction.customId === 'gymRemove') {
-    await interaction.member.roles.remove(gymRoles);
-    await interaction.reply({ content: `Tous les rôles de **salle de sport** vous ont été retirés.`, ephemeral: true });
-  }
-  
-}
 });
 
 
