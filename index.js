@@ -1871,13 +1871,13 @@ client.on('interactionCreate', async interaction => {
       const role = interaction.values[0];
       const roleName = disciplineRoleNames[disciplineRoles.indexOf(role)];
       await interaction.member.roles.add(role);
-      await interaction.member.roles.add("987820202177749088");
+      await interaction.member.roles.add("987820202198712441");
       await interaction.reply({ content: `Le rôle de la discipline du **${roleName}** vous a été attribué.`, ephemeral: true });
     }
   } else if (interaction.isButton()) {
     if (interaction.customId === 'disciplineRemove') {
       await interaction.member.roles.remove(disciplineRoles);
-      await interaction.member.roles.remove("987820202177749088");
+      await interaction.member.roles.remove("987820202198712441");
       await interaction.reply({ content: `Tous les rôles de **discipline** vous ont été retirés.`, ephemeral: true });
     }
   }
@@ -2011,11 +2011,13 @@ client.on('interactionCreate', async interaction => {
       const roleName = notificationRoleNames[notificationRoles.indexOf(role)];
       
       await interaction.member.roles.add(role);
+      await interaction.member.roles.add("987820202177749088");
       await interaction.reply({ content: `Le rôle de notification de **${roleName}** vous a été attribué.`, ephemeral: true });
     }
   } else if (interaction.isButton()) {
     if (interaction.customId === 'notificationRemove') {
       await interaction.member.roles.remove(notificationRoles);
+      await interaction.member.roles.remove("987820202177749088");
       await interaction.reply({ content: `Tous les rôles de **notification** vous ont été retirés.`, ephemeral: true });
     }
   }
