@@ -2704,3 +2704,61 @@ client.on('interactionCreate', async interaction => {
     await interaction.reply({ content: 'Veuillez vous rendre dans le salon <#987820203016618021> pour obtenir de l\'aide.', ephemeral: true });
   }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+client.on('messageCreate', message => {
+  if (message.content === 'envoie_les_séparations') {
+    const guild = message.guild;
+    guild.members.fetch().then(members => {
+      members.forEach(member => {
+        if (member.roles.cache.has('987826511295950889') || member.roles.cache.has('987826660130816020')) {
+          member.roles.add('987828202925854772');
+        }
+        if (member.roles.cache.has('987821823607570462') || member.roles.cache.has('987822236335480842') || member.roles.cache.has('1097948959907000422') || member.roles.cache.has('1097947839134441492') || member.roles.cache.has('1097947941823590491') || member.roles.cache.has('1097948044474990752') || member.roles.cache.has('1097948253254852738') || member.roles.cache.has('1097948278097723462') || member.roles.cache.has('1097948489696161834') || member.roles.cache.has('987822447967473734')) {
+          member.roles.add('987827916865933312');
+        }
+        if (member.roles.cache.has('987827124138307604') || member.roles.cache.has('987826944630468688') || member.roles.cache.has('987827687664005170') || member.roles.cache.has('1097950501963829411') || member.roles.cache.has('1097950743513796760') || member.roles.cache.has('1097950337324826725') || member.roles.cache.has('1097950875298828461')) {
+          member.roles.add('987820202198712441');
+        }
+        if (member.roles.cache.has('987820202177749089') || member.roles.cache.has('987820202177749090') || member.roles.cache.has('987820202177749091')) {
+          member.roles.add('987820202177749088');
+        }
+      });
+    });
+  }
+});
