@@ -1936,6 +1936,7 @@ client.on('interactionCreate', async interaction => {
       const roleName = sexeRoleNames[sexeRoles.indexOf(role)];
       
       await interaction.member.roles.add(role);
+      await interaction.member.roles.add("987828202925854772");
       await interaction.reply({ content: `Le rôle de **${roleName}** vous a été attribué.`, ephemeral: true });
     }
   
@@ -1943,6 +1944,7 @@ client.on('interactionCreate', async interaction => {
   
     if (interaction.customId === 'sexeRemove') {
       await interaction.member.roles.remove(sexeRoles);
+      await interaction.member.roles.remove("987828202925854772");
       await interaction.reply({ content: `Tous les rôles de **sexe** vous ont été retirés.`, ephemeral: true });
     }
   
