@@ -838,7 +838,7 @@ client.on('interactionCreate', async interaction => {
   const exercice = exercicesFiltres[exerciceIndex];
   const userId = interaction.user.id;
 
-  await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n**${boutton_name}** demandé par* <@${interaction.user.id}>`, { ephemeral: true });
+  await interaction.reply(`**${exercice.nom}** - ${exercice.description}\n***${boutton_name}** demandé par* <@${interaction.user.id}>`, { ephemeral: true });
 });
 
 
@@ -1677,7 +1677,7 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
                          ***${motivationMessages[motivationMessagesAleatoire]}***
                     
                          
-      ||𝐺𝑂𝑀𝑈𝑆𝐶𝑈||
+      ||Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.||
                     `);
           }
       }
