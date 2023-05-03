@@ -1677,7 +1677,7 @@ Il est temps de commencer une nouvelle journée pleine d\'énergie et de motivat
                          ***${motivationMessages[motivationMessagesAleatoire]}***
                     
                          
-      ||Au nom de l\'équipe 𝐺𝑂𝑀𝑈𝑆𝐶𝑈.||
+      ||*Au nom de l\'équipe* 𝐺𝑂𝑀𝑈𝑆𝐶𝑈*.*||
                     `);
           }
       }
